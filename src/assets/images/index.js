@@ -1,5 +1,6 @@
 const images = {
     product_index_background: require('~/assets/images/Assest_1.jpg'),
+    banner: require('~/assets/images/banner.jpg'),
 };
 
 export default images;
