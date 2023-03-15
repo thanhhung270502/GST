@@ -1,0 +1,135 @@
+.statis-body {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: rgb(214, 240, 232);
+}
+
+.sbd-drop {
+    display: inline-block;
+    text-align: center;
+    margin-top: 4%;
+    width: 80%;
+}
+
+.sbd-drop .sbd-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.sbdr-content {
+    text-align: center;
+    display: inline-block;
+}
+
+.sbd-time {
+    font-weight: bold;
+    font-size: 1.2rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sbd-content .sbd-time .date-start,
+.sbd-content .sbd-time .date-end {
+    font-weight: bold;
+    color: red;
+}
+
+.sbd-mid {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+.sbd-mid .sbdm-report {
+    background-color: #ffffff;
+    text-align: left;
+    margin-top: 3%;
+    padding: 1%;
+    padding-left: 2%;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.sbd-mid .sbdm-report svg {
+    margin-right: 1%;
+}
+
+.sbdm-drop {
+    margin-top: 2%;
+    width: 100%;
+    display: inline-flex;
+}
+
+.sbdm-drop .soil-hist {
+    background-color: rgb(249, 223, 173);
+    width: 28%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 5%;
+}
+
+.sbdm-drop .temp-hist {
+    background-color: rgb(149, 222, 253);
+    width: 28%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 3%;
+}
+
+.sbdm-drop .light-hist {
+    background-color: rgb(173, 244, 184);
+    width: 28%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 3%;
+}
+
+.sbd-mid .sbdm-drop div p {
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 10%;
+}
+
+.sbdm-drop .comp-content {
+    margin-left: 5%;
+    width: 40%;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.sbdm-drop .comp-chart {
+    width: 60%;
+}
+
+.sbd-right {
+    width: 25%;
+    border: 0px solid black;
+    box-shadow: 5px 5px 20px #888888;
+}
+
+.sbdr-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sbdr-content {
+    text-align: left;
+    margin-top: 10%;
+    margin-left: 10%;
+}
+
+.sbdr-content div {
+    display: flex;
+    margin-bottom: 10%;
+}
+
+.sbdr-content div svg {
+    margin-right: 5%;
+}
+
+.sbdr-content div p {
+    font-size: 1.2rem;
+    margin-right: 2%;
+}
