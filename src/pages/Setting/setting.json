@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Temperator",
+        "mode": "Automatic",
+        "static": "High"
+    },
+    {
+        "name": "Lighting",
+        "mode": "Schedule",
+        "static": "Normal"
+    },
+    {
+        "name": "Temperator",
+        "mode": "Manual",
+        "static": "Low"
+    }
+]
