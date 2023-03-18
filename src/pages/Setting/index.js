@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './setting.scss';
 import data from './setting.json';
 
-function TempSetting() {
+function Setting() {
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
 
@@ -132,4 +132,4 @@ function TempSetting() {
     );
 }
 
-export default TempSetting;
+export default Setting;

@@ -3,7 +3,7 @@ import { OnlyHeader } from '~/components/Layout';
 
 // Pages
 import Home from '~/pages/Home';
-import TempSetting from '~/pages/TempSetting';
+import Setting from '~/pages/Setting';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
@@ -29,8 +29,8 @@ const publicRoutes = [
     },
     // http://localhost:3000/tempsetting
     {
-        path: '/tempsetting',
-        component: TempSetting,
+        path: '/setting',
+        component: Setting,
     },
 ];
 
