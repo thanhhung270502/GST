@@ -1,135 +1,134 @@
-.statis-body {
-    text-align: center;
-    font-family: 'Times New Roman', Times, serif;
-    background-color: rgb(214, 240, 232);
+.statis-body .row {
+    height: 100%;
 }
 
-.sbd-drop {
-    display: inline-block;
+.statis-left {
     text-align: center;
-    margin-top: 4%;
+    background-color: #f4faf6;
+}
+
+.statis-left p {
+    text-align: left;
+    font-size: 1.3rem;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.statis-left .stl {
+    display: inline-flex;
+    flex-direction: column;
     width: 80%;
 }
 
-.sbd-drop .sbd-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2%;
+.statis-left .stl .temp,
+.statis-left .stl .light,
+.statis-left .stl .humid {
+    border: 1px solid rgb(222, 219, 219);
+    margin-bottom: 20%;
+    height: 150px;
+    cursor: pointer;
 }
 
-.sbdr-content {
-    text-align: center;
-    display: inline-block;
-}
-
-.sbd-time {
-    font-weight: bold;
-    font-size: 1.2rem;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.sbd-content .sbd-time .date-start,
-.sbd-content .sbd-time .date-end {
-    font-weight: bold;
-    color: red;
-}
-
-.sbd-mid {
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-}
-
-.sbd-mid .sbdm-report {
+.statis-left .stl .temp {
     background-color: #ffffff;
-    text-align: left;
-    margin-top: 3%;
-    padding: 1%;
-    padding-left: 2%;
-    font-size: 1rem;
-    font-style: italic;
 }
 
-.sbd-mid .sbdm-report svg {
-    margin-right: 1%;
-}
-
-.sbdm-drop {
-    margin-top: 2%;
-    width: 100%;
+.stl-content {
+    border: none !important;
     display: inline-flex;
+    align-items: center;
+    height: 150px;
 }
 
-.sbdm-drop .soil-hist {
-    background-color: rgb(249, 223, 173);
-    width: 28%;
-    font-size: 1.2rem;
+.stl-content div {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.stl-content div p {
+    margin: 0;
+    padding: 5px;
+}
+
+.stl-content div .uil::before {
+    border-radius: 100%;
+    margin-top: 15%;
+    font-size: 40px;
+    padding: 5px;
+}
+
+.stl-content div .uil-sun::before {
+    background-color: #fff7cf;
+    color: #fa9806;
+}
+
+.stl-content div .uil-brightness-half::before {
+    background-color: #c5e6fa;
+    color: #0092e4;
+}
+
+.stl-content div .uil-tear::before {
+    background-color: #b3f5dd;
+    color: #25b580;
+}
+
+.statis-right .str-left {
+    background-color: #f5f5f5;
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.strl-opt div {
+    font-size: 1.4rem;
     font-weight: bold;
-    margin-left: 5%;
+    padding: 10px;
 }
 
-.sbdm-drop .temp-hist {
-    background-color: rgb(149, 222, 253);
-    width: 28%;
-    font-size: 1.2rem;
+.strl-opt #sl-day,
+.strl-opt #sl-week,
+.strl-opt #sl-month,
+.strl-opt #sl-year {
+    border-radius: 25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.strl-opt #sl-week {
+    background-color: #25b580;
+    color: #ffffff;
+}
+
+.strl-content {
+    height: 100%;
+}
+
+.strl-content .strl-histogram {
+    padding: 5%;
+    background-color: #ffffff;
+    margin-bottom: 5%;
+    height: 45%;
+}
+
+.strl-content .strl-history {
+    background-color: #ffffff;
+    overflow-y: scroll;
+    height: 35%;
+}
+
+.strl-content .strl-history p {
+    margin: 0;
+    padding-top: 15px;
+    font-size: 1.6rem;
     font-weight: bold;
-    margin-left: 3%;
 }
 
-.sbdm-drop .light-hist {
-    background-color: rgb(173, 244, 184);
-    width: 28%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-left: 3%;
+.Lightchart {
+    display: none;
 }
 
-.sbd-mid .sbdm-drop div p {
-    font-weight: bold;
-    font-size: 1.3rem;
-    margin-bottom: 10%;
-}
-
-.sbdm-drop .comp-content {
-    margin-left: 5%;
-    width: 40%;
-    text-align: left;
-    font-size: 1rem;
-}
-
-.sbdm-drop .comp-chart {
-    width: 60%;
-}
-
-.sbd-right {
-    width: 25%;
-    border: 0px solid black;
-    box-shadow: 5px 5px 20px #888888;
-}
-
-.sbdr-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 10%;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.sbdr-content {
-    text-align: left;
-    margin-top: 10%;
-    margin-left: 10%;
-}
-
-.sbdr-content div {
-    display: flex;
-    margin-bottom: 10%;
-}
-
-.sbdr-content div svg {
-    margin-right: 5%;
-}
-
-.sbdr-content div p {
-    font-size: 1.2rem;
-    margin-right: 2%;
+.Humidchart {
+    display: none;
 }

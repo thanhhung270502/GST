@@ -1,10 +1,29 @@
 import './home.scss';
+import { useState, useEffect } from 'react';
+import $ from 'jquery';  // npm install jquery
+
 
 function Home() {
-    window.onscroll = () => {
-        var navbar = document.getElementsByClassName("header-section")[0];
-        navbar.style.display = "block";
-    }
+
+    useEffect(() => {
+
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+
+        var show = document.getElementsByClassName('header-section')[0];
+
+        $(window).on('scroll', function () {
+            var scroll = $(window).scrollTop(), navbar = $('.navbar');
+
+            if (scroll < 50) {
+                show.style.display = 'none';
+                navbar.removeClass('fixed');
+            } else if (scroll >= 300) {
+                navbar.addClass('fixed');
+                show.style.display = 'block';
+            }
+        })
+    });
+
     return (
         <div className='home-body'>
             <img src={require('~/assets/images/banner.jpg')} alt="tomato" id='homepic' />

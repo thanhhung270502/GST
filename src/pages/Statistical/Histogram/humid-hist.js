@@ -1,7 +1,7 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
 
-function LightChart() {
+function HumidChart() {
     const pdata = [
         {
             Date: "21/02/2022",
@@ -13,7 +13,7 @@ function LightChart() {
         },
         {
             Date: "23/02/2022",
-            Value: 24
+            Value: 42
         },
         {
             Date: "24/02/2022",
@@ -25,7 +25,7 @@ function LightChart() {
         },
         {
             Date: "26/02/2022",
-            Value: 80
+            Value: 56
         },
         {
             Date: "27/02/2022",
@@ -36,6 +36,7 @@ function LightChart() {
             Value: 66
         },
     ];
+
     const [data, setData] = useState(pdata);
     console.log(data);
 
@@ -61,12 +62,13 @@ function LightChart() {
     //         .then((response) => response.json())
     //         .then((data) => {
     //             setData(data);
+    //             console.log(data);
     //         })
     //         .catch((error) => console.log(error));
     // }, [])
 
     return (
-        <div>
+        <div >
             <AreaChart
                 width={650}
                 height={250}
@@ -88,4 +90,4 @@ function LightChart() {
     )
 }
 
-export default LightChart;
+export default HumidChart;

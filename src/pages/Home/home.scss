@@ -1,9 +1,25 @@
+.home-body {
+    background-color: rgb(214, 240, 232);
+}
+
 .header-section {
     display: none;
 }
 
-.home-body {
-    background-color: rgb(214, 240, 232);
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+@keyframes smoothScroll {
+    0% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
 }
 
 #homepic {
