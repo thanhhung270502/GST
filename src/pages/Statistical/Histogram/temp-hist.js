@@ -79,11 +79,22 @@ function TempChart() {
                     bottom: 0,
                 }}
             >
+
+                <defs>
+                    <linearGradient id="colorUvTC" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="10%" stopColor="#FF8D5C" stopOpacity={0.8} />
+                        <stop offset="90%" stopColor="#FF8D5C" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorPvTC" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                    </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="Date" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="#C3FAFF" />
+                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvTC)" fillOpacity={1} />
             </AreaChart>
         </div>
     )

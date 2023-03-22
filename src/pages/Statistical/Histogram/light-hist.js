@@ -78,11 +78,22 @@ function LightChart() {
                     bottom: 0,
                 }}
             >
+
+                <defs>
+                    <linearGradient id="colorUvLC" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="10%" stopColor="#0d5cb6" stopOpacity={0.8} />
+                        <stop offset="90%" stopColor="#0d5cb6" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorPvLC" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                    </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="Date" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="#C3FAFF" />
+                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
             </AreaChart>
         </div >
     )
