@@ -6,15 +6,33 @@ import LightChart from './Histogram/light-hist'
 import $ from 'jquery'
 
 function Statistical() {
+    var firstrender = false;
 
     useEffect(() => {
+        // Scrool default
         $("html, body").animate({ scrollTop: 0 }, "fast");
 
+        // Function
         function reload() {
             $("#sl-day, #sl-week, #sl-month, #sl-year").css('background-color', '#f5f5f5');
             $("#sl-day, #sl-week, #sl-month, #sl-year").css('color', '#000000');
         }
+        function sethis() {
+            var count = 101;
+            var val;
+            var i;
+            $('.his-table').remove();
+            var content = "<table class='his-table'> <tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
+            for (i = 0; i < 7; i++) {
+                val = 30 - Math.random() * 10;
+                content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
+                count++;
+            };
+            content += '<table/>'
+            $('.strl-history').append(content);
+        }
 
+        // Render
         var show = document.getElementsByClassName('header-section')[0];
         var sbody = document.getElementsByClassName('statis-body')[0];
         show.style.display = 'block';
@@ -22,6 +40,20 @@ function Statistical() {
         $(window).on('scroll', function () {
             sbody.style.marginTop = '55px';
         })
+
+        if (firstrender == false) {
+            var count = 101;
+            var val;
+            var i;
+            var content = "<tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
+            for (i = 0; i < 7; i++) {
+                val = 30 - Math.random() * 10;
+                content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
+                count++;
+            };
+            $('.his-table').append(content);
+            firstrender = true;
+        }
 
         var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart');
 
@@ -32,6 +64,7 @@ function Statistical() {
             temp.show();
             light.hide();
             humid.hide();
+            sethis();
         });
 
         $(".light").on('click', function () {
@@ -41,6 +74,7 @@ function Statistical() {
             temp.hide();
             light.show();
             humid.hide();
+            sethis();
         });
 
         $(".humid").on('click', function () {
@@ -50,6 +84,7 @@ function Statistical() {
             temp.hide();
             light.hide();
             humid.show();
+            sethis();
         });
 
         $("#sl-day").on('click', function () {
@@ -141,8 +176,10 @@ function Statistical() {
                                     </div>
                                 </div>
                                 <div className="strl-history">
-                                    <p>History</p>
-                                    <div>his1</div>
+                                    <div className="histop"></div>
+                                    <table className='his-table'>
+                                        {/* Add table */}
+                                    </table>
                                 </div>
                             </div>
                         </div>

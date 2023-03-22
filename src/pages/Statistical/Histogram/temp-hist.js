@@ -82,8 +82,8 @@ function TempChart() {
 
                 <defs>
                     <linearGradient id="colorUvTC" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="10%" stopColor="#FF8D5C" stopOpacity={0.8} />
-                        <stop offset="90%" stopColor="#FF8D5C" stopOpacity={0} />
+                        <stop offset="10%" stopColor="#ff4e00" stopOpacity={0.8} />
+                        <stop offset="90%" stopColor="#ff4e00" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorPvTC" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
