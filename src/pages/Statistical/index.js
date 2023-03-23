@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import HumidChart from './Histogram/humid-hist'  // npm install --save recharts
 import TempChart from './Histogram/temp-hist'
 import LightChart from './Histogram/light-hist'
+import SoilChart from './Histogram/soil-hist'
 import $ from 'jquery'
 
 function Statistical() {
@@ -23,7 +24,7 @@ function Statistical() {
             var i;
             $('.his-table').remove();
             var content = "<table class='his-table'> <tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
-            for (i = 0; i < 7; i++) {
+            for (i = 0; i < 11; i++) {
                 val = 30 - Math.random() * 10;
                 content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
                 count++;
@@ -46,7 +47,7 @@ function Statistical() {
             var val;
             var i;
             var content = "<tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
-            for (i = 0; i < 7; i++) {
+            for (i = 0; i < 11; i++) {
                 val = 30 - Math.random() * 10;
                 content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
                 count++;
@@ -55,15 +56,19 @@ function Statistical() {
             firstrender = true;
         }
 
-        var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart');
+        // Jquery call
+
+        var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart'), soil = $('.Soilchart');
 
         $(".temp").on('click', function () {
             $('.light').css('background-color', '#f4faf6');
             $(this).css('background-color', 'white');
             $('.humid').css('background-color', '#f4faf6');
+            $('.soil').css('background-color', '#f4faf6');
             temp.show();
             light.hide();
             humid.hide();
+            soil.hide();
             sethis();
         });
 
@@ -71,9 +76,11 @@ function Statistical() {
             $('.temp').css('background-color', '#f4faf6');
             $(this).css('background-color', 'white');
             $('.humid').css('background-color', '#f4faf6');
+            $('.soil').css('background-color', '#f4faf6');
             temp.hide();
             light.show();
             humid.hide();
+            soil.hide();
             sethis();
         });
 
@@ -81,9 +88,23 @@ function Statistical() {
             $('.temp').css('background-color', '#f4faf6');
             $(this).css('background-color', 'white');
             $('.light').css('background-color', '#f4faf6');
+            $('.soil').css('background-color', '#f4faf6');
             temp.hide();
             light.hide();
             humid.show();
+            soil.hide();
+            sethis();
+        });
+
+        $(".soil").on('click', function () {
+            $('.temp').css('background-color', '#f4faf6');
+            $(this).css('background-color', 'white');
+            $('.light').css('background-color', '#f4faf6');
+            $('.humid').css('background-color', '#f4faf6');
+            temp.hide();
+            light.hide();
+            humid.hide();
+            soil.show();
             sethis();
         });
 
@@ -115,7 +136,7 @@ function Statistical() {
 
     return (
         <div className="container-fluid statis-body">
-            <div className="row">
+            <div className="row sbd-row">
                 <div className="col-3 statis-left">
                     <p>
                         All my conditions
@@ -148,6 +169,15 @@ function Statistical() {
                             </div>
                         </div>
 
+                        <div className="soil">
+                            <div className="stl-content">
+                                <div>
+                                    <i class="uil uil-mountains-sun"></i>
+                                    <p>Soil Moisture</p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div className="col-9 statis-right">
@@ -173,6 +203,9 @@ function Statistical() {
                                     </div>
                                     <div className="Humidchart">
                                         <HumidChart />
+                                    </div>
+                                    <div className="Soilchart">
+                                        <SoilChart />
                                     </div>
                                 </div>
                                 <div className="strl-history">

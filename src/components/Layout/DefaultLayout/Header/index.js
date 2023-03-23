@@ -17,7 +17,7 @@ function Header() {
         <header class="header-section">
             <nav id='navbar_top' class="navbar navbar-expand-lg bg-body-tertiary inner__header">
                 <div class="container-fluid pc__header" >
-                    <a class="navbar-brand header__logo" href="#">
+                    <a class="navbar-brand header__logo" href="/">
                         GST
                     </a>
                     <button

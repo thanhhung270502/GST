@@ -79,7 +79,7 @@ function LightChart() {
 
     return (
         <div>
-            <ResponsiveContainer width="100%" aspect={2.5} >
+            <ResponsiveContainer width="100%" aspect={2} >
                 <AreaChart
                     width={650}
                     height={250}

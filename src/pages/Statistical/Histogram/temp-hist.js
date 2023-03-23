@@ -79,10 +79,10 @@ function TempChart() {
 
     return (
         <div >
-            <ResponsiveContainer width="100%" aspect={2.5} >
+            <ResponsiveContainer width="100%" aspect={2} >
                 <AreaChart
                     width={650}
-                    height={250}
+                    height={500}
                     data={data}
                     margin={{
                         top: 10,
@@ -94,8 +94,8 @@ function TempChart() {
 
                     <defs>
                         <linearGradient id="colorUvTC" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="10%" stopColor="#ff4e00" stopOpacity={0.8} />
-                            <stop offset="90%" stopColor="#ff4e00" stopOpacity={0} />
+                            <stop offset="10%" stopColor="#EF0107" stopOpacity={0.8} />
+                            <stop offset="90%" stopColor="#EF0107" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="colorPvTC" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />

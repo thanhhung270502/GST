@@ -13,39 +13,39 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-function HumidChart() {
+function SoilChart() {
     const pdata = [
         {
             Date: "21/02/2022",
-            Value: 50
-        },
-        {
-            Date: "22/02/2022",
             Value: 70
         },
         {
+            Date: "22/02/2022",
+            Value: 80
+        },
+        {
             Date: "23/02/2022",
-            Value: 42
+            Value: 101
         },
         {
             Date: "24/02/2022",
-            Value: 65
+            Value: 110
         },
         {
             Date: "25/02/2022",
-            Value: 61
+            Value: 130
         },
         {
             Date: "26/02/2022",
-            Value: 56
+            Value: 120
         },
         {
             Date: "27/02/2022",
-            Value: 58
+            Value: 96
         },
         {
             Date: "28/02/2022",
-            Value: 66
+            Value: 88
         },
     ];
 
@@ -95,11 +95,11 @@ function HumidChart() {
                 >
 
                     <defs>
-                        <linearGradient id="colorUvHC" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="10%" stopColor="#25b580" stopOpacity={0.8} />
-                            <stop offset="90%" stopColor="#2df3aa" stopOpacity={0} />
+                        <linearGradient id="colorUvSC" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="10%" stopColor="#ff4e00" stopOpacity={0.8} />
+                            <stop offset="90%" stopColor="#ff4e00" stopOpacity={0} />
                         </linearGradient>
-                        <linearGradient id="colorPvHC" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="colorPvSC" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
                             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                         </linearGradient>
@@ -108,11 +108,11 @@ function HumidChart() {
                     <XAxis dataKey="Date" />
                     <YAxis />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
-                    <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvHC)" fillOpacity={1} />
+                    <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvSC)" fillOpacity={1} />
                 </AreaChart>
             </ResponsiveContainer>
         </div >
     )
 }
 
-export default HumidChart;
+export default SoilChart;
