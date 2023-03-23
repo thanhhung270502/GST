@@ -1,10 +1,11 @@
 // Layouts
-import { OnlyHeader } from '~/components/Layout';
+import { DefaultLayout, OnlyHeader } from '~/components/Layout';
 
 // Pages
 import Home from '~/pages/Home';
 import Setting from '~/pages/Setting';
 import StaticPage from '~/pages/Conditions';
+import Statis from '~/pages/Statistical';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
@@ -37,6 +38,11 @@ const publicRoutes = [
     {
         path: '/setting',
         component: Setting,
+    // http://localhost:3000/statistic
+    },
+    {
+        path: '/statis',
+        component: Statis,
     },
 ];
 
