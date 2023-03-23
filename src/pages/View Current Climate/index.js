@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import hot from '../../assets/images/hot.png'; // Tell webpack this JS file uses this image
+import hot from '../../assets/images/hot.png'; 
 import light from '../../assets/images/light.png'
 import irri from '../../assets/images/irrigation.png'
 function Climate() {
@@ -35,9 +35,9 @@ function Climate() {
         </Container>
       </section>
       <section>
-        <Container   className = 'CardGroup'>
+        <Container  className = 'CardGroup'>
             <Row>
-                <Col sm = '4'  className = "text-center">
+                <Col xs={{ order: 'first' }}  className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={hot}  alt="Hot" />;      
@@ -48,7 +48,7 @@ function Climate() {
                     </div>
                 </Col>
 
-                <Col  sm = '4' className = "text-center">
+                <Col  xs  className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={light}  alt="light" />;      
@@ -59,7 +59,7 @@ function Climate() {
                     </div>
                 </Col>
 
-                <Col sm = '4'  className = "text-center">
+                <Col xs={{ order: 'last' }} className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={irri}  alt="irri" />;      
