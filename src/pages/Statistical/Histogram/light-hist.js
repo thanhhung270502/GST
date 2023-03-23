@@ -49,21 +49,28 @@ function LightChart() {
     let timeoutId = null;
     let messagePrinted = false;
 
-    const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
+    const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
 
-    // useEffect(() => {
-    //     fetch(url, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setData(data);
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, [])
+    // const username = 'vienminhphuc';
+    // const feedKey = 'gst-fan';
+    const aioKey = 'aio_FwnL44zQBHuJwgICmM3ZGIqTHDMg';
+
+    // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
+
+
+    useEffect(() => {
+        fetch(url, {
+            headers: {
+                'X-AIO-Key': aioKey,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setData(data);
+            })
+            .catch((error) => console.log(error));
+    }, [])
 
     return (
         <div>
@@ -90,10 +97,10 @@ function LightChart() {
                     </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="Date" />
+                <XAxis dataKey="created_at" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
+                <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
             </AreaChart>
         </div >
     )

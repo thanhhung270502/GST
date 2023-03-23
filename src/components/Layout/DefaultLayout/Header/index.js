@@ -18,7 +18,7 @@ function Header() {
             <nav id='navbar_top' class="navbar navbar-expand-lg bg-body-tertiary inner__header">
                 <div class="container-fluid pc__header" >
                     <a class="navbar-brand header__logo" href="#">
-                        GST
+                        GSTomato
                     </a>
                     <button
                         class="navbar-toggler"

@@ -25,6 +25,7 @@
 
     --green: #2df3aa;
     --green-dark: #25b580;
+    --green-light: #dff1ea;
 
     --purple: #e574ff;
     --pink: #fa7daf;
@@ -50,4 +51,13 @@ li {
 
 a {
     text-decoration: none;
+}
+
+.sticky {
+    background-color: var(--green-dark) !important;
+
+    .header__logo,
+    .header__link {
+        color: var(--white) !important;
+    }
 }
