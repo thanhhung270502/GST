@@ -6,6 +6,7 @@ import Home from '~/pages/Home';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
+import Climate from '../pages/View Current Climate';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -25,6 +26,11 @@ const publicRoutes = [
         path: '/upload',
         component: Upload,
         layout: null,
+    },
+    {
+        path: '/climate',
+        component: Climate,
+        layout:null,
     },
 ];
 

@@ -1,0 +1,98 @@
+.customcontainer 
+{
+width: 100%;
+background: #FDF7EA;
+}
+.logo
+{
+flex: none;
+order: 0;
+flex-grow: 0;
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 40px;
+line-height: 60px;
+/* identical to box height */
+color: #413923;
+}
+.frame5
+{
+    padding-top: 50px;
+}
+.frame5 h2
+{
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 40px;
+line-height: 65px;
+text-align: center;
+
+color: #413923;
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+.frame5 h2 span
+{
+    background: linear-gradient(90.85deg, #64AE82 100%, #78CFFF 5%);
+    font-weight: 600;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    
+}
+.customCard
+{
+display: block;
+align-items: center;
+margin-top: 100px;
+width:auto;
+height: 300px;
+flex: none;
+order: 0;
+flex-grow: 0;
+background: #24353E;
+box-shadow: 10px 9px 70px rgba(36, 53, 62, 0.4);
+border-radius: 20px;
+}
+.customCard h1
+{
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 40px;
+line-height: 65px;
+text-align: center;
+color: #FFFFFF;
+
+}
+.image
+{
+    transform: translateY(-250px);
+    max-height: 150px;
+}
+.image img
+{
+    scale: 30%;
+    margin-left: auto;
+    margin-right: auto ;
+ 
+}
+.card-content
+{
+display: inline-block;
+
+}
+.CardGroup 
+{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+}
