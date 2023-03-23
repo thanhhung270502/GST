@@ -1,11 +1,12 @@
 .header-section {
-    // position: fixed;
     width: 100%;
 }
 
 .inner__header {
     background-color: var(--green-dark) !important;
-    /* height: 70px; */
+    font-family: 'Play', sans-serif;
+    position: fixed;
+    width: 100%;
 }
 
 .navbar {
@@ -14,9 +15,8 @@
 
 .header__logo {
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--white);
-    font-family: 'Play', sans-serif;
 
     &:hover {
         color: var(--black-green);
@@ -34,7 +34,6 @@
             font-weight: bold;
             font-size: 1.1rem;
             cursor: pointer;
-            font-family: 'Play', sans-serif;
 
             &:hover {
                 color: var(--black-green);
@@ -51,9 +50,9 @@
 
 .fixed {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
+    background-color: #FAF1DF !important;
+    z-index: 100;
 }
 
 @keyframes smoothScroll {

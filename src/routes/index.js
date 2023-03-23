@@ -3,6 +3,8 @@ import { DefaultLayout, OnlyHeader } from '~/components/Layout';
 
 // Pages
 import Home from '~/pages/Home';
+import Setting from '~/pages/Setting';
+import StaticPage from '~/pages/Conditions';
 import Statis from '~/pages/Statistical';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
@@ -14,6 +16,11 @@ const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    // http://localhost:3000/conditions
+    {
+        path: '/conditions',
+        component: StaticPage,
     },
     // http://localhost:3000/test
     {
@@ -27,7 +34,12 @@ const publicRoutes = [
         component: Upload,
         layout: null,
     },
+    // http://localhost:3000/tempsetting
+    {
+        path: '/setting',
+        component: Setting,
     // http://localhost:3000/statistic
+    },
     {
         path: '/statis',
         component: Statis,

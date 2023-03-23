@@ -8,6 +8,7 @@
     --black: black;
     --black-blue: #161D27;
     --black-green: #1F2D25;
+    --black-yellow: #2D2C1F;
 
     --white: white;
     --white-gray: #F0F8FF;
@@ -24,6 +25,7 @@
 
     --green: #2df3aa;
     --green-dark: #25b580;
+    --green-light: #dff1ea;
 
     --purple: #e574ff;
     --pink: #fa7daf;
@@ -41,4 +43,21 @@ html {
 }
 
 body {
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.sticky {
+    background-color: var(--green-dark) !important;
+
+    .header__logo,
+    .header__link {
+        color: var(--white) !important;
+    }
 }

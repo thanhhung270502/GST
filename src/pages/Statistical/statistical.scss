@@ -1,4 +1,5 @@
-.statis-body .sbd-row {
+.statis-body .row {
+>>>>>>> 189d1081148a1cb0c61472027fffcfe7ce9e2333
     height: 100%;
     background-color: #f4faf6;
     display: flex;
@@ -105,7 +106,7 @@
 }
 
 .strl-opt div {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     font-weight: bold;
     padding: 10px;
 }
@@ -115,8 +116,7 @@
 .strl-opt #sl-month,
 .strl-opt #sl-year {
     border-radius: 25px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding: 8px 0;
     cursor: pointer;
 }
 

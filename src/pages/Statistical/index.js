@@ -38,9 +38,9 @@ function Statistical() {
         var sbody = document.getElementsByClassName('statis-body')[0];
         show.style.display = 'block';
 
-        $(window).on('scroll', function () {
-            sbody.style.marginTop = '55px';
-        })
+        // $(window).on('scroll', function () {
+        //     sbody.style.marginTop = '55px';
+        // })
 
         if (firstrender == false) {
             var count = 101;
