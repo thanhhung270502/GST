@@ -1,6 +1,18 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
 
+const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="custom-tooltip">
+                <p className="label">{`${label} : ${payload[0].value}`}</p>
+            </div>
+        );
+    }
+
+    return null;
+};
+
 function LightChart() {
     const pdata = [
         {
@@ -67,34 +79,36 @@ function LightChart() {
 
     return (
         <div>
-            <AreaChart
-                width={650}
-                height={250}
-                data={data}
-                margin={{
-                    top: 10,
-                    right: 10,
-                    left: 0,
-                    bottom: 0,
-                }}
-            >
+            <ResponsiveContainer width="100%" aspect={2.5} >
+                <AreaChart
+                    width={650}
+                    height={250}
+                    data={data}
+                    margin={{
+                        top: 10,
+                        right: 10,
+                        left: 0,
+                        bottom: 0,
+                    }}
+                >
 
-                <defs>
-                    <linearGradient id="colorUvLC" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="10%" stopColor="#0d5cb6" stopOpacity={0.8} />
-                        <stop offset="90%" stopColor="#0d5cb6" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorPvLC" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                    </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="Date" />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
-            </AreaChart>
+                    <defs>
+                        <linearGradient id="colorUvLC" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="10%" stopColor="#0d5cb6" stopOpacity={0.8} />
+                            <stop offset="90%" stopColor="#0d5cb6" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="colorPvLC" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                        </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="Date" />
+                    <YAxis />
+                    <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
+                    <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
+                </AreaChart>
+            </ResponsiveContainer>
         </div >
     )
 }
