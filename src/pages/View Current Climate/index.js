@@ -6,12 +6,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button'
 import hot from '../../assets/images/hot.png'; 
 import light from '../../assets/images/light.png'
 import irri from '../../assets/images/irrigation.png'
 function Climate() {
         return(
-    <Container fluid className = "customcontainer">
+    <Container fluid={true} className="p-0">
       <Navbar bg="none" variant="light">
         <Container>
           <Navbar.Brand className = "logo" href="#home" >GSTomato</Navbar.Brand>
@@ -24,8 +25,7 @@ function Climate() {
             <Nav.Link href="#connect">Connect</Nav.Link>
           </Nav>
         </Container>
-      </Navbar>
-      <section>
+      </Navbar> 
       <Container>
             <Row className = "frame5">
                 <Col lg = '12' className = "text-center">
@@ -33,22 +33,27 @@ function Climate() {
                 </Col>
             </Row>
         </Container>
-      </section>
-      <section>
         <Container  className = 'CardGroup'>
             <Row>
-                <Col xs={{ order: 'first' }}  className = "text-center">
+                <Col md={12} lg = {4} xs = {12}  className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={hot}  alt="Hot" />;      
                     </div>                 
                     <div className = 'card-content'>
                         <h1>Temperature 35°C </h1>
+                    </div> 
+                    <br></br>
+                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
+                    <div class="space">
                     </div>
+                    <Button size = 'md' variant="danger">Turn on the fan</Button>{' '}
+
                     </div>
+ = ""
                 </Col>
 
-                <Col  xs  className = "text-center">
+                <Col md={12} lg = {4} xs = {12} className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={light}  alt="light" />;      
@@ -56,10 +61,14 @@ function Climate() {
                     <div className = 'card-content'>
                         <h1>Lighting 35°C </h1>
                     </div>
+                    <br></br>
+                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
+                    <div class="space">
+                    </div>
+                    <Button size = 'md' variant="warning">Turn on the light</Button>{' '}
                     </div>
                 </Col>
-
-                <Col xs={{ order: 'last' }} className = "text-center">
+                <Col md={12} lg = {4} xs = {12} className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
                     <img src={irri}  alt="irri" />;      
@@ -67,13 +76,16 @@ function Climate() {
                     <div className = 'card-content'>
                         <h1>Irrigation 35°C </h1>
                     </div>
+                    <br></br>
+                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}   
+                    <div class="space">
+                    </div>
+                    <Button size = 'md' variant="primary">Water the tree</Button>{' '}
                     </div>
                 </Col>
 
-            </Row>
+                </Row>
         </Container>
-    </section>
-
 
 
 

@@ -1,5 +1,6 @@
 // Layouts
 import { OnlyHeader } from '~/components/Layout';
+import Footer from '~/components/Layout/DefaultLayout/Footer';
 
 // Pages
 import Home from '~/pages/Home';
@@ -30,7 +31,7 @@ const publicRoutes = [
     {
         path: '/climate',
         component: Climate,
-        layout:null,
+        layout: null,
     },
 ];
 
