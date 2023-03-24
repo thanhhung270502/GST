@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import './setting.scss';
 import data from './setting.json';
+import $ from 'jquery';
 
 function Setting() {
-    const $ = document.querySelector.bind(document);
+    // const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
+    var firstRender = false;
 
     const conditions = ['Temperator', 'Lighting', 'Irrigation'];
 
@@ -27,6 +29,14 @@ function Setting() {
         setLight(false);
         setIrri(true);
     };
+
+    useEffect(() => {
+        if (firstRender === false) {
+            $('.inner__header').attr('style', 'background-color: var(--green-dark) !important');
+            $('.header__logo, .header__link').attr('style', 'color: var(--white) !important');
+            firstRender = true;
+        }
+    })
 
     return (
         <div className="temp-setting">
@@ -92,7 +102,7 @@ function Setting() {
                                 </div>
                                 <div className="sub-items">
                                     <div className="sub-item">
-                                        
+
                                     </div>
                                 </div>
                             </div>

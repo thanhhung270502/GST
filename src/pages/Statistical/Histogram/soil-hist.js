@@ -16,36 +16,36 @@ const CustomTooltip = ({ active, payload, label }) => {
 function SoilChart() {
     const pdata = [
         {
-            Date: "21/02/2022",
-            Value: 70
+            created_at: "21/02/2022",
+            value: 70
         },
         {
-            Date: "22/02/2022",
-            Value: 80
+            created_at: "22/02/2022",
+            value: 80
         },
         {
-            Date: "23/02/2022",
-            Value: 101
+            created_at: "23/02/2022",
+            value: 101
         },
         {
-            Date: "24/02/2022",
-            Value: 110
+            created_at: "24/02/2022",
+            value: 110
         },
         {
-            Date: "25/02/2022",
-            Value: 130
+            created_at: "25/02/2022",
+            value: 130
         },
         {
-            Date: "26/02/2022",
-            Value: 120
+            created_at: "26/02/2022",
+            value: 120
         },
         {
-            Date: "27/02/2022",
-            Value: 96
+            created_at: "27/02/2022",
+            value: 96
         },
         {
-            Date: "28/02/2022",
-            Value: 88
+            created_at: "28/02/2022",
+            value: 88
         },
     ];
 
@@ -105,10 +105,10 @@ function SoilChart() {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="Date" />
+                    <XAxis dataKey="created_at" />
                     <YAxis />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
-                    <Area type="monotone" dataKey="Value" stroke="#D9D9D9" fill="url(#colorUvSC)" fillOpacity={1} />
+                    <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvSC)" fillOpacity={1} />
                 </AreaChart>
             </ResponsiveContainer>
         </div >

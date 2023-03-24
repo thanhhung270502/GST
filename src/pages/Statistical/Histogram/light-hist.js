@@ -16,36 +16,36 @@ const CustomTooltip = ({ active, payload, label }) => {
 function LightChart() {
     const pdata = [
         {
-            Date: "21/02/2022",
-            Value: 50
+            created_at: "21/02/2022",
+            value: 50
         },
         {
-            Date: "22/02/2022",
-            Value: 70
+            created_at: "22/02/2022",
+            value: 70
         },
         {
-            Date: "23/02/2022",
-            Value: 24
+            created_at: "23/02/2022",
+            value: 24
         },
         {
-            Date: "24/02/2022",
-            Value: 65
+            created_at: "24/02/2022",
+            value: 65
         },
         {
-            Date: "25/02/2022",
-            Value: 61
+            created_at: "25/02/2022",
+            value: 61
         },
         {
-            Date: "26/02/2022",
-            Value: 80
+            created_at: "26/02/2022",
+            value: 80
         },
         {
-            Date: "27/02/2022",
-            Value: 58
+            created_at: "27/02/2022",
+            value: 58
         },
         {
-            Date: "28/02/2022",
-            Value: 66
+            created_at: "28/02/2022",
+            value: 66
         },
     ];
     const [data, setData] = useState(pdata);
@@ -70,19 +70,19 @@ function LightChart() {
     // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
-    useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': aioKey,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': aioKey,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div>

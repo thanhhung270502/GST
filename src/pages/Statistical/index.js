@@ -38,11 +38,7 @@ function Statistical() {
         var sbody = document.getElementsByClassName('statis-body')[0];
         show.style.display = 'block';
 
-        // $(window).on('scroll', function () {
-        //     sbody.style.marginTop = '55px';
-        // })
-
-        if (firstrender == false) {
+        if (firstrender === false) {
             var count = 101;
             var val;
             var i;
@@ -54,6 +50,9 @@ function Statistical() {
             };
             $('.his-table').append(content);
             firstrender = true;
+            $('.inner__header').attr('style', 'background-color: var(--green-dark) !important');
+            $('.header__logo, .header__link').attr('style', 'color: var(--white) !important');
+
         }
 
         // Jquery call
@@ -135,7 +134,7 @@ function Statistical() {
     }, []);
 
     return (
-        <div className="container-fluid statis-body">
+        <div className="statis-body">
             <div className="row sbd-row">
                 <div className="col-3 statis-left">
                     <p>

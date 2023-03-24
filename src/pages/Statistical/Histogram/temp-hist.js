@@ -16,36 +16,36 @@ const CustomTooltip = ({ active, payload, label }) => {
 function TempChart() {
     const pdata = [
         {
-            Date: "21/02/2022",
-            Value: 23
+            created_at: "21/02/2022",
+            value: 23
         },
         {
-            Date: "22/02/2022",
-            Value: 22
+            created_at: "22/02/2022",
+            value: 22
         },
         {
-            Date: "23/02/2022",
-            Value: 14
+            created_at: "23/02/2022",
+            value: 14
         },
         {
-            Date: "24/02/2022",
-            Value: 18
+            created_at: "24/02/2022",
+            value: 18
         },
         {
-            Date: "25/02/2022",
-            Value: 20
+            created_at: "25/02/2022",
+            value: 20
         },
         {
-            Date: "26/02/2022",
-            Value: 21
+            created_at: "26/02/2022",
+            value: 21
         },
         {
-            Date: "27/02/2022",
-            Value: 27
+            created_at: "27/02/2022",
+            value: 27
         },
         {
-            Date: "28/02/2022",
-            Value: 22
+            created_at: "28/02/2022",
+            value: 22
         },
     ];
     const [data, setData] = useState(pdata);
@@ -63,26 +63,23 @@ function TempChart() {
 
     const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[3] + '/data';
 
-    // const username = 'vienminhphuc';
-    // const feedKey = 'gst-fan';
     const aioKey = 'aio_FwnL44zQBHuJwgICmM3ZGIqTHDMg';
 
-    // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
-    useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': aioKey,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': aioKey,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div >
