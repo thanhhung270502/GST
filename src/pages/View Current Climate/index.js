@@ -8,9 +8,76 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button'
 import hot from '../../assets/images/hot.png'; 
-import light from '../../assets/images/light.png'
+import lightpng from '../../assets/images/light.png'
 import irri from '../../assets/images/irrigation.png'
 function Climate() {
+
+    const [temp, setTemp] = useState([36]);
+
+    const [light, setLight] = useState([1200]);
+
+    const [humi, setHumi] = useState([50]);
+
+    const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
+    const AIO_USERNAME = 'vienminhphuc';
+    const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
+    const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
+
+    const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
+    let lastTimestamp = 0;
+    let timeoutId = null;
+    let messagePrinted = false;
+
+    const url_temp = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[3] + '/data';
+    const url_light = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
+    const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
+
+    // --------------------------------- Start --------------------------------- //
+
+    useEffect(() => {
+        fetch(url_temp, {
+            headers: {  
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setTemp(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        fetch(url_light, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setLight(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        fetch(url_humi, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setHumi(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+
         return(
     <Container fluid  className = 'custom-container'>
       <Navbar bg="none" variant="light">
@@ -41,7 +108,7 @@ function Climate() {
                     <img src={hot}  alt="Hot" />;      
                     </div>                 
                     <div className = 'card-content'>
-                        <h1>Temperature 35°C </h1>
+                        <h1>Temperature {temp}°C </h1>
                     </div> 
                     <br></br>
                     <div className='button-group'>
@@ -56,15 +123,15 @@ function Climate() {
                 <Col md={12} lg = {4} xs = {12} className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
-                    <img src={light}  alt="light" />;      
+                    <img src={lightpng}  alt="light" />;      
                     </div>                 
                     <div className = 'card-content'>
-                        <h1>Lighting 35°C </h1>
+                        <h1>Lighting {light}Lux </h1>
                     </div>
                     <br></br>
                     <div className='button-group'>
                     <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
-                    <div class="space">
+                    <div className="space">
                     </div>
                     <Button size = 'md' variant="warning">Turn on the light</Button>{' '}
                     </div>
@@ -76,12 +143,12 @@ function Climate() {
                     <img src={irri}  alt="irri" />;      
                     </div>                 
                     <div className = 'card-content'>
-                        <h1>Irrigation 35°C </h1>
+                        <h1>Irrigation {humi}% </h1>
                     </div>
                     <br></br>
                     <div className='button-group'>
                     <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}   
-                    <div class="space">
+                    <div className="space">
                     </div>
                     <Button size = 'md' variant="primary">Water the tree</Button>{' '}
                     </div>
