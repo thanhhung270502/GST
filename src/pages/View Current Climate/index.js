@@ -23,17 +23,9 @@ function Climate() {
     const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
-    const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
-    let lastTimestamp = 0;
-    let timeoutId = null;
-    let messagePrinted = false;
-
     const url_temp = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[3] + '/data';
     const url_light = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
-
-    // --------------------------------- Start --------------------------------- //
-
     useEffect(() => {
         fetch(url_temp, {
             headers: {  
