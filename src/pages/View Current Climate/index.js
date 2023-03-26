@@ -12,7 +12,7 @@ import light from '../../assets/images/light.png'
 import irri from '../../assets/images/irrigation.png'
 function Climate() {
         return(
-    <Container fluid={true} className="p-0">
+    <Container fluid  className = 'custom-container'>
       <Navbar bg="none" variant="light">
         <Container>
           <Navbar.Brand className = "logo" href="#home" >GSTomato</Navbar.Brand>
@@ -34,7 +34,7 @@ function Climate() {
             </Row>
         </Container>
         <Container  className = 'CardGroup'>
-            <Row>
+            <Row className = 'justify-content-between'>
                 <Col md={12} lg = {4} xs = {12}  className = "text-center">
                     <div className='customCard'>
                     <div className = 'image'>
@@ -44,13 +44,13 @@ function Climate() {
                         <h1>Temperature 35°C </h1>
                     </div> 
                     <br></br>
+                    <div className='button-group'>
                     <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
-                    <div class="space">
+                    <div className="space">
                     </div>
                     <Button size = 'md' variant="danger">Turn on the fan</Button>{' '}
-
                     </div>
- = ""
+                    </div>
                 </Col>
 
                 <Col md={12} lg = {4} xs = {12} className = "text-center">
@@ -62,10 +62,12 @@ function Climate() {
                         <h1>Lighting 35°C </h1>
                     </div>
                     <br></br>
+                    <div className='button-group'>
                     <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
                     <div class="space">
                     </div>
                     <Button size = 'md' variant="warning">Turn on the light</Button>{' '}
+                    </div>
                     </div>
                 </Col>
                 <Col md={12} lg = {4} xs = {12} className = "text-center">
@@ -77,11 +79,14 @@ function Climate() {
                         <h1>Irrigation 35°C </h1>
                     </div>
                     <br></br>
+                    <div className='button-group'>
                     <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}   
                     <div class="space">
                     </div>
                     <Button size = 'md' variant="primary">Water the tree</Button>{' '}
                     </div>
+                    </div>
+
                 </Col>
 
                 </Row>
