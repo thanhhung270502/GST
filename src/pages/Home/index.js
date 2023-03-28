@@ -83,7 +83,7 @@ function Home() {
                     </div>
                 </div>
                 <div className="ct ct-6">
-                    <div className="text-center image">
+                    <div className="text-center">
                         <img src={require('~/assets/images/tomato2.jpg')} className=""></img>
                     </div>
                     <div className="">
