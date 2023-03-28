@@ -1,9 +1,12 @@
 // Layouts
 import { OnlyHeader } from '~/components/Layout';
-import Footer from '~/components/Layout/DefaultLayout/Footer';
+// import Footer from '~/components/Layout/DefaultLayout/Footer';
 
 // Pages
 import Home from '~/pages/Home';
+import Setting from '~/pages/Setting';
+import StaticPage from '~/pages/Conditions';
+import Statis from '~/pages/Statistical';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
@@ -15,6 +18,11 @@ const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    // http://localhost:3000/conditions
+    {
+        path: '/conditions',
+        component: StaticPage,
     },
     // http://localhost:3000/test
     {
@@ -28,10 +36,20 @@ const publicRoutes = [
         component: Upload,
         layout: null,
     },
+    // http://localhost:3000/tempsetting
+    {
+        path: '/setting',
+        component: Setting,
+    },
+    // http://localhost:3000/statistic
+    {
+        path: '/statis',
+        component: Statis,
+    },
+    // http://localhost:3000/climate
     {
         path: '/climate',
         component: Climate,
-        layout: null,
     },
 ];
 

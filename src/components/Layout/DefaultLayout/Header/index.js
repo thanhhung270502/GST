@@ -1,12 +1,23 @@
 import './header.scss';
+import { useState, useEffect } from 'react';
+import $ from 'jquery';
 
 function Header() {
+    useEffect(() => {
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+
+        // $(window).on('scroll', function () {
+        var navbar = $('.navbar');
+        navbar.addClass('fixed');
+        // })
+    });
+
     return (
         <header class="header-section">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary inner__header">
+            <nav id="navbar_top" class="navbar navbar-expand-lg bg-body-tertiary inner__header">
                 <div class="container-fluid pc__header">
-                    <a class="navbar-brand header__logo" href="#">
-                        GST
+                    <a class="navbar-brand header__logo" href="/">
+                        GSTomato
                     </a>
                     <button
                         class="navbar-toggler"
@@ -22,14 +33,40 @@ function Header() {
                     <div class="collapse navbar-collapse header__menu" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item header__item">
-                                <a href="" class="nav-link header__link">
+                                <a href="/" class="nav-link header__link">
                                     Home
                                 </a>
                             </li>
-                            <li class="nav-item header__item">
-                                <a href="" class="nav-link header__link">
+                            <li class="nav-item dropdown header__item">
+                                <a
+                                    class="nav-link dropdown-toggle header__link"
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
                                     Features
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="/climate">
+                                            Conditions
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/statis">
+                                            Statistical
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider"></hr>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/setting">
+                                            Setting
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item header__item">
                                 <a href="" class="nav-link header__link">
