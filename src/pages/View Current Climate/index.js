@@ -104,7 +104,7 @@ function Climate() {
                     </div> 
                     <br></br>
                     <div className='button-group'>
-                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
+                    <Button size = 'md' variant="outline-dark">Measure Again</Button>{' '}
                     <div className="space">
                     </div>
                     <Button size = 'md' variant="danger">Turn on the fan</Button>{' '}
@@ -122,7 +122,7 @@ function Climate() {
                     </div>
                     <br></br>
                     <div className='button-group'>
-                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}
+                    <Button size = 'md' variant="outline-dark">Measure Again</Button>{' '}
                     <div className="space">
                     </div>
                     <Button size = 'md' variant="warning">Turn on the light</Button>{' '}
@@ -139,7 +139,7 @@ function Climate() {
                     </div>
                     <br></br>
                     <div className='button-group'>
-                    <Button size = 'md' variant="outline-light">Measure Again</Button>{' '}   
+                    <Button size = 'md' variant="outline-dark">Measure Again</Button>{' '}   
                     <div className="space">
                     </div>
                     <Button size = 'md' variant="primary">Water the tree</Button>{' '}

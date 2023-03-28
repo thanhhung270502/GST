@@ -1,95 +1,92 @@
+
 .custom-container {
-    background: #FDF7EA;
+background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);}
+
+
+.logo {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 60px;
+    /* identical to box height */
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.logo
-{
-font-family: 'Poppins';
-font-style: normal;
-font-weight: 600;
-font-size: 40px;
-line-height: 60px;
-/* identical to box height */
-color: #413923;
+.climate__header {
+    background-color: var(--yellow-light) !important;
 }
-.frame5
-{
-    padding-top: 50px;
-}
-.frame5 h2
-{
 
-font-family: 'Poppins';
-font-style: normal;
-font-weight: 500;
-font-size: 40px;
-line-height: 65px;
-text-align: center;
-color: #413923;
-/* Inside auto layout */
+.frame5 {
+    padding-top: 100px;
 }
-.frame5 h2 span
-{
-    background: linear-gradient(90.85deg, #64AE82 100%, #78CFFF 5%);
+.frame5 h2 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 65px;
+    text-align: center;
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* Inside auto layout */
+}
+.frame5 h2 span {
+    background: #000000;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0f9b0f, #000000);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0f9b0f, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     font-weight: 600;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
-    
 }
 .space {
     width: 5px;
     height: auto;
     display: inline-block;
-  }
-.customCard
-{
-display: block;
-align-items: center;
-margin-top: 100px;
-width:auto;
-height: 300px;
-background: #24353E;
-box-shadow: 10px 9px 70px rgba(36, 53, 62, 0.4);
-border-radius: 20px;
 }
-.customCard h1
-{
-font-family: 'Poppins';
-font-style: normal;
-line-height: 60px;
-font-weight: 600;
-font-size: 30px;
-text-align: center;
-color: #FFFFFF;
+.customCard {
+    margin-top: 100px;
+    width: auto;
+    height: 300px;
+    box-shadow: 10px 9px 70px rgba(36, 53, 62, 0.4);
+    border-radius: 20px;
+background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+
+
+
 }
-.image
-{
-    max-height: 150px;
-    margin:0;
-    padding:0;
-    transform: translateY(-250px);
+.customCard h1 {
+    font-family: 'Poppins';
+    font-style: normal;
+    line-height: 60px;
+    font-weight: 600;
+    font-size: 30px;
+    text-align: center;
+
+
+
 }
-.image img
-{
-    scale: 25%;
-    margin-left: auto;
-    margin-right: auto ; 
+.image {
+    transform: translateY(-70px);
+    line-height: 0px;
+    display: flex;
+    justify-content: center;
 }
-.card-content
-{
-display: inline-block;
+.image img {
+    scale: 125%;
 }
-.CardGroup 
-{
+.card-content {
+    display: inline-block;
+    padding-top: 30px;
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.CardGroup {
     margin: auto;
     flex-direction: column;
     align-items: center;
     padding: 0px;
 }
-.button-group
-{
+.button-group {
     position: relative;
     z-index: 1;
 }
