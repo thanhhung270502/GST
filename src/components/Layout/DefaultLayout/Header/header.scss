@@ -1,11 +1,12 @@
 .header-section {
-    // position: fixed;
     width: 100%;
 }
 
 .inner__header {
-    background-color: var(--green-dark) !important;
-    /* height: 70px; */
+    background-color: var(--green-dark);
+    font-family: 'Play', sans-serif;
+    position: fixed;
+    width: 100%;
 }
 
 .navbar {
@@ -14,9 +15,8 @@
 
 .header__logo {
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--white);
-    font-family: 'Play', sans-serif;
 
     &:hover {
         color: var(--black-green);
@@ -34,7 +34,6 @@
             font-weight: bold;
             font-size: 1.1rem;
             cursor: pointer;
-            font-family: 'Play', sans-serif;
 
             &:hover {
                 color: var(--black-green);
@@ -46,5 +45,25 @@
 @media (min-width: 1024px) {
     .pc__header {
         justify-content: space-around !important;
+    }
+}
+
+.fixed {
+    position: fixed;
+    width: 100%;
+    background-color: var(--green-dark) !important;
+    z-index: 100;
+
+    .header__logo, .header__link {
+        color: var(--white) !important;
+    }
+}
+
+@keyframes smoothScroll {
+    0% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
     }
 }
