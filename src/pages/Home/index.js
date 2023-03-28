@@ -7,16 +7,14 @@ function Home() {
         $('html, body').animate({ scrollTop: 0 }, 'fast');
 
         var show = document.getElementsByClassName('header-section')[0];
-
+        var navbar = $('.navbar');
+        navbar.removeClass('fixed');
         $(window).on('scroll', function () {
-            var scroll = $(window).scrollTop(),
-                navbar = $('.navbar');
+            var scroll = $(window).scrollTop();
 
             if (scroll < 50) {
-                navbar.removeClass('fixed');
                 navbar.removeClass('sticky');
             } else if (scroll >= 50) {
-                navbar.removeClass('fixed');
                 navbar.addClass('sticky');
             }
         });

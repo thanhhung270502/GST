@@ -12,6 +12,8 @@ function Statistical() {
     useEffect(() => {
         // Scrool default
         $("html, body").animate({ scrollTop: 0 }, "fast");
+        
+        $('.temp').addClass('stl-active');
 
         // Function
         function reload() {
@@ -60,10 +62,8 @@ function Statistical() {
         var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart'), soil = $('.Soilchart');
 
         $(".temp").on('click', function () {
-            $('.light').css('background-color', '#f4faf6');
-            $(this).css('background-color', 'white');
-            $('.humid').css('background-color', '#f4faf6');
-            $('.soil').css('background-color', '#f4faf6');
+            $('.light, .humid, .soil').removeClass('stl-active');
+            $(this).addClass('stl-active');
             temp.show();
             light.hide();
             humid.hide();
@@ -72,10 +72,8 @@ function Statistical() {
         });
 
         $(".light").on('click', function () {
-            $('.temp').css('background-color', '#f4faf6');
-            $(this).css('background-color', 'white');
-            $('.humid').css('background-color', '#f4faf6');
-            $('.soil').css('background-color', '#f4faf6');
+            $('.temp, .humid, .soil').removeClass('stl-active');
+            $(this).addClass('stl-active');
             temp.hide();
             light.show();
             humid.hide();
@@ -84,10 +82,8 @@ function Statistical() {
         });
 
         $(".humid").on('click', function () {
-            $('.temp').css('background-color', '#f4faf6');
-            $(this).css('background-color', 'white');
-            $('.light').css('background-color', '#f4faf6');
-            $('.soil').css('background-color', '#f4faf6');
+            $('.light, .temp, .soil').removeClass('stl-active');
+            $(this).addClass('stl-active');
             temp.hide();
             light.hide();
             humid.show();
@@ -96,10 +92,9 @@ function Statistical() {
         });
 
         $(".soil").on('click', function () {
-            $('.temp').css('background-color', '#f4faf6');
-            $(this).css('background-color', 'white');
-            $('.light').css('background-color', '#f4faf6');
-            $('.humid').css('background-color', '#f4faf6');
+            $('.light, .temp, .humid').removeClass('stl-active');
+            $(this).addClass('stl-active');
+            
             temp.hide();
             light.hide();
             humid.hide();
@@ -136,7 +131,7 @@ function Statistical() {
     return (
         <div className="statis-body">
             <div className="row sbd-row">
-                <div className="col-3 statis-left">
+                <div className="col-3 pb-3 statis-left">
                     <p>
                         All my conditions
                     </p>

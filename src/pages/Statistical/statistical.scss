@@ -1,5 +1,5 @@
 .statis-body {
-    padding-top: 50px;
+    padding-top: 52px;
 }
 
 .statis-body .row {
@@ -36,16 +36,18 @@
 
 .statis-left .stl .temp,
 .statis-left .stl .light,
-.statis-left .stl .humid,
-.statis-left .stl .soil {
-    border: 1px solid rgb(222, 219, 219);
+.statis-left .stl .humid {
+    border: 1px solid rgba(222, 219, 219, 0.5);
+    border-radius: 10px;
     margin-bottom: 20%;
     height: 150px;
     cursor: pointer;
+    background-color: var(--white-green);
 }
 
-.statis-left .stl .temp {
-    background-color: #ffffff;
+.stl-active {
+    border-color: var(--white) !important;
+    background-color: var(--white) !important;
 }
 
 .stl-content {
@@ -109,7 +111,7 @@
 }
 
 .strl-opt div {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: bold;
     padding: 10px;
 }
@@ -119,7 +121,7 @@
 .strl-opt #sl-month,
 .strl-opt #sl-year {
     border-radius: 25px;
-    padding: 8px 0;
+    padding: 7px 0;
     cursor: pointer;
 }
 

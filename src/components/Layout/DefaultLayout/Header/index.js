@@ -3,20 +3,19 @@ import { useState, useEffect } from 'react';
 import $ from 'jquery';
 
 function Header() {
-
     useEffect(() => {
-        $("html, body").animate({ scrollTop: 0 }, "fast");
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
 
-        $(window).on('scroll', function () {
-            var navbar = $('.navbar');
-            navbar.addClass('fixed');
-        })
+        // $(window).on('scroll', function () {
+        var navbar = $('.navbar');
+        navbar.addClass('fixed');
+        // })
     });
 
     return (
         <header class="header-section">
-            <nav id='navbar_top' class="navbar navbar-expand-lg bg-body-tertiary inner__header">
-                <div class="container-fluid pc__header" >
+            <nav id="navbar_top" class="navbar navbar-expand-lg bg-body-tertiary inner__header">
+                <div class="container-fluid pc__header">
                     <a class="navbar-brand header__logo" href="#">
                         GSTomato
                     </a>

@@ -3,7 +3,7 @@
 }
 
 .inner__header {
-    background-color: var(--green-dark) !important;
+    background-color: var(--green-dark);
     font-family: 'Play', sans-serif;
     position: fixed;
     width: 100%;
@@ -51,8 +51,12 @@
 .fixed {
     position: fixed;
     width: 100%;
-    background-color: #faf1df !important;
+    background-color: var(--green-dark) !important;
     z-index: 100;
+
+    .header__logo, .header__link {
+        color: var(--white) !important;
+    }
 }
 
 @keyframes smoothScroll {
