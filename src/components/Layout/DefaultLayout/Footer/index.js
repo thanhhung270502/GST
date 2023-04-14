@@ -30,11 +30,6 @@ function Footer() {
                             <div className="footer__title pb-2">CUSTOMER SERVICES</div>
                             <div className="footer__items">
                                 <div className="footer__item">Help Center</div>
-                                <div className="footer__item">How To Buy</div>
-                                <div className="footer__item">How To sell</div>
-                                <div className="footer__item">Payment Methods</div>
-                                <div className="footer__item">Shipping and Returns</div>
-                                <div className="footer__item">Return Policies</div>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6">
@@ -42,8 +37,6 @@ function Footer() {
                             <div className="footer__items">
                                 <div className="footer__item">PolkaDots Overview</div>
                                 <div className="footer__item">Privacy Policy</div>
-                                <div className="footer__item">Flash Sales</div>
-                                <div className="footer__item">Terms & Conditions</div>
                             </div>
                         </div>
                     </div>

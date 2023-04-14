@@ -53,7 +53,7 @@ function TempChart() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_lcAJ85164nTVHzZrkUegzBXK4sc9';
+    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -63,7 +63,7 @@ function TempChart() {
 
     const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[3] + '/data';
 
-    const aioKey = 'aio_lcAJ85164nTVHzZrkUegzBXK4sc9';
+    const aioKey = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
 
     useEffect(() => {
         fetch(url, {
