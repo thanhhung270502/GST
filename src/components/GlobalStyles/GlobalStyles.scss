@@ -22,7 +22,8 @@
     --blue: #0c97ff;
     --blue-light: #dfebf1;
     --blue-dark: #0d5cb6;
-    --blue-black: #09203f;
+    --blue-black: #1f232e;
+    --blue-dark: #313743;
     --blue-db: #2d5d80;
 
     --green: #2df3aa;
@@ -57,9 +58,13 @@ a {
 
 .sticky {
     background-color: var(--green-dark) !important;
+    z-index: 100;
 
-    .header__logo,
-    .header__link {
+    .header__logo {
+        color: var(--white) !important;
+    }
+
+    .header__menu .header__item .header__link {
         color: var(--white) !important;
     }
 }

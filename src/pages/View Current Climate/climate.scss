@@ -1,6 +1,28 @@
-.custom-container {
-    background: #fdf7ea;
+.inner__header {
+    background-color: transparent !important;
+    
+    .header__logo {
+        color: var(--black) !important;
+    }
+    
+    .header__menu {
+    
+        .header__link {
+            color: var(--black) !important;
+            font-weight: normal !important;
+    
+            &:hover {
+                font-weight: bold !important;
+            }
+        }
+    }
 }
+
+.custom-container {
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    padding-bottom: 4rem;
+}
+
 
 .logo {
     font-family: 'Poppins';
@@ -9,7 +31,7 @@
     font-size: 40px;
     line-height: 60px;
     /* identical to box height */
-    color: #413923;
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .climate__header {
@@ -26,16 +48,17 @@
     font-size: 40px;
     line-height: 65px;
     text-align: center;
-    color: #413923;
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     /* Inside auto layout */
 }
 .frame5 h2 span {
-    background: linear-gradient(90.85deg, #64ae82 100%, #78cfff 5%);
+    background: #000000;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0f9b0f, #000000);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0f9b0f, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     font-weight: 600;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
 }
 .space {
     width: 5px;
@@ -43,14 +66,15 @@
     display: inline-block;
 }
 .customCard {
-    display: block;
-    align-items: center;
     margin-top: 100px;
     width: auto;
-    height: 300px;
-    background: #24353e;
+    height: 330px;
     box-shadow: 10px 9px 70px rgba(36, 53, 62, 0.4);
     border-radius: 20px;
+background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+
+
+
 }
 .customCard h1 {
     font-family: 'Poppins';
@@ -59,21 +83,22 @@
     font-weight: 600;
     font-size: 30px;
     text-align: center;
-    color: #ffffff;
+
+
+
 }
 .image {
-    max-height: 150px;
-    margin: 0;
-    padding: 0;
-    transform: translateY(-250px);
+    transform: translateY(-70px);
+    line-height: 0px;
+    display: flex;
+    justify-content: center;
 }
 .image img {
-    scale: 25%;
-    margin-left: auto;
-    margin-right: auto;
+    scale: 125%;
 }
 .card-content {
     display: inline-block;
+    color: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .CardGroup {
     margin: auto;
@@ -84,4 +109,26 @@
 .button-group {
     position: relative;
     z-index: 1;
+}
+.irri
+{
+    scale: 150%;
+    transform: translateY(-50px);
+
+}
+
+.card-value {
+    font-size: 3rem !important;
+    font-weight: bold;
+    background: linear-gradient(to right, #0f9b0f, #166716);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 1400px) {
+    .CardGroup {
+        max-width: 1400px !important; 
+    }
 }

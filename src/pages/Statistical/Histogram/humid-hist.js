@@ -54,7 +54,7 @@ function HumidChart() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
+    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -64,17 +64,13 @@ function HumidChart() {
 
     const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
 
-    // const username = 'vienminhphuc';
-    // const feedKey = 'gst-fan';
-    const aioKey = 'aio_FwnL44zQBHuJwgICmM3ZGIqTHDMg';
-
     // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
     useEffect(() => {
         fetch(url, {
             headers: {
-                'X-AIO-Key': aioKey,
+                'X-AIO-Key': AIO_KEY,
                 'Content-Type': 'application/json',
             },
         })

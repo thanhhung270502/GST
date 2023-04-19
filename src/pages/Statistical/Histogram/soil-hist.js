@@ -54,7 +54,7 @@ function SoilChart() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
+    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -62,22 +62,22 @@ function SoilChart() {
     let timeoutId = null;
     let messagePrinted = false;
 
-    const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
+    const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[2] + '/data';
 
-    // useEffect(() => {
-    //     fetch(url, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setData(data);
-    //             console.log(data);
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, [])
+    useEffect(() => {
+        fetch(url, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setData(data);
+                console.log(data);
+            })
+            .catch((error) => console.log(error));
+    }, [])
 
     return (
         <div >

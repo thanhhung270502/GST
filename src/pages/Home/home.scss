@@ -11,17 +11,20 @@
 
 .inner__header {
     background-color: transparent;
-
+    
     .header__logo {
-        color: var(--black) !important;
+        color: var(--black);
     }
-
-    .header__link {
-        color: var(--black) !important;
-        font-weight: normal !important;
-
-        &:hover {
-            font-weight: bold !important;
+    
+    .header__menu {
+    
+        .header__link {
+            color: var(--black);
+            font-weight: normal !important;
+    
+            &:hover {
+                font-weight: bold !important;
+            }
         }
     }
 }

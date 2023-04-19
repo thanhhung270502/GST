@@ -50,7 +50,7 @@ function Header() {
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item" href="/climate">
-                                            Conditions
+                                            Dashboard
                                         </a>
                                     </li>
                                     <li>

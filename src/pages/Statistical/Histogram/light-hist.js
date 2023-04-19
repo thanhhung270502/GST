@@ -53,7 +53,7 @@ function LightChart() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
+    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -63,26 +63,22 @@ function LightChart() {
 
     const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
 
-    // const username = 'vienminhphuc';
-    // const feedKey = 'gst-fan';
-    const aioKey = 'aio_FwnL44zQBHuJwgICmM3ZGIqTHDMg';
-
     // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
-    // useEffect(() => {
-    //     fetch(url, {
-    //         headers: {
-    //             'X-AIO-Key': aioKey,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setData(data);
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, [])
+    useEffect(() => {
+        fetch(url, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setData(data);
+            })
+            .catch((error) => console.log(error));
+    }, [])
 
     return (
         <div>
@@ -111,7 +107,10 @@ function LightChart() {
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="created_at" />
-                    <YAxis />
+                    <YAxis tickCount={10}
+                        domain={["auto", "dataMax + 2000"]}
+                        interval="preserveStart"
+                    />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvLC)" fillOpacity={1} />
                 </AreaChart>
