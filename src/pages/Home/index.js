@@ -36,10 +36,10 @@ function Home() {
                     </div>
                 </div>
                 <div className="d-flex align-items-center ct ct-2">
-                    <div className="col-8">
+                    <div className="col-xl-8">
                         <img src={require('~/assets/images/tomato.jpg')} className="img-fluid"></img>
                     </div>
-                    <div className="col-4">
+                    <div className="col-xl-4">
                         <div className="title">About Us</div>
                         <div className="content">
                             This is a website with most of content about tomatoes and how to grow them. Hope it helps
@@ -48,22 +48,22 @@ function Home() {
                     </div>
                 </div>
                 <div className="d-flex align-items-center ct ct-3">
-                    <div className="col-5">
+                    <div className="col-xl-5">
                         <div className="title">Temperature</div>
                         <div className="content">
                             Temperatures below 12°C or above 30°C will adversely affect plant growth and affect pollen
                             viability, causing flower drop and fruit failure.
                         </div>
                     </div>
-                    <div className="col-7">
+                    <div className="col-xl-7">
                         <img src={require('~/assets/images/temptomato.jpg')} className="img-fluid"></img>
                     </div>
                 </div>
                 <div className="d-flex align-items-center ct ct-4">
-                    <div className="col-8">
+                    <div className="col-xl-8">
                         <img src={require('~/assets/images/lighttomato.jpg')} className="img-fluid"></img>
                     </div>
-                    <div className="col-4">
+                    <div className="col-xl-4">
                         <div className="title">Lighting</div>
                         <div className="content">
                             Tomato plants need to be grown in full sunlight and need to be exposed to light for 6-8
@@ -72,13 +72,13 @@ function Home() {
                     </div>
                 </div>
                 <div className="d-flex align-items-center ct ct-5">
-                    <div className="col-5">
+                    <div className="col-xl-5">
                         <div className="title">Soil and Nutrients</div>
                         <div className="content">
                             The soil needs to contain a lot of organic nutrients. Soil pH from 5.5 to 7.0 is standard.
                         </div>
                     </div>
-                    <div className="col-7">
+                    <div className="col-xl-7">
                         <img src={require('~/assets/images/temptomato.jpg')} className="img-fluid"></img>
                     </div>
                 </div>

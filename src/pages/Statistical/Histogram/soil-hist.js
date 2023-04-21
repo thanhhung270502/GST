@@ -1,5 +1,8 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { dataJson } from '../data';
 import { useState, useEffect } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+var pdata = dataJson();
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -14,41 +17,6 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 function SoilChart() {
-    const pdata = [
-        {
-            created_at: "21/02/2022",
-            value: 70
-        },
-        {
-            created_at: "22/02/2022",
-            value: 80
-        },
-        {
-            created_at: "23/02/2022",
-            value: 101
-        },
-        {
-            created_at: "24/02/2022",
-            value: 110
-        },
-        {
-            created_at: "25/02/2022",
-            value: 130
-        },
-        {
-            created_at: "26/02/2022",
-            value: 120
-        },
-        {
-            created_at: "27/02/2022",
-            value: 96
-        },
-        {
-            created_at: "28/02/2022",
-            value: 88
-        },
-    ];
-
     const [data, setData] = useState(pdata);
     console.log(data);
 
@@ -64,20 +32,20 @@ function SoilChart() {
 
     const url = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[2] + '/data';
 
-    useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-                console.log(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': AIO_KEY,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //             console.log(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div >
@@ -105,8 +73,12 @@ function SoilChart() {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="created_at" />
-                    <YAxis />
+                    <XAxis dataKey="time" />
+                    <YAxis
+                        ticks={[20, 40, 60, 80]}
+                        domain={[0, 100]}
+                        interval="preserveStart"
+                    />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvSC)" fillOpacity={1} />
                 </AreaChart>
