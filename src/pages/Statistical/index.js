@@ -79,34 +79,34 @@ function Statistical() {
         }
 
         function setValue() {
-            if ($('.stl-active').attr('class').split(' ')[0] === 'temp') {
+            if ($('.stl-active').attr('class').split(' ')[0] === 'temp' || $('.stl-active').attr('class').split(' ')[0] === 'short-temp') {
                 return Math.floor(Math.random() * 20) + 20;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light' || $('.stl-active').attr('class').split(' ')[0] === 'short-light') {
                 return Math.floor(Math.random() * 1000) + 1000;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid' || $('.stl-active').attr('class').split(' ')[0] === 'short-humid') {
                 return Math.floor(Math.random() * 20) + 30;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil' || $('.stl-active').attr('class').split(' ')[0] === 'short-soil') {
                 return Math.floor(Math.random() * 50) + 50;
             };
         }
 
         function refreshHistogram() {
-            if ($('.stl-active').attr('class').split(' ')[0] === 'temp') {
+            if ($('.stl-active').attr('class').split(' ')[0] === 'temp' || $('.stl-active').attr('class').split(' ')[0] === 'short-temp') {
                 temp.hide();
                 setTimeout(function () {
                     temp.show();
                 }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light' || $('.stl-active').attr('class').split(' ')[0] === 'short-light') {
                 light.hide();
                 setTimeout(function () {
                     light.show();
                 }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid' || $('.stl-active').attr('class').split(' ')[0] === 'short-humid') {
                 humid.hide();
                 setTimeout(function () {
                     humid.show();
                 }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil') {
+            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil' || $('.stl-active').attr('class').split(' ')[0] === 'short-soil') {
                 soil.hide();
                 setTimeout(function () {
                     soil.show();
@@ -226,7 +226,7 @@ function Statistical() {
         var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart'), soil = $('.Soilchart');
 
         $(".temp, .short-temp").on('click', function () {
-            $('.light, .humid, .soil').removeClass('stl-active');
+            $('.light, .humid, .soil, .short-light, .short-humid, .short-soil').removeClass('stl-active');
             $(this).addClass('stl-active');
 
             temp.show();
@@ -243,7 +243,7 @@ function Statistical() {
         });
 
         $(".light, .short-light").on('click', function () {
-            $('.temp, .humid, .soil').removeClass('stl-active');
+            $('.temp, .humid, .soil, .short-temp, .short-humid, .short-soil').removeClass('stl-active');
             $(this).addClass('stl-active');
 
             temp.hide();
@@ -259,7 +259,7 @@ function Statistical() {
         });
 
         $(".humid, .short-humid").on('click', function () {
-            $('.light, .temp, .soil').removeClass('stl-active');
+            $('.light, .temp, .soil, .short-light, .short-temp, .short-soil').removeClass('stl-active');
             $(this).addClass('stl-active');
 
             temp.hide();
@@ -275,7 +275,7 @@ function Statistical() {
         });
 
         $(".soil, .short-soil").on('click', function () {
-            $('.light, .temp, .humid').removeClass('stl-active');
+            $('.light, .temp, .humid ,.short-light, .short-temp, .short-humid').removeClass('stl-active');
             $(this).addClass('stl-active');
 
             temp.hide();
