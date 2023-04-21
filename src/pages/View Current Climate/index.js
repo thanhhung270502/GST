@@ -277,7 +277,7 @@ function Climate() {
                     </Col>
                 </Row>
             </Container>
-            <Container className="CardGroup">
+            <Container fluid className="CardGroup">
                 <Row className="justify-content-between">
                     <Col md={12} lg={3} xs={12} className="text-center">
                         <div className="customCard">
