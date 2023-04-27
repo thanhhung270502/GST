@@ -1,6 +1,6 @@
 import './header.scss';
 import { useState, useEffect } from 'react';
-import $ from 'jquery';
+import $, { get } from 'jquery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
@@ -15,8 +15,21 @@ import {
     faTriangleExclamation,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import { logout } from '~/api/api';
+import cookie from 'cookie';
+import { getCookie } from '~/api/cookie';
 
 function Header() {
+    const [currentUser, setCurrentUser] = useState();
+    const handleLogout = () => {
+        logout();
+        window.location.href = './';
+    };
+
+    useEffect(() => {
+        setCurrentUser(getCookie('user_id'));
+    }, []);
+
     return (
         <header className="header-section">
             <div className="top-header">
@@ -92,58 +105,71 @@ function Header() {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="d-flex align-items-center top-header__item-right">
-                                {/* <div className="top-header__item">
-                                    <a className="top-header__link">Login</a>
-                                </div>
-                                <div className="top-header__item">
-                                    <a className="top-header__link">SignUp</a>
-                                </div> */}
-                                <div class="dropdown">
-                                    <div
-                                        class="d-flex align-items-center dropdown-toggle"
-                                        href="#"
-                                        role="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                    >
-                                        <div className="top-header__username">Thanh Hung</div>
-                                        <div className="top-header__avatar">
-                                            <img src="http://html.phoenixcoded.net/empire/bootstrap/default/assets/img/avatars/1.png"></img>
+                            {currentUser && (
+                                <div className="d-flex align-items-center top-header__item-right">
+                                    <div class="dropdown">
+                                        <div
+                                            class="d-flex align-items-center dropdown-toggle"
+                                            href="#"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            <div className="top-header__username">Thanh Hung</div>
+                                            <div className="top-header__avatar">
+                                                <img src="http://html.phoenixcoded.net/empire/bootstrap/default/assets/img/avatars/1.png"></img>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div className="top-header__icon col-2">
-                                                    <FontAwesomeIcon icon={faUser} />
-                                                </div>
-                                                <div className="col-10">My Profile</div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div className="top-header__icon col-2">
-                                                    <FontAwesomeIcon icon={faGear} />
-                                                </div>
-                                                <div className="col-10">Account settings</div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider" />
-                                        </li>
-                                        <li>
-                                            <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div className="top-header__icon col-2">
-                                                    <FontAwesomeIcon icon={faRightFromBracket} />
-                                                </div>
-                                                <div className="col-10">Log out</div>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="d-flex align-items-center dropdown-item" href="#">
+                                                    <div className="top-header__icon col-2">
+                                                        <FontAwesomeIcon icon={faUser} />
+                                                    </div>
+                                                    <div className="col-10">My Profile</div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="d-flex align-items-center dropdown-item" href="#">
+                                                    <div className="top-header__icon col-2">
+                                                        <FontAwesomeIcon icon={faGear} />
+                                                    </div>
+                                                    <div className="col-10">Account settings</div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li>
+                                                <button
+                                                    class="d-flex align-items-center dropdown-item"
+                                                    onClick={handleLogout}
+                                                >
+                                                    <div className="top-header__icon col-2">
+                                                        <FontAwesomeIcon icon={faRightFromBracket} />
+                                                    </div>
+                                                    <div className="col-10">Log out</div>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
+                            {!currentUser && (
+                                <div className="d-flex align-items-center top-header__item-right">
+                                    <div className="top-header__item">
+                                        <a href="./login" className="top-header__link">
+                                            Login
+                                        </a>
+                                    </div>
+                                    <div className="top-header__item">
+                                        <a href="./signup" className="top-header__link">
+                                            SignUp
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
