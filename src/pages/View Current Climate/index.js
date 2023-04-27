@@ -11,53 +11,32 @@ import hot from '../../assets/images/hot.png';
 import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
 import $ from 'jquery';
+import { toggleDevice } from '~/api/toggle';
 
-function toggleFan(valueFan) {
-    const username = 'vienminhphuc';
-    const feedKey = 'gst-fan';
-    const aioKey = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
 
-    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
-    //Create a GET request with value 1 and send it to AdafruitIO
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-AIO-Key': aioKey,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            value: 0, //Turn on the fan
-        }),
-    })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-}
 
 function Climate() {
     const staticAt = ['High', 'Normal', 'Low'];
     const [fan, setFan] = useState(0);
+    const [led, setLed] = useState(0);
+    const [pump, setPump] = useState(0);
+    const [roof, setRoof] = useState(0);
 
     const [temp, setTemp] = useState(22);
     const [tempTimePrev, setTempTimePrev] = useState(22);
-    // const [modeTemp, setModeTemp] = useState('Automatic');
-    // const [staticTemp, setStaticTemp] = useState('Normal');
 
     const [light, setLight] = useState(1200);
     const [lightTimePrev, setLightTimePrev] = useState(1200);
-    // const [modeLight, setModeLight] = useState('Automatic');
-    // const [staticLight, setStaticLight] = useState('Normal');
 
     const [humi, setHumi] = useState(56);
     const [humiTimePrev, setHumiTimePrev] = useState(56);
-    // const [modeHumi, setModeHumi] = useState('Automatic');
-    // const [staticHumi, setStaticHumi] = useState('Normal');
 
     const [soil, setSoil] = useState(56);
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
+    const AIO_KEY = 'aio_vzdq51hH08Y7zHyKkTTXSx8ubgIp';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -69,71 +48,61 @@ function Climate() {
 
     // --------------------------------- Start --------------------------------- //
 
-    // useEffect(() => {
-    //     fetch(url_temp, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setTempTimePrev(data[0].created_at);
-    //             setTemp(data[0].value);
-    //             // if (data[0].value < 21) {
-    //             //     setStaticTemp(staticAt[2]);
-    //             // } else if (data[0].value >= 21 && data[0].value <= 24) {
-    //             //     setStaticTemp(staticAt[1]);
-    //             // } else {
-    //             //     setStaticTemp(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
+    useEffect(() => {
+        fetch(url_temp, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setTemp(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
-    // useEffect(() => {
-    //     fetch(url_light, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setLightTimePrev(data[0].created_at);
-    //             setLight(data[0].value);
-    //             // if (data[0].value < 2000) {
-    //             //     setStaticLight(staticAt[2]);
-    //             // } else if (data[0].value >= 2000 && data[0].value <= 3000) {
-    //             //     setStaticLight(staticAt[1]);
-    //             // } else {
-    //             //     setStaticLight(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
+    useEffect(() => {
+        fetch(url_light, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setLight(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
-    // useEffect(() => {
-    //     fetch(url_humi, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setHumiTimePrev(data[0].created_at);
-    //             setHumi(data[0].value);
-    //             // if (data[0].value < 60) {
-    //             //     setStaticHumi(staticAt[2]);
-    //             // } else if (data[0].value >= 60 && data[0].value <= 70) {
-    //             //     setStaticHumi(staticAt[1]);
-    //             // } else {
-    //             //     setStaticHumi(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
+    useEffect(() => {
+        fetch(url_humi, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setHumi(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        fetch(url_soil, {
+            headers: {
+                'X-AIO-Key': AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setSoil(data[0].value);
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
     // --------------------------------- Real-time --------------------------------- //
     useEffect(() => {
@@ -161,13 +130,6 @@ function Climate() {
                 .then((response) => response.json())
                 .then((data) => {
                     setLight(data[0].value);
-                    // if (data[0].value < 2000) {
-                    //     setStaticLight(staticAt[2]);
-                    // } else if (data[0].value >= 2000 && data[0].value <= 3000) {
-                    //     setStaticLight(staticAt[1]);
-                    // } else {
-                    //     setStaticLight(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
@@ -181,13 +143,6 @@ function Climate() {
                 .then((response) => response.json())
                 .then((data) => {
                     setHumi(data[0].value);
-                    // if (data[0].value < 60) {
-                    //     setStaticHumi(staticAt[2]);
-                    // } else if (data[0].value >= 60 && temp <= 70) {
-                    //     setStaticHumi(staticAt[1]);
-                    // } else {
-                    //     setStaticHumi(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
@@ -201,13 +156,6 @@ function Climate() {
                 .then((response) => response.json())
                 .then((data) => {
                     setSoil(data[0].value);
-                    // if (data[0].value < 60) {
-                    //     setStaticHumi(staticAt[2]);
-                    // } else if (data[0].value >= 60 && temp <= 70) {
-                    //     setStaticHumi(staticAt[1]);
-                    // } else {
-                    //     setStaticHumi(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 3000);
@@ -216,48 +164,45 @@ function Climate() {
     const handleFan = () => {
         if (fan === 0) {
             setFan(1);
-            toggleFan(fan);
+            toggleDevice("fan", 1);
         } else {
             setFan(0);
-            toggleFan(fan);
+            toggleDevice("fan", 0);
         }
     };
-    
-    // useEffect(() => {
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
 
-    //     var show = document.getElementsByClassName('header-section')[0];
-    //     var navbar = $('.navbar');
-    //     navbar.removeClass('fixed');
-    //     $(window).on('scroll', function () {
-    //         var scroll = $(window).scrollTop();
+    const handleLed = () => {
+        if (led === 0) {
+            setLed(1);
+            toggleDevice("led", 1);
+        } else {
+            setLed(0);
+            toggleDevice("led", 0);
+        }
+    };
 
-    //         if (scroll < 50) {
-    //             navbar.removeClass('sticky');
-    //         } else if (scroll >= 50) {
-    //             navbar.addClass('sticky');
-    //         }
-    //     });
-    // });
+    const handlePump = () => {
+        if (led === 0) {
+            setPump(1);
+            toggleDevice("pump", 1);
+        } else {
+            setPump(0);
+            toggleDevice("pump", 0);
+        }
+    };
 
+    const handleRoof = () => {
+        if (led === 0) {
+            setRoof(1);
+            toggleDevice("roof", 1);
+        } else {
+            setRoof(0);
+            toggleDevice("roof", 0);
+        }
+    };
 
     return (
         <Container fluid className="custom-container">
-            {/* <Navbar bg="none" variant="light">
-                <Container>
-                    <Navbar.Brand className="logo" href="#home">
-                        GSTomato
-                    </Navbar.Brand>
-                    <Nav className="justify-content-center">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#features">Features</Nav.Link>
-                        <Nav.Link href="#about">About us</Nav.Link>
-                        <Nav.Link href="#services">Services</Nav.Link>
-                        <Nav.Link href="#contact">Contact</Nav.Link>
-                        <Nav.Link href="#connect">Connect</Nav.Link>
-                    </Nav>
-                </Container>
-            </Navbar> */}
             <Container>
                 <Row className="frame5">
                     <Col lg="12" className="text-center">
@@ -312,9 +257,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="warning">
-                                    Turn on the light
-                                </Button>{' '}
+                                {led === 0 && (
+                                    <div className="btn btn-warning btn-md" onClick={handleLed}>
+                                        Turn on the light
+                                    </div>
+                                )}
+                                {led === 1 && (
+                                    <div className="btn btn-warning btn-md" onClick={handleLed}>
+                                        Turn off the light
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
@@ -333,9 +285,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="success">
-                                    Water the tree
-                                </Button>{' '}
+                                {pump === 0 && (
+                                    <div className="btn btn-success btn-md" onClick={handlePump}>
+                                        Turn on the pump
+                                    </div>
+                                )}
+                                {pump === 1 && (
+                                    <div className="btn btn-success btn-md" onClick={handlePump}>
+                                        Turn off the pump
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
@@ -354,9 +313,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="success">
-                                    Water the tree
-                                </Button>{' '}
+                                {roof === 0 && (
+                                    <div className="btn btn-success btn-md" onClick={handleRoof}>
+                                        Turn on the roof
+                                    </div>
+                                )}
+                                {roof === 1 && (
+                                    <div className="btn btn-success btn-md" onClick={handleRoof}>
+                                        Turn off the roof
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
