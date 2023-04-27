@@ -217,7 +217,8 @@ function Statistical() {
             };
             $('.his-table').append(content);
             firstrender = true;
-            $('.inner__header').addClass('sticky');
+            // $('.inner__header').attr('style', 'background-color: var(--green-dark) !important');
+            // $('.header__logo, .header__link').attr('style', 'color: var(--white) !important');
 
         }
 

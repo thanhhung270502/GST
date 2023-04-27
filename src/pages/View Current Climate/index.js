@@ -148,16 +148,6 @@ function Climate() {
                 .then((data) => {
                     setTemp(data[0].value);
                     console.log(data[0]);
-                    if (data[0].created_at === tempTimePrev) {
-                        // alert('Chương trình bị dừng');
-                    }
-                    // if (data[0].value < 21) {
-                    //     setStaticTemp(staticAt[2]);
-                    // } else if (data[0].value >= 21 && data[0].value <= 24) {
-                    //     setStaticTemp(staticAt[1]);
-                    // } else {
-                    //     setStaticTemp(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
@@ -233,22 +223,22 @@ function Climate() {
         }
     };
     
-    useEffect(() => {
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    // useEffect(() => {
+    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
 
-        var show = document.getElementsByClassName('header-section')[0];
-        var navbar = $('.navbar');
-        navbar.removeClass('fixed');
-        $(window).on('scroll', function () {
-            var scroll = $(window).scrollTop();
+    //     var show = document.getElementsByClassName('header-section')[0];
+    //     var navbar = $('.navbar');
+    //     navbar.removeClass('fixed');
+    //     $(window).on('scroll', function () {
+    //         var scroll = $(window).scrollTop();
 
-            if (scroll < 50) {
-                navbar.removeClass('sticky');
-            } else if (scroll >= 50) {
-                navbar.addClass('sticky');
-            }
-        });
-    });
+    //         if (scroll < 50) {
+    //             navbar.removeClass('sticky');
+    //         } else if (scroll >= 50) {
+    //             navbar.addClass('sticky');
+    //         }
+    //     });
+    // });
 
 
     return (

@@ -1,95 +1,6 @@
-.statis-body {
-    position: relative;
-    padding-top: 52px;
-
-    .stl-opt {
-        position: absolute;
-        top: 70px;
-        left: 20px;
-        width: 60px;
-        height: 60px;
-        font-size: 2.5rem;
-        text-align: center;
-        display: none;
-
-        i:first-child {
-            opacity: 0.8;
-        }
-
-        .dropdown-opt {
-            position: absolute;
-            top: 70px;
-            width: 200px;
-            margin: 0;
-            padding: 0;
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 1);
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: left;
-            list-style: none;
-            z-index: 50;
-
-            li {
-                width: 100%;
-                padding: 10px 0;
-                padding-left: 24px;
-                opacity: 0.9;
-
-                &:hover {
-                    cursor: pointer;
-                    background-color: rgba(157, 157, 157, 0.8);
-                    color: #ffffff;
-                }
-            }
-
-            li:first-child {
-                &:hover {
-                    border-top-right-radius: 15px;
-                    border-top-left-radius: 15px;
-                }
-            }
-
-            li:last-child {
-                &:hover {
-                    border-bottom-left-radius: 15px;
-                    border-bottom-right-radius: 15px;
-                }
-            }
-        }
-
-        div {
-            position: absolute;
-            top: 40px;
-            left: 10px;
-
-            i {
-                color: rgba(255, 255, 255, 1);
-            }
-        }
-
-        &:hover i:first-child {
-            cursor: pointer;
-            opacity: 1;
-        }
-
-        .add-hover {
-            background-color: rgba(157, 157, 157, 0.8) !important;
-            color: #ffffff;
-        }
-    }
-
-    .add-hover {
-        background-color: #25b580 !important;
-        color: #ffffff !important;
-    }
-}
-
 .statis-body .row {
     width: 100%;
     height: 100%;
-    margin: 0;
-    background-color: #edf9f9;
     display: flex;
 }
 
@@ -196,23 +107,6 @@
 }
 
 .statis-right .str-right {
-    display: flex;
-    flex-direction: column;
-    height: 50vw;
-    min-height: 900px;
-    margin: 0;
-    padding: 0;
-    background-color: #edf9f9;
-
-    div {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 90%;
-        max-height: 400px;
-        margin: auto;
-    }
 }
 
 .strl-opt {

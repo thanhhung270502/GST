@@ -1,25 +1,25 @@
-.inner__header {
-    background-color: transparent !important;
+// .inner__header {
+//     background-color: transparent !important;
     
-    .header__logo {
-        color: var(--black) !important;
-    }
+//     .header__logo {
+//         color: var(--black) !important;
+//     }
     
-    .header__menu {
+//     .header__menu {
     
-        .header__link {
-            color: var(--black) !important;
-            font-weight: normal !important;
+//         .header__link {
+//             color: var(--black) !important;
+//             font-weight: normal !important;
     
-            &:hover {
-                font-weight: bold !important;
-            }
-        }
-    }
-}
+//             &:hover {
+//                 font-weight: bold !important;
+//             }
+//         }
+//     }
+// }
 
 .custom-container {
-    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    // background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%); 
     padding-bottom: 4rem;
 }
 
