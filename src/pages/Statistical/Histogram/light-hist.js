@@ -1,5 +1,8 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
+import { dataJson } from '../data';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+var pdata = dataJson();
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -14,42 +17,8 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 function LightChart() {
-    const pdata = [
-        {
-            created_at: "21/02/2022",
-            value: 50
-        },
-        {
-            created_at: "22/02/2022",
-            value: 70
-        },
-        {
-            created_at: "23/02/2022",
-            value: 24
-        },
-        {
-            created_at: "24/02/2022",
-            value: 65
-        },
-        {
-            created_at: "25/02/2022",
-            value: 61
-        },
-        {
-            created_at: "26/02/2022",
-            value: 80
-        },
-        {
-            created_at: "27/02/2022",
-            value: 58
-        },
-        {
-            created_at: "28/02/2022",
-            value: 66
-        },
-    ];
     const [data, setData] = useState(pdata);
-    console.log(data);
+    // console.log(data);
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
@@ -66,19 +35,19 @@ function LightChart() {
     // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
-    useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': AIO_KEY,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div>
@@ -106,9 +75,9 @@ function LightChart() {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="created_at" />
+                    <XAxis dataKey="time" />
                     <YAxis tickCount={10}
-                        domain={["auto", "dataMax + 2000"]}
+                        domain={["auto", "dataMax + 200"]}
                         interval="preserveStart"
                     />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />

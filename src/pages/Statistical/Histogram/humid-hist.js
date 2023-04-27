@@ -1,5 +1,8 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { dataJson } from '../data';
 import { useState, useEffect } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+var pdata = dataJson();
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -14,41 +17,6 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 function HumidChart() {
-    const pdata = [
-        {
-            created_at: "21/02/2022",
-            value: 50
-        },
-        {
-            created_at: "22/02/2022",
-            value: 70
-        },
-        {
-            created_at: "23/02/2022",
-            value: 42
-        },
-        {
-            created_at: "24/02/2022",
-            value: 65
-        },
-        {
-            created_at: "25/02/2022",
-            value: 61
-        },
-        {
-            created_at: "26/02/2022",
-            value: 56
-        },
-        {
-            created_at: "27/02/2022",
-            value: 58
-        },
-        {
-            created_at: "28/02/2022",
-            value: 66
-        },
-    ];
-
     const [data, setData] = useState(pdata);
     console.log(data);
 
@@ -67,19 +35,19 @@ function HumidChart() {
     // const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
 
-    useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': AIO_KEY,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div >
@@ -107,8 +75,12 @@ function HumidChart() {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="created_at" />
-                    <YAxis />
+                    <XAxis dataKey="time" />
+                    <YAxis
+                        ticks={[20, 40, 60, 80]}
+                        domain={[0, 100]}
+                        interval="preserveStart"
+                    />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvHC)" fillOpacity={1} />
                 </AreaChart>

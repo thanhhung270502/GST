@@ -1,5 +1,7 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import '../index';
+import { dataJson } from '../data';
 import { useState, useEffect } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -13,41 +15,10 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
+
 function TempChart() {
-    const pdata = [
-        {
-            created_at: "21/02/2022",
-            value: 23
-        },
-        {
-            created_at: "22/02/2022",
-            value: 22
-        },
-        {
-            created_at: "23/02/2022",
-            value: 14
-        },
-        {
-            created_at: "24/02/2022",
-            value: 18
-        },
-        {
-            created_at: "25/02/2022",
-            value: 20
-        },
-        {
-            created_at: "26/02/2022",
-            value: 21
-        },
-        {
-            created_at: "27/02/2022",
-            value: 27
-        },
-        {
-            created_at: "28/02/2022",
-            value: 22
-        },
-    ];
+    var pdata = dataJson();
+
     const [data, setData] = useState(pdata);
     console.log(data);
 
@@ -66,18 +37,23 @@ function TempChart() {
     const aioKey = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
 
     useEffect(() => {
-        fetch(url, {
-            headers: {
-                'X-AIO-Key': aioKey,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setData(data);
-            })
-            .catch((error) => console.log(error));
-    }, [])
+
+
+    })
+
+    // useEffect(() => {
+    //     fetch(url, {
+    //         headers: {
+    //             'X-AIO-Key': aioKey,
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setData(data);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, [])
 
     return (
         <div >
@@ -105,8 +81,11 @@ function TempChart() {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="created_at" />
-                    <YAxis />
+                    <XAxis dataKey="time" />
+                    <YAxis tickCount={10}
+                        domain={["auto", "dataMax + 5"]}
+                        interval="preserveStart"
+                    />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvTC)" fillOpacity={1} />
                 </AreaChart>

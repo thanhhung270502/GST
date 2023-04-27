@@ -57,14 +57,31 @@ a {
 }
 
 .sticky {
-    background-color: var(--green-dark) !important;
+    // background-color: var(--green-dark) !important;
+    background-image: linear-gradient(
+        to bottom,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #aceeea,
+        #aff0ea,
+        #b3f1ea,
+        #bcf4ea,
+        #c4f8eb,
+        #cdfbec,
+        #d5feee
+    ) !important;
+
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.4);
     z-index: 100;
 
     .header__logo {
-        color: var(--white) !important;
+        color: #0b850b !important;
     }
 
     .header__menu .header__item .header__link {
-        color: var(--white) !important;
+        color: #0b850b !important;
     }
 }
