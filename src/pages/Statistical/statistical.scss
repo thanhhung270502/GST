@@ -1,0 +1,407 @@
+.statis-body {
+    position: relative;
+    padding-top: 52px;
+
+    .stl-opt {
+        position: absolute;
+        top: 70px;
+        left: 20px;
+        width: 60px;
+        height: 60px;
+        font-size: 2.5rem;
+        text-align: center;
+        display: none;
+
+        i:first-child {
+            opacity: 0.8;
+        }
+
+        .dropdown-opt {
+            position: absolute;
+            top: 70px;
+            width: 200px;
+            margin: 0;
+            padding: 0;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 1);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: left;
+            list-style: none;
+            z-index: 50;
+
+            li {
+                width: 100%;
+                padding: 10px 0;
+                padding-left: 24px;
+                opacity: 0.9;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgba(157, 157, 157, 0.8);
+                    color: #ffffff;
+                }
+            }
+
+            li:first-child {
+                &:hover {
+                    border-top-right-radius: 15px;
+                    border-top-left-radius: 15px;
+                }
+            }
+
+            li:last-child {
+                &:hover {
+                    border-bottom-left-radius: 15px;
+                    border-bottom-right-radius: 15px;
+                }
+            }
+        }
+
+        div {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+
+            i {
+                color: rgba(255, 255, 255, 1);
+            }
+        }
+
+        &:hover i:first-child {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .add-hover {
+            background-color: rgba(157, 157, 157, 0.8) !important;
+            color: #ffffff;
+        }
+    }
+
+    .add-hover {
+        background-color: #25b580 !important;
+        color: #ffffff !important;
+    }
+}
+
+.statis-body .row {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background-color: #edf9f9;
+    display: flex;
+}
+
+.statis-left {
+    text-align: center;
+    height: 100%;
+}
+
+.statis-right {
+    padding: 0;
+    height: 100%;
+}
+
+.statis-right .row {
+    margin: 0;
+    height: 100%;
+}
+
+.statis-left p {
+    text-align: left;
+    font-size: 1.3rem;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.statis-left .stl {
+    display: inline-flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.statis-left .stl .temp,
+.statis-left .stl .light,
+.statis-left .stl .humid,
+.statis-left .stl .soil {
+    border: 2px solid rgba(222, 219, 219, 0.5);
+    border-radius: 25px;
+    margin-bottom: 20%;
+    height: 150px;
+    cursor: pointer;
+    background-color: var(--white-green);
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.stl-active {
+    border-color: var(--white) !important;
+    background-color: var(--white) !important;
+}
+
+.stl-content {
+    border: none !important;
+    display: inline-flex;
+    align-items: center;
+    height: 150px;
+}
+
+.stl-content div {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.stl-content div p {
+    margin: 0;
+    padding: 5px;
+}
+
+.stl-content div .uil::before {
+    border-radius: 100%;
+    margin-top: 15%;
+    font-size: 40px;
+    padding: 5px;
+}
+
+.stl-content div .uil-sun::before {
+    background-color: #f9d6d6;
+    color: #f92121;
+}
+
+.stl-content div .uil-brightness-half::before {
+    background-color: #c5e6fa;
+    color: #0092e4;
+}
+
+.stl-content div .uil-tear::before {
+    background-color: #b3f5dd;
+    color: #25b580;
+}
+
+.stl-content div .uil-mountains-sun::before {
+    background-color: #ffd6b8;
+    color: #ff7c01;
+}
+
+.statis-right .str-left {
+    background-color: #edf9f9;
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+    height: 100%;
+    min-height: 900px;
+}
+
+.statis-right .str-right {
+    display: flex;
+    flex-direction: column;
+    height: 50vw;
+    min-height: 900px;
+    margin: 0;
+    padding: 0;
+    background-color: #edf9f9;
+
+    div {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        max-height: 400px;
+        margin: auto;
+    }
+}
+
+.strl-opt {
+    height: 10%;
+
+    .row {
+        padding: 15px 10px;
+        background-color: #edf9f9;
+    }
+}
+
+.strl-opt div {
+    font-size: 1.15rem;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.strl-opt #sl-day,
+.strl-opt #sl-week,
+.strl-opt #sl-month,
+.strl-opt #sl-year {
+    border-radius: 25px;
+    padding: 7px 0;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #25b580;
+        color: #ffffff;
+    }
+}
+
+.strl-opt .sl-opt-active {
+    background-color: #25b580;
+    color: #ffffff;
+}
+
+.strl-content {
+    height: 100%;
+}
+
+.strl-content .strl-histogram {
+    padding: 5%;
+    background-color: #ffffff;
+    height: 100%;
+    margin-bottom: 5%;
+}
+
+.strl-content .strl-history {
+    background-color: #ffffff;
+    overflow-y: scroll;
+    border-radius: 25px;
+    height: 400px;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}
+
+.strl-content .strl-history::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
+.strl-content .strl-history .histop {
+    background-image: linear-gradient(
+        to right top,
+        #e1eff8,
+        #dfebf3,
+        #dde6ee,
+        #dae2e9,
+        #d8dee4,
+        #d4dee7,
+        #cfdfeb,
+        #cadfee,
+        #bce6f7,
+        #abedfc,
+        #9bf4fb,
+        #8ffbf3
+    );
+    width: 100%;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.his-table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.his-table td,
+.his-table th {
+    padding: 10px;
+    border-bottom: 1px solid rgb(214, 211, 211);
+}
+
+.his-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.his-table tr:hover {
+    background-color: #ddd;
+}
+
+.his-table th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.his-table td {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    opacity: 0.7;
+    font-size: 1.1rem;
+}
+
+.Lightchart,
+.Humidchart,
+.Soilchart {
+    display: none;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .statis-body {
+        .sbd-row {
+            .statis-left {
+                display: none;
+            }
+
+            .statis-right {
+                .row {
+                    .str-left {
+                        .strl-opt {
+                            height: 10%;
+
+                            .row {
+                                padding: 30px 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .stl-opt {
+            display: block;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .statis-body {
+        .sbd-row {
+            .statis-left {
+                display: none;
+            }
+
+            .statis-right {
+                .row {
+                    flex-direction: column;
+                    .str-left {
+                        .strl-opt {
+                            .row {
+                                flex-direction: row;
+                                padding: 30px 10px;
+                                padding-top: 60px;
+                            }
+
+                            #sl-day,
+                            #sl-week,
+                            #sl-month,
+                            #sl-year {
+                                font-size: 1.5rem;
+                                padding: 10px 0;
+                            }
+                        }
+                        .strl-content {
+                            .strl-history {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .str-left {
+                        min-height: 0;
+                    }
+                }
+            }
+        }
+
+        .stl-opt {
+            display: block;
+        }
+    }
+}

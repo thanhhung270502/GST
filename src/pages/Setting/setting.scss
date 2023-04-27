@@ -1,6 +1,7 @@
 .temp-setting {
     background-color: var(--white);
-    height: 100vh;
+    // height: 100vh;
+    padding-top: 50px;
 
     .sidebar {
         font-family: 'Play', sans-serif;
@@ -22,12 +23,12 @@
             cursor: pointer;
 
             &:hover {
-                background-color: rgba($color: #fff, $alpha: 0.3)
+                background-color: rgba($color: #fff, $alpha: 0.3);
             }
         }
 
         .item-active {
-            background-color: rgba($color: #fff, $alpha: 0.3)
+            background-color: rgba($color: #fff, $alpha: 0.3);
         }
 
         .sidebar-link {

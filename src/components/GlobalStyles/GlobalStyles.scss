@@ -6,24 +6,29 @@
 // Color
 :root {
     --black: black;
-    --black-blue: #161D27;
-    --black-green: #1F2D25;
+    --black-blue: #161d27;
+    --black-green: #1f2d25;
+    --black-yellow: #2d2c1f;
 
     --white: white;
-    --white-gray: #F0F8FF;
-    
-    --red: #df2020;
-    --orange: #FF8D5C;
-    --yellow: #ffc174;
+    --white-gray: #f0f8ff;
+    --white-green: #f4faf6;
 
-    --blue: #0C97FF;
+    --red: #df2020;
+    --orange: #ff8d5c;
+    --yellow: #ffc174;
+    --yellow-light: #fdf7ea;
+
+    --blue: #0c97ff;
     --blue-light: #dfebf1;
     --blue-dark: #0d5cb6;
-    --blue-black: #09203f;
+    --blue-black: #1f232e;
+    --blue-dark: #313743;
     --blue-db: #2d5d80;
 
     --green: #2df3aa;
     --green-dark: #25b580;
+    --green-light: #dff1ea;
 
     --purple: #e574ff;
     --pink: #fa7daf;
@@ -49,4 +54,34 @@ li {
 
 a {
     text-decoration: none;
+}
+
+.sticky {
+    // background-color: var(--green-dark) !important;
+    background-image: linear-gradient(
+        to bottom,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #a8edea,
+        #aceeea,
+        #aff0ea,
+        #b3f1ea,
+        #bcf4ea,
+        #c4f8eb,
+        #cdfbec,
+        #d5feee
+    ) !important;
+
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.4);
+    z-index: 100;
+
+    .header__logo {
+        color: #0b850b !important;
+    }
+
+    .header__menu .header__item .header__link {
+        color: #0b850b !important;
+    }
 }

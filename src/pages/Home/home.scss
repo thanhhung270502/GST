@@ -1,0 +1,149 @@
+.home-body {
+    // background-color: var(--green-light);
+    background-color: #fcfffe;
+    background-image: linear-gradient(315deg, #fcfffe 0%, #d5feee 74%);
+}
+
+#homepic {
+    width: 100%;
+    height: 15%;
+}
+
+.inner__header {
+    background-color: transparent;
+
+    .header__logo {
+        color: var(--black);
+    }
+
+    .header__menu {
+        .header__link {
+            color: var(--black);
+            font-weight: normal !important;
+
+            &:hover {
+                font-weight: bold !important;
+            }
+        }
+    }
+}
+
+.home-content {
+    width: 70%;
+    max-width: 1600px;
+    margin: auto;
+    padding: 2rem 0;
+    font-family: 'Courier New', Courier, monospace;
+
+    .ct {
+        padding: 3rem 0;
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Play', sans-serif;
+            color: var(--green-dark);
+        }
+
+        .content {
+            padding: 1.5rem 2.5rem;
+            text-align: justify;
+            font-size: 1.25rem;
+        }
+    }
+
+    .ct-1 {
+        font-size: 1.5rem;
+        line-height: 40px;
+
+        .first {
+            text-align: justify;
+        }
+    }
+
+    .ct-2,
+    .ct-4 {
+        img {
+            width: 100%;
+            min-width: 400px;
+            max-width: 1200px;
+            min-height: 300px;
+            max-height: 700px;
+        }
+    }
+
+    .ct-3,
+    .ct-5 {
+        img {
+            width: 100%;
+            min-width: 400px;
+            max-width: 1100px;
+            min-height: 300px;
+            max-height: 600px;
+        }
+    }
+
+    .ct-6 {
+        img {
+            width: 100%;
+            max-width: 800px;
+            max-height: 600px;
+        }
+    }
+}
+
+@keyframes smoothScroll {
+    0% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@media only screen and (max-width: 1439px) {
+    .home-content {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 1047px) {
+    .home-content {
+        .ct-2,
+        .ct-4 {
+            flex-direction: column;
+            div:last-child {
+                div:first-child {
+                    margin-top: 30px;
+                }
+            }
+        }
+
+        .ct-3,
+        .ct-5 {
+            flex-direction: column-reverse;
+            div:first-child {
+                div:first-child {
+                    margin-top: 30px;
+                }
+            }
+        }
+
+        .ct-2,
+        .ct-3,
+        .ct-4,
+        .ct-5 {
+            img {
+                width: 100%;
+                max-width: 1200px;
+                max-height: 700px;
+            }
+
+            .content {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
+}

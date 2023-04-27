@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import './setting.scss';
 import data from './setting.json';
 import { getDataInfo } from '~/api/index';
+import $ from 'jquery';
 
-function TempSetting() {
-    const $ = document.querySelector.bind(document);
+function Setting() {
+    // const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
+    var firstRender = false;
 
     const conditions = ['Temperator', 'Lighting', 'Irrigation'];
 
@@ -64,6 +66,13 @@ function TempSetting() {
     const showData = () => {
         console.log(data)
     }
+    useEffect(() => {
+        if (firstRender === false) {
+            $('.inner__header').attr('style', 'background-color: var(--green-dark) !important');
+            $('.header__logo, .header__link').attr('style', 'color: var(--white) !important');
+            firstRender = true;
+        }
+    })
 
     return (
         <div className="temp-setting">
@@ -129,7 +138,11 @@ function TempSetting() {
                                 </div>
                                 <div className="sub-items">
                                     <div className="sub-item">
+<<<<<<< HEAD:src/pages/TempSetting/index.js
                                         <div onClick={showData}>Click</div>
+=======
+
+>>>>>>> 4205a820f245aa2e354c5cbd346fab926c566523:src/pages/Setting/index.js
                                     </div>
                                 </div>
                             </div>
@@ -169,4 +182,4 @@ function TempSetting() {
     );
 }
 
-export default TempSetting;
+export default Setting;

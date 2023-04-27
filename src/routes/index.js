@@ -1,12 +1,16 @@
 // Layouts
 import { OnlyHeader } from '~/components/Layout';
+// import Footer from '~/components/Layout/DefaultLayout/Footer';
 
 // Pages
 import Home from '~/pages/Home';
-import TempSetting from '~/pages/TempSetting';
+import Setting from '~/pages/Setting';
+import StaticPage from '~/pages/Conditions';
+import Statis from '~/pages/Statistical';
 // import Product_Index from '~/pages/Product_Index';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
+import Climate from '../pages/View Current Climate';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -14,6 +18,11 @@ const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    // http://localhost:3000/conditions
+    {
+        path: '/conditions',
+        component: StaticPage,
     },
     // http://localhost:3000/test
     {
@@ -29,8 +38,18 @@ const publicRoutes = [
     },
     // http://localhost:3000/tempsetting
     {
-        path: '/tempsetting',
-        component: TempSetting,
+        path: '/setting',
+        component: Setting,
+    },
+    // http://localhost:3000/statistic
+    {
+        path: '/statis',
+        component: Statis,
+    },
+    // http://localhost:3000/climate
+    {
+        path: '/climate',
+        component: Climate,
     },
 ];
 
