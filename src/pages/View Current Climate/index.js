@@ -10,13 +10,15 @@ import Button from 'react-bootstrap/Button';
 import hot from '../../assets/images/hot.png';
 import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
+import soilpng from '../../assets/images/soil.png'
+import sendDataToBackend from '~/api/api';
 import $ from 'jquery';
+import { sendData } from '~/api/api';
 
 function toggleFan(valueFan) {
     const username = 'vienminhphuc';
     const feedKey = 'gst-fan';
-    const aioKey = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
-
+    const aioKey = '';
     const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
     //Create a GET request with value 1 and send it to AdafruitIO
@@ -57,7 +59,7 @@ function Climate() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_ZVYY232fdRUHOhzUwnGkVVgNIaO7';
+    const AIO_KEY = '';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -66,92 +68,31 @@ function Climate() {
     const url_light = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
     const url_soil = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[2] + '/data';
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
-
-    // --------------------------------- Start --------------------------------- //
-
-    // useEffect(() => {
-    //     fetch(url_temp, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setTempTimePrev(data[0].created_at);
-    //             setTemp(data[0].value);
-    //             // if (data[0].value < 21) {
-    //             //     setStaticTemp(staticAt[2]);
-    //             // } else if (data[0].value >= 21 && data[0].value <= 24) {
-    //             //     setStaticTemp(staticAt[1]);
-    //             // } else {
-    //             //     setStaticTemp(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
-
-    // useEffect(() => {
-    //     fetch(url_light, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setLightTimePrev(data[0].created_at);
-    //             setLight(data[0].value);
-    //             // if (data[0].value < 2000) {
-    //             //     setStaticLight(staticAt[2]);
-    //             // } else if (data[0].value >= 2000 && data[0].value <= 3000) {
-    //             //     setStaticLight(staticAt[1]);
-    //             // } else {
-    //             //     setStaticLight(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
-
-    // useEffect(() => {
-    //     fetch(url_humi, {
-    //         headers: {
-    //             'X-AIO-Key': AIO_KEY,
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setHumiTimePrev(data[0].created_at);
-    //             setHumi(data[0].value);
-    //             // if (data[0].value < 60) {
-    //             //     setStaticHumi(staticAt[2]);
-    //             // } else if (data[0].value >= 60 && data[0].value <= 70) {
-    //             //     setStaticHumi(staticAt[1]);
-    //             // } else {
-    //             //     setStaticHumi(staticAt[0]);
-    //             // }
-    //         })
-    //         .catch((error) => console.log(error));
-    // }, []);
-
     // --------------------------------- Real-time --------------------------------- //
-    useEffect(() => {
-        setInterval(() => {
-            fetch(url_temp, {
+     useEffect(() => {
+        setInterval(async () => {
+             fetch(url_temp, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
                     'Content-Type': 'application/json',
                 },
+
             })
                 .then((response) => response.json())
-                .then((data) => {
-                    setTemp(data[0].value);
-                    console.log(data[0]);
+                .then((data) => {                    
+                    const send = async () => {
+                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
+                        console.log(res);
+                        console.log(data[0]);
+                        console.log(data[0].feed_key.slice(4));
+                    };        
+                    send();
+                    setTemp(data[0].value);            
                 })
+
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
-        setInterval(() => {
+        setInterval(async() => {
             fetch(url_light, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -160,6 +101,14 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    const send = async () => {
+                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
+                        console.log(res);
+                        console.log(data[0]);
+                        console.log(data[0].feed_key.slice(4));
+                    };        
+                    send();
+
                     setLight(data[0].value);
                     // if (data[0].value < 2000) {
                     //     setStaticLight(staticAt[2]);
@@ -171,7 +120,9 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
-        setInterval(() => {
+
+
+        setInterval(async() => {
             fetch(url_humi, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -180,6 +131,14 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    const send = async () => {
+                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
+                        console.log(res);
+                        console.log(data[0]);
+                        console.log(data[0].feed_key.slice(4));
+                    };        
+                    send();
+
                     setHumi(data[0].value);
                     // if (data[0].value < 60) {
                     //     setStaticHumi(staticAt[2]);
@@ -191,7 +150,7 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
-        setInterval(() => {
+        setInterval(async() => {
             fetch(url_soil, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -200,6 +159,14 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    const send = async () => {
+                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
+                        console.log(res);
+                        console.log(data[0]);
+                        console.log(data[0].feed_key.slice(4));
+                    };        
+                    send();
+
                     setSoil(data[0].value);
                     // if (data[0].value < 60) {
                     //     setStaticHumi(staticAt[2]);
@@ -341,8 +308,8 @@ function Climate() {
                     </Col>
                     <Col md={12} lg={3} xs={12} className="text-center">
                         <div className="customCard">
-                            <div className="irri">
-                                <img src={irri} alt="irri" />
+                            <div className="soilpng">
+                                <img src={soilpng} alt="soil" />
                             </div>
                             <div className="card-content">
                                 <h2>Soil Moisture</h2>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cookie from 'cookie';
 import { setCookie } from './cookie';
-
+import React, { useEffect, useState } from 'react';
 const URL = 'http://localhost:3000';
 
 export const signup = async (info) => {
@@ -44,7 +44,13 @@ export const login = async (info) => {
         });
     return res;
 };
-
 export const logout = () => {
     setCookie("user_id", '', 0);
+};
+const data = []
+
+export const sendData = async(data) => {
+    await axios.post(`${URL}/climates`, data)
+   .then(res => console.log('Data send'))
+   .catch(err => console.log(err.data))
 };
