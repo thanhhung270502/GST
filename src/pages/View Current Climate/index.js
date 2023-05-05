@@ -11,10 +11,9 @@ import hot from '../../assets/images/hot.png';
 import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
 import soilpng from '../../assets/images/soil.png'
-import sendDataToBackend from '~/api/api';
 import $ from 'jquery';
 import { sendData } from '~/api/api';
-
+import { getTheLastData } from '~/api/api';
 function toggleFan(valueFan) {
     const username = 'vienminhphuc';
     const feedKey = 'gst-fan';
@@ -69,6 +68,20 @@ function Climate() {
     const url_soil = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[2] + '/data';
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
     // --------------------------------- Real-time --------------------------------- //
+    const send = async (data) => {
+        await sendData({type: data.feed_key.slice(4),value: data.value, time: data.created_at});
+   };        
+   const check = async(data) => {
+    const res = await getTheLastData(data.feed_key.slice(4))
+    if(res === '') {send(data); throw "Succesfully add to database";}
+    res.time = res.time.replace('.000', '')
+    if(res.time === data.created_at)
+    {
+        throw Error("Database already had this row!")
+    }
+    else send(data);
+   };
+
      useEffect(() => {
         setInterval(async () => {
              fetch(url_temp, {
@@ -79,17 +92,10 @@ function Climate() {
 
             })
                 .then((response) => response.json())
-                .then((data) => {                    
-                    const send = async () => {
-                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
-                        console.log(res);
-                        console.log(data[0]);
-                        console.log(data[0].feed_key.slice(4));
-                    };        
-                    send();
+                .then((data) => {   
+                    check(data[0]);
                     setTemp(data[0].value);            
                 })
-
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
         setInterval(async() => {
@@ -101,26 +107,11 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const send = async () => {
-                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
-                        console.log(res);
-                        console.log(data[0]);
-                        console.log(data[0].feed_key.slice(4));
-                    };        
-                    send();
-
+                    check(data[0]);
                     setLight(data[0].value);
-                    // if (data[0].value < 2000) {
-                    //     setStaticLight(staticAt[2]);
-                    // } else if (data[0].value >= 2000 && data[0].value <= 3000) {
-                    //     setStaticLight(staticAt[1]);
-                    // } else {
-                    //     setStaticLight(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
-
 
         setInterval(async() => {
             fetch(url_humi, {
@@ -131,22 +122,8 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const send = async () => {
-                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
-                        console.log(res);
-                        console.log(data[0]);
-                        console.log(data[0].feed_key.slice(4));
-                    };        
-                    send();
-
+                    check(data[0]);
                     setHumi(data[0].value);
-                    // if (data[0].value < 60) {
-                    //     setStaticHumi(staticAt[2]);
-                    // } else if (data[0].value >= 60 && temp <= 70) {
-                    //     setStaticHumi(staticAt[1]);
-                    // } else {
-                    //     setStaticHumi(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
@@ -159,22 +136,8 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const send = async () => {
-                        const res = await sendData({type: data[0].feed_key.slice(4),value: data[0].value, time: data[0].created_at});
-                        console.log(res);
-                        console.log(data[0]);
-                        console.log(data[0].feed_key.slice(4));
-                    };        
-                    send();
-
+                    check(data[0]);
                     setSoil(data[0].value);
-                    // if (data[0].value < 60) {
-                    //     setStaticHumi(staticAt[2]);
-                    // } else if (data[0].value >= 60 && temp <= 70) {
-                    //     setStaticHumi(staticAt[1]);
-                    // } else {
-                    //     setStaticHumi(staticAt[0]);
-                    // }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 3000);
@@ -189,25 +152,6 @@ function Climate() {
             toggleFan(fan);
         }
     };
-    
-    // useEffect(() => {
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-
-    //     var show = document.getElementsByClassName('header-section')[0];
-    //     var navbar = $('.navbar');
-    //     navbar.removeClass('fixed');
-    //     $(window).on('scroll', function () {
-    //         var scroll = $(window).scrollTop();
-
-    //         if (scroll < 50) {
-    //             navbar.removeClass('sticky');
-    //         } else if (scroll >= 50) {
-    //             navbar.addClass('sticky');
-    //         }
-    //     });
-    // });
-
-
     return (
         <Container fluid className="custom-container">
             {/* <Navbar bg="none" variant="light">
