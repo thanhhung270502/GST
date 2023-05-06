@@ -1,447 +1,798 @@
 import $ from 'jquery';
-import './statistical.scss';
-import { dataJson } from './data';
-import { useEffect } from 'react';
-import HumidChart from './Histogram/humid-hist';  // npm install --save recharts
-import TempChart from './Histogram/temp-hist';
-import LightChart from './Histogram/light-hist';
-import SoilChart from './Histogram/soil-hist';
-import RaChart from './Histogram/radar-hist';
-import PChart from './Histogram/pie-hist';
-import { json } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import classNames from 'classnames/bind';
+import stylesCss from './statistical.scss';
+// import Data
+import { dataJson } from './Histogram/Data/data';
+import { meanTemp } from './Histogram/Data/tempsubdata';
+import { meanLight } from './Histogram/Data/lightsubdata';
+import { meanHumid } from './Histogram/Data/humidsubdata';
+import { meanSoil } from './Histogram/Data/soilsubdata';
+import { subdataTemp } from './Histogram/Data/tempsubdata';
+import { subdataLight } from './Histogram/Data/lightsubdata';
+import { subdataHumid } from './Histogram/Data/humidsubdata';
+import { subdataSoil } from './Histogram/Data/soilsubdata';
+import { getMainData } from './Histogram/Data/maindata';
+import { getFreqData } from './Histogram/Data/freqdata';
+// import Chart
+import MainChart from './Histogram/MainChart';
+import FreqChart from './Histogram/FreqChart';
+import TempChart from './Histogram/ClimateChart/TempChart';
+import LightChart from './Histogram/ClimateChart/LightChart';
+import HumidChart from './Histogram/ClimateChart/HumidChart';
+import SoilChart from './Histogram/ClimateChart/SoilChart';
+import SubTempChart from './Histogram/SubChart/SubTempChart';
+import SubLightChart from './Histogram/SubChart/SubLightChart';
+import SubHumidChart from './Histogram/SubChart/SubHumidChart';
+import SubSoilChart from './Histogram/SubChart/SubSoilChart';
+
+const cx = classNames.bind(stylesCss);
+
+var url = 'http://localhost:4000/climates/temp';
+var notiurl = 'http://localhost:4000/notification';
+var hisurl = 'http://localhost:4000/history';
 
 var pdata = dataJson();
 
+var maindata = getMainData();
+
+var freqdata = getFreqData();
+
+// Function
+
+function refreshData() {
+    for (var i = 0; i <= 29; i++) {
+        pdata.splice(0, 1);
+    };
+}
+
+function refreshHistogram() {
+    $('.statis-histogram').hide();
+    setTimeout(function () {
+        $('.statis-histogram').show();
+    }, 50)
+}
+
+function setdataDay() {
+    // Remove data 30 days
+    refreshData();
+
+    // Set data 24 hours
+    axios.get(`${url}`)
+        .then(function (res) {
+            var notiDate = res.data[res.data.length - 1].time.split('T')[0];
+            var idx = 23;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (res.data[i].time.split('T')[0] !== notiDate) {
+                    break;
+                };
+                pdata[idx] = res.data[i];
+                pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+
+    refreshHistogram();
+}
+
+function setdataWeek() {
+    // Remove data 30 days
+    refreshData();
+
+    // Set data 7 days
+    axios.get(`${url}`)
+        .then(function (res) {
+            var notiDate = res.data[res.data.length - 1].time.split('T')[0];
+            var idx = (res.data.length / 24) >= 7 ? 6 : res.data.length - 1;
+            var mean = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+
+                if (idx === -1) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0]) {
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / 24;
+                    pdata[idx].time = notiDate;
+                    notiDate = res.data[i].time.split('T')[0];
+                    mean = 0;
+                    i++;
+                    idx--;
+                } else {
+                    mean += Number(res.data[i].value);
+                }
+
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+
+    refreshHistogram();
+}
+
+function setdataMonth() {
+    // Remove data 30 days
+    refreshData();
+
+    // Set data 30 days
+    axios.get(`${url}`)
+        .then(function (res) {
+            var notiDate = res.data[res.data.length - 1].time.split('T')[0];
+            var idx = (res.data.length / 24) >= 30 ? 29 : res.data.length / 24 - 1;
+            var mean = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === -1) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0] || i === 0) {
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / 24;
+                    pdata[idx].time = notiDate;
+                    notiDate = res.data[i].time.split('T')[0];
+                    mean = 0;
+                    i++;
+                    idx--;
+                } else {
+                    mean += Number(res.data[i].value);
+                }
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+
+    refreshHistogram();
+}
+
+function setdata3Months() {
+    // Remove data 30 days
+    refreshData();
+
+    // Set data 3 months
+    axios.get(`${url}`)
+        .then(function (res) {
+            var notiDate = res.data[res.data.length - 1].time.split('T')[0];
+            var notiMonth = res.data[res.data.length - 1].time.split('-')[1];
+            var idx = Number(res.data[res.data.length - 1].time.split('-')[1] - res.data[0].time.split('-')[1]);
+            if (idx > 2) {
+                idx = 2;
+            };
+            var mean = 0;
+            var sum = 0;
+            var count = 1;
+            var counthours = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === -1) {
+                    break;
+                };
+                if (notiMonth !== res.data[i].time.split('-')[1] && i === 0) {
+                    sum += mean / counthours;
+                    pdata[idx] = {
+                        value: sum / count,
+                        time: 'Tháng ' + notiMonth
+                    };
+                    if (idx === 1) {
+                        pdata[--idx] = {
+                            value: Number(res.data[i].value),
+                            time: 'Tháng' + res.data[i].time.split('-')[1]
+                        }
+                    }
+                } else if (notiMonth !== res.data[i].time.split('-')[1] || i === 0) {
+                    if (i === 0) {
+                        mean += Number(res.data[i].value);
+                        counthours++;
+                        sum += mean / counthours;
+                    };
+                    pdata[idx] = {};
+                    pdata[idx].value = sum / count;
+                    pdata[idx].time = 'Tháng ' + notiMonth;
+                    if (i > 0) {
+                        notiMonth = res.data[i].time.split('-')[1];
+                        notiDate = res.data[i].time.split('T')[0];
+                        i++;
+                    };
+                    sum = 0;
+                    mean = 0;
+                    count = 1;
+                    counthours = 0;
+                    idx--;
+                } else {
+                    if (notiDate !== res.data[i].time.split('T')[0]) {
+                        count++;
+                        notiDate = res.data[i].time.split('T')[0];
+                        sum += mean / counthours;
+                        mean = 0;
+                        counthours = 0;
+                    }
+                    mean += Number(res.data[i].value);
+                    counthours++;
+                }
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+
+    refreshHistogram();
+}
+
+function setdataClimate() {
+    if ($('.time-opt').find('.time-opt-active').hasClass('time-opt-day')) {
+        return setdataDay();
+    } else if ($('.time-opt').find('.time-opt-active').hasClass('time-opt-week')) {
+        return setdataWeek();
+    } else if ($('.time-opt').find('.time-opt-active').hasClass('time-opt-month')) {
+        return setdataMonth();
+    } else if ($('.time-opt').find('.time-opt-active').hasClass('time-opt-3Months')) {
+        return setdata3Months();
+    }
+}
+
+$(document).ready(function () {
+    window.setTimeout(function () {
+        refreshHistogram();
+    }, 100);
+
+})
+
+const setInitialReport = async () => {
+    // Initial report
+    await axios.get(`${hisurl}`)
+        .then(function (res) {
+            var table = `<table>
+        <tr>
+            <th id='report-id'>
+                ID
+            </th>
+            <th id='report-editor'>
+                Editor
+            </th>
+            <th id='report-activity'>
+                Activity
+            </th>
+            <th id='report-date'>
+                Date
+            </th>
+            <th id='report-action'>
+                Action
+            </th>
+        </tr>`;
+
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                table += `
+                <tr id='report-activity-${i}'>
+                    <td>
+                        <input type="text" value="${i}" disabled>
+                            
+                        </input>
+                    </td>
+                    <td>
+                        <input type="text" value="${res.data[i].editor}" disabled>
+                            
+                        </input>
+                    </td>
+                    <td>
+                        <input type="text" value="${res.data[i].activity}" disabled>
+                            
+                        </input>
+                    </td>
+                    <td>
+                        <input type="text" value="${res.data[i].time.split('T')[0]} ${res.data[i].time.split('T')[1].split('.')[0]}" disabled>
+                            
+                        </input>
+                    </td>
+                    <td>
+                        <i class="uil uil-pen" id='report-activity-fix-${i}'></i>
+                        <i class="uil uil-check" id='report-activity-check-${i}'></i>
+                    </td>
+                </tr>
+            `;
+            };
+
+            table += `</table>`;
+            $('.report-wrap').html(table);
+
+            for (i = res.data.length - 1; i >= 0; i--) {
+                $(`#report-activity-fix-${i}`).on('click', function (e) {
+                    $(this).css('display', 'none');
+                    $(`#report-activity-check-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', false);
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', '1px solid #7d7d7d')
+                })
+                $(`#report-activity-check-${i}`).on('click', function (e) {
+                    $(this).css('display', 'none');
+                    $(`#report-activity-fix-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', true);
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', 'none')
+                })
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+}
+
+const setInitialNoti = async () => {
+    await axios.get(`${notiurl}`)
+        .then(function (res) {
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                // Set initial variables
+                var srcImg = '~/assets/images/Becareful.png';
+                var notiDay = res.data[i].time.split('-')[2].split('T')[0];
+                var notiMonth = res.data[i].time.split('-')[1];
+                var setMonth = '';
+                var notiYear = res.data[i].time.split('-')[0];
+                var notiTimeHour = res.data[i].time.split('T')[1].split(':')[0];
+                var setZone = 'AM';
+                var notiTimeMinute = res.data[i].time.split('T')[1].split(':')[1];
+
+                // Set default values
+                if (Number(notiTimeHour) > 12) {
+                    notiTimeHour = String(Number(notiTimeHour) - 12);
+                    setZone = 'PM';
+                };
+                switch (notiMonth) {
+                    case '01':
+                        setMonth = 'January';
+                        break;
+                    case '02':
+                        setMonth = 'February';
+                        break;
+                    case '03':
+                        setMonth = 'March';
+                        break;
+                    case '04':
+                        setMonth = 'April';
+                        break;
+                    case '05':
+                        setMonth = 'May';
+                        break;
+                    case '06':
+                        setMonth = 'June';
+                        break;
+                    case '07':
+                        setMonth = 'July';
+                        break;
+                    case '08':
+                        setMonth = 'August';
+                        break;
+                    case '09':
+                        setMonth = 'September';
+                        break;
+                    case '10':
+                        setMonth = 'October';
+                        break;
+                    case '11':
+                        setMonth = 'November';
+                        break;
+                    case '12':
+                        setMonth = 'December';
+                        break;
+                    default:
+                        break;
+                }
+
+                // Set source images
+                if (res.data[i].status === 'danger') {
+                    srcImg = 'https://media.istockphoto.com/id/1152189152/vector/red-alert-icon.jpg?s=612x612&w=0&k=20&c=Kw_-i314F4cxgn2hmakp-88-O45FSx62c6r-OzKYMw4=';
+                } else if (res.data[i].status === 'warn') {
+                    srcImg = 'https://www.labelsonline.co.uk/media/catalog/product/cache/4144d5a2ad04a864da81790e4da4c21c/5/0/50mm_general_warning-01_2.png';
+                } else if (res.data[i].status === 'info') {
+                    srcImg = 'https://static.vecteezy.com/system/resources/previews/005/747/906/original/info-icon-template-information-icon-colorful-free-vector.jpg';
+                };
+                $('.notification-wrap').append(`
+                <div id='notification-wrap__${i}'>
+                    <img src="${srcImg}" alt="" class='notification-avt''/>
+                    <div class='notification-main'>
+                        <div class='notification-info'>
+                            <p class='notification-name'>
+                                #330${i} ${res.data[i].problem}
+                            </p>
+                            <p class='notification-time'>
+                                ${notiDay} ${setMonth} ${notiYear}, ${notiTimeHour}:${notiTimeMinute} ${setZone}
+                            </p>
+                        </div>
+                        <div>
+                            <div class='notification-activity' id='noti-activity-${i}'>
+                                Turn ${res.data[i].sub_problem.split(' ')[2]}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `);
+                if (res.data[i].sub_problem.split(' ')[2] === 'off') {
+                    $('#noti-activity-' + i).css('background-color', '#ca2128');
+                }
+
+                $('#noti-activity-' + i).on('click', function (e) {
+                    $('.notification-wrap').find('#notification-wrap__' + e.target.id.split('-')[2]).remove();
+                    axios.delete(`http://localhost:4000/notification/delete/${res.data[e.target.id.split('-')[2]].id}`);
+                    var notiId = res.data[e.target.id.split('-')[2]].id;
+                    var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
+                    notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4];
+                    var today = new Date();
+                    var date = today.getFullYear()
+                        + '-' + (Number(today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1))
+                        + '-' + (Number(today.getDate()) >= 10 ? today.getDate() : '0' + today.getDate());
+                    var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
+                        + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
+                        + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
+                    axios.post(`http://localhost:4000/history/add/${notiId}k/${'Huynh Tuan Kiet'}/${notiActivity}/${date} ${time}`)
+                        .then(function (res) {
+                            setInitialReport();
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                })
+            };
+
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        ;
+}
+
 function Statistical() {
-    var firstrender = false;
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Check loading
+        if (!isLoading) {
+            // Initial report
+            setInitialReport();
+
+            // Initial notification 
+            setInitialNoti();
+
+        } else {
+            // Get data from Database and First render
+            axios.get(`${url}`)
+                .then(function (res) {
+                    var notiDate = res.data[res.data.length - 1].time.split('T')[0];
+                    var idx = 23;
+                    for (var i = res.data.length - 1; i >= 0; i--) {
+                        if (res.data[i].time.split('T')[0] !== notiDate) {
+                            break;
+                        };
+                        pdata[idx] = res.data[i];
+                        pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
+                    };
+
+                    window.setTimeout(function () {
+                        $('.freq-temp').animate({ width: `${freqdata[0].value}%` });
+                        $('.freq-light').animate({ width: `${freqdata[1].value}%` });
+                        $('.freq-humid').animate({ width: `${freqdata[2].value}%` });
+                        $('.freq-soil').animate({ width: `${freqdata[3].value}%` });
+                        $('.temp-mean').html(`${meanTemp.toFixed(2)} <sup>o</sup>C`)
+                        $('.light-mean').html(`${meanLight.toFixed(2)} Lux`);
+                        $('.humid-mean').html(`${meanHumid.toFixed(2)}%`);
+                        $('.soil-mean').html(`${meanSoil.toFixed(2)}%`);
+                    }, 1000);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+
+        }
+
+        if (subdataTemp !== [] && subdataLight !== [] && subdataSoil !== [] && subdataHumid !== [] && pdata !== [] && maindata !== []) {
+            setTimeout(function () {
+                setLoading(false);
+            }, 50)
+        };
         // Scrool default
         $("html, body").animate({ scrollTop: 0 }, "fast");
 
-        $('.temp').addClass('stl-active');
+        // Jquery
 
-        // Function
-        function sethis() {
-            var count = 101;
-            var val;
-            var i;
-            $('.his-table').remove();
-            var content = "<table class='his-table'> <tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
-            for (i = 0; i < 11; i++) {
-                val = 30 - Math.random() * 10;
-                content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
-                count++;
-            };
-            content += '<table/>'
-            $('.strl-history').append(content);
-        }
-
-        function reload() {
-            if ($('#sl-day').hasClass('sl-opt-active')) {
-                $('#sl-day').removeClass('sl-opt-active');
-            } else if ($('#sl-week').hasClass('sl-opt-active')) {
-                $('#sl-week').removeClass('sl-opt-active');
-            } else if ($('#sl-month').hasClass('sl-opt-active')) {
-                $('#sl-month').removeClass('sl-opt-active');
-            } else if ($('#sl-year').hasClass('sl-opt-active')) {
-                $('#sl-year').removeClass('sl-opt-active');
-            }
-        }
-
-        function reloadHover() {
-            $('.short-temp, .short-light, .short-humid, .short-soil').mouseover(function () {
-                $(this).addClass('add-hover');
-            });
-            $('.short-temp, .short-light, .short-humid, .short-soil').mouseout(function () {
-                $(this).removeClass('add-hover');
-            });
-            $('#sl-day, #sl-week, #sl-month, #sl-year').mouseover(function () {
-                $(this).addClass('add-hover');
-            });
-            $('#sl-day, #sl-week, #sl-month, #sl-year').mouseout(function () {
-                $(this).removeClass('add-hover');
-            });
-        }
-
-        function dropdownOptShow() {
-            $('.dropdown-opt').removeClass('d-none');
-            $('.dropdown-opt').addClass('d-block');
-            $('.dropdown-arrow').removeClass('d-none');
-            $('.dropdown-arrow').addClass('d-block');
-        }
-
-        function dropdownOptHide() {
-            $('.dropdown-opt').removeClass('d-block');
-            $('.dropdown-opt').addClass('d-none');
-            $('.dropdown-arrow').removeClass('d-block');
-            $('.dropdown-arrow').addClass('d-none');
-        }
-
-        function setValue() {
-            if ($('.stl-active').attr('class').split(' ')[0] === 'temp' || $('.stl-active').attr('class').split(' ')[0] === 'short-temp') {
-                return Math.floor(Math.random() * 20) + 20;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light' || $('.stl-active').attr('class').split(' ')[0] === 'short-light') {
-                return Math.floor(Math.random() * 1000) + 1000;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid' || $('.stl-active').attr('class').split(' ')[0] === 'short-humid') {
-                return Math.floor(Math.random() * 20) + 30;
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil' || $('.stl-active').attr('class').split(' ')[0] === 'short-soil') {
-                return Math.floor(Math.random() * 50) + 50;
-            };
-        }
-
-        function refreshHistogram() {
-            if ($('.stl-active').attr('class').split(' ')[0] === 'temp' || $('.stl-active').attr('class').split(' ')[0] === 'short-temp') {
-                temp.hide();
-                setTimeout(function () {
-                    temp.show();
-                }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'light' || $('.stl-active').attr('class').split(' ')[0] === 'short-light') {
-                light.hide();
-                setTimeout(function () {
-                    light.show();
-                }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'humid' || $('.stl-active').attr('class').split(' ')[0] === 'short-humid') {
-                humid.hide();
-                setTimeout(function () {
-                    humid.show();
-                }, 50);
-            } else if ($('.stl-active').attr('class').split(' ')[0] === 'soil' || $('.stl-active').attr('class').split(' ')[0] === 'short-soil') {
-                soil.hide();
-                setTimeout(function () {
-                    soil.show();
-                }, 50);
-            };
-        }
-
-        function setdataDay() {
-            for (var i = 0; i <= 23; i++) {
-                pdata[i] = {
-                    id: i,
-                    time: i + ":00",
-                    value: setValue()
-                }
-            };
-
-            refreshHistogram();
-        }
-
-        function setdataWeek() {
-            // Remove data 24 hours
-            for (var i = 0; i <= 23; i++) {
-                pdata.splice(0, 1);
-            };
-
-            // Set data 7 days
-            for (i = 0; i <= 6; i++) {
-                pdata[i] = {
-                    id: i,
-                    time: "2" + i + "/04/2023",
-                    value: setValue()
-                }
-            };
-
-            refreshHistogram();
-        }
-
-        function setdataMonth() {
-            // Remove data 24 hours
-            for (var i = 0; i <= 23; i++) {
-                pdata.splice(0, 1);
-            };
-
-            // Set data 4 weeks
-            for (i = 0; i <= 3; i++) {
-                pdata[i] = {
-                    id: i,
-                    time: "Tuần " + (i + 1),
-                    value: setValue()
-                }
-            };
-
-            refreshHistogram();
-        }
-
-        function setdataYear() {
-            // Remove data 24 hours
-            for (var i = 0; i <= 23; i++) {
-                pdata.splice(0, 1);
-            };
-
-            // Set data 12 months
-            for (i = 0; i <= 11; i++) {
-                pdata[i] = {
-                    id: i,
-                    time: "Tháng " + (i + 1),
-                    value: setValue()
-                }
-            };
-
-            refreshHistogram();
-        }
-
-        function checkwhichOpt() {
-            if ($('.sl-opt-active').attr('id') === 'sl-day') {
-                return setdataDay();
-            } else if ($('.sl-opt-active').attr('id') === 'sl-week') {
-                return setdataWeek();
-            } else if ($('.sl-opt-active').attr('id') === 'sl-month') {
-                return setdataMonth();
-            } else if ($('.sl-opt-active').attr('id') === 'sl-year') {
-                return setdataYear();
-            };
-        }
-
-        // Initial data
-        for (var i = 0; i <= 23; i++) {
-            pdata[i] = {
-                id: i,
-                time: i + ":00",
-                value: setValue()
-            }
-        };
-
-        // Render
-        var show = document.getElementsByClassName('header-section')[0];
-        show.style.display = 'block';
-
-        if (firstrender === false) {
-            var count = 101;
-            var val;
-            var i;
-            var content = "<tr> <th> ID </th> <th> Time </th> <th> Value </th> <th> Status </th> </tr>"
-            for (i = 0; i < 11; i++) {
-                val = 30 - Math.random() * 10;
-                content += '<tr> <td> #' + count + '</td>' + '<td> 2022-03-2' + i + '</td>' + '<td>' + val + '</td>' + '<td> Normal </td> </tr>';
-                count++;
-            };
-            $('.his-table').append(content);
-            firstrender = true;
-            $('.inner__header').addClass('sticky');
-
-        }
-
-        // Jquery call
-
-        var temp = $('.Tempchart'), light = $('.Lightchart'), humid = $('.Humidchart'), soil = $('.Soilchart');
-
-        $(".temp, .short-temp").on('click', function () {
-            $('.light, .humid, .soil, .short-light, .short-humid, .short-soil').removeClass('stl-active');
-            $(this).addClass('stl-active');
-
-            temp.show();
-            light.hide();
-            humid.hide();
-            soil.hide();
-            sethis();
-
-            checkwhichOpt();
-
-            $('.short-temp').css({ 'border-top-right-radius': '15px', 'border-top-left-radius': '15px' });
-            reloadHover();
-            dropdownOptHide();
-        });
-
-        $(".light, .short-light").on('click', function () {
-            $('.temp, .humid, .soil, .short-temp, .short-humid, .short-soil').removeClass('stl-active');
-            $(this).addClass('stl-active');
-
-            temp.hide();
-            light.show();
-            humid.hide();
-            soil.hide();
-            sethis();
-
-            checkwhichOpt();
-
-            reloadHover();
-            dropdownOptHide();
-        });
-
-        $(".humid, .short-humid").on('click', function () {
-            $('.light, .temp, .soil, .short-light, .short-temp, .short-soil').removeClass('stl-active');
-            $(this).addClass('stl-active');
-
-            temp.hide();
-            light.hide();
-            humid.show();
-            soil.hide();
-            sethis();
-
-            checkwhichOpt();
-
-            reloadHover();
-            dropdownOptHide();
-        });
-
-        $(".soil, .short-soil").on('click', function () {
-            $('.light, .temp, .humid ,.short-light, .short-temp, .short-humid').removeClass('stl-active');
-            $(this).addClass('stl-active');
-
-            temp.hide();
-            light.hide();
-            humid.hide();
-            soil.show();
-            sethis();
-
-            checkwhichOpt();
-
-            $('.short-soil').css({ 'border-bottom-right-radius': '15px', 'border-bottom-left-radius': '15px' });
-            reloadHover();
-            dropdownOptHide();
-        });
-
-        $("#sl-day").on('click', function () {
-            reload();
-
-            $("#sl-day").addClass('sl-opt-active');
-            reloadHover();
-
-            // Set data 24 hour
+        // Time - options
+        $('.time-opt-day').on('click', function (e) {
+            $('.time-opt').find('.time-opt-active').removeClass('time-opt-active');
+            $(this).addClass('time-opt-active');
             setdataDay();
         })
 
-
-        $("#sl-week").on('click', function () {
-            reload();
-            $("#sl-week").addClass('sl-opt-active');
-            reloadHover();
-
+        $('.time-opt-week').on('click', function (e) {
+            $('.time-opt').find('.time-opt-active').removeClass('time-opt-active');
+            $(this).addClass('time-opt-active');
             setdataWeek();
         })
 
-        $("#sl-month").on('click', function () {
-            reload();
-            $("#sl-month").addClass('sl-opt-active');
-            reloadHover();
-
+        $('.time-opt-month').on('click', function (e) {
+            $('.time-opt').find('.time-opt-active').removeClass('time-opt-active');
+            $(this).addClass('time-opt-active');
             setdataMonth();
         })
 
-        $("#sl-year").on('click', function () {
-            reload();
-            $("#sl-year").addClass('sl-opt-active');
-            reloadHover();
-
-            setdataYear();
+        $('.time-opt-3Months').on('click', function (e) {
+            $('.time-opt').find('.time-opt-active').removeClass('time-opt-active');
+            $(this).addClass('time-opt-active');
+            setdata3Months();
         })
 
-        $('.slt-opt-btn').on('click', function (e) {
-            if ($('.dropdown-opt').hasClass('d-none')) {
-                dropdownOptShow();
-            } else {
-                dropdownOptHide();
-            }
 
-            $(document).on('click', function (ev) {
-                if (!ev.target.classList.contains('slt-opt-btn') && !(ev.target.tagName.toLowerCase() === ('li'))) {
-                    dropdownOptHide();
-                }
-            })
+        // Climate - options
+        $('.climate-opt').on('change', function (e) {
+            $('.TempChart').css('display', 'none');
+            $('.LightChart').css('display', 'none');
+            $('.HumidChart').css('display', 'none');
+            $('.SoilChart').css('display', 'none');
+            if ($('.climate-opt option:selected').text() === 'Temperature') {
+                $('.TempChart').css('display', 'flex');
+                url = 'http://localhost:4000/climates/temp';
+            } else if ($('.climate-opt option:selected').text() === 'Light') {
+                $('.LightChart').css('display', 'flex');
+                url = 'http://localhost:4000/climates/light';
+            } else if ($('.climate-opt option:selected').text() === 'Humidity') {
+                $('.HumidChart').css('display', 'flex');
+                url = 'http://localhost:4000/climates/humi';
+            } else if ($('.climate-opt option:selected').text() === 'Soil Moisture') {
+                $('.SoilChart').css('display', 'flex');
+                url = 'http://localhost:4000/climates/soil';
+            };
+
+            setdataClimate();
+            refreshHistogram();
         })
-    }, []);
+    });
 
+    if (isLoading) {
+        return;
+    }
+
+    // Render
     return (
-        <div className="statis-body">
-            <div className="row sbd-row">
-                <div className="col-xl-3 pb-3 statis-left">
-                    <p>
-                        All my conditions
+        <div className={cx('statis-body')}>
+            <p className={cx('statis-title')}>
+                Chart Widgets
+            </p>
+            <div className={cx('statis-general')}>
+                <div className={cx('statis-main')}>
+                    <div className={cx('statis-main__top')}>
+                        <p className={cx('statis-main__title')}>
+                            Statistics
+                        </p>
+                        <i className="uil uil-ellipsis-h"></i>
+                    </div>
+                    <div className={cx('statis-main__content')}>
+                        <div className={cx('statis-main__histogram')}>
+                            <MainChart />
+                        </div>
+                        <div className={cx('histogram-legend')}>
+                            <div className={cx('legend__temp')}>
+                                <div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>
+                                        Temperature
+                                    </p>
+                                    <p className={cx('temp-max')}>
+                                        40 <sup>o</sup>C
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={cx('legend__light')}>
+                                <div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>
+                                        Light
+                                    </p>
+                                    <p className={cx('light-max')}>
+                                        4096 Lux
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={cx('legend__humid')}>
+                                <div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>
+                                        Humidity
+                                    </p>
+                                    <p className={cx('humid-max')}>
+                                        100%
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={cx('legend__soil')}>
+                                <div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>
+                                        Soil Moisture
+                                    </p>
+                                    <p className={cx('soil-max')}>
+                                        100%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={cx('statis-frequency')}>
+                    <div className={cx('statis-frequency__top')}>
+                        <p className={cx('statis-frequency__title')}>
+                            Frequency
+                        </p>
+                        <i className="uil uil-ellipsis-h"></i>
+                    </div>
+                    <div className={cx('statis-frequency__content')}>
+                        <div className={cx('statis-frequency__histogram')}>
+                            <FreqChart />
+                        </div>
+                        <div className={cx('histogram-legend')}>
+                            <div className='legend__temp'>
+                                <p>Temperature</p>
+                                <div>
+                                    <div className={('freq-temp')} >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='legend__light'>
+                                <p>Light</p>
+                                <div>
+                                    <div className={('freq-light')}>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='legend__humid'>
+                                <p>Humidity</p>
+                                <div>
+                                    <div className={('freq-humid')}>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='legend__soil'>
+                                <p>Soil Moisture</p>
+                                <div>
+                                    <div className={('freq-soil')}>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={cx('statis-particular')}>
+                <div className={cx('statis-content')}>
+                    <p className={cx('statis-content__title')}>
+                        Statistics
                     </p>
-                    <div className="stl">
-                        <div className="temp">
-                            <div className="stl-content">
-                                <div>
-                                    <i className="uil uil-sun"></i>
-                                    <p>Temperature</p>
-                                </div>
-                            </div>
+                    <select className={cx('climate-opt')}>
+                        <option value="" className={cx('climate-opt-temp')}>Temperature</option>
+                        <option value="" className={cx('climate-opt-light')}>Light</option>
+                        <option value="" className={cx('climate-opt-humid')}>Humidity</option>
+                        <option value="" className={cx('climate-opt-soil')}>Soil Moisture</option>
+                    </select>
+                    <div className={cx('time-opt')}>
+                        <div className={cx('time-opt-day time-opt-active')}>
+                            Day
                         </div>
-
-                        <div className="light">
-                            <div className="stl-content">
-                                <div>
-                                    <i className="uil uil-brightness-half"></i>
-                                    <p>Light</p>
-                                </div>
-                            </div>
+                        <div className={cx('time-opt-week')}>
+                            7-Days
                         </div>
-
-                        <div className="humid">
-                            <div className="stl-content">
-                                <div>
-                                    <i className="uil uil-tear"></i>
-                                    <p>Humidity</p>
-                                </div>
-                            </div>
+                        <div className={cx('time-opt-month')}>
+                            30-Days
                         </div>
-
-                        <div className="soil">
-                            <div className="stl-content">
-                                <div>
-                                    <i className="uil uil-mountains-sun"></i>
-                                    <p>Soil Moisture</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div className="col-lg-12 col-xl-9 statis-right">
-                    <div className="row">
-                        <div className="col-md-8 str-left">
-                            <div className="strl-opt">
-                                <div className="row">
-                                    <div className="col-md-2"></div>
-                                    <div className='col-3 col-md-2 sl-opt-active' id='sl-day'>Day</div>
-                                    <div className='col-3 col-md-2' id='sl-week'>Week</div>
-                                    <div className='col-3 col-md-2' id='sl-month'>Month</div>
-                                    <div className='col-3 col-md-2' id='sl-year'>Year</div>
-                                    <div className="col-md-2"></div>
-                                </div>
-                            </div>
-                            <div className="strl-content">
-                                <div className="strl-histogram">
-                                    <div className="Tempchart">
-                                        <TempChart />
-                                    </div>
-                                    <div className="Lightchart">
-                                        <LightChart />
-                                    </div>
-                                    <div className="Humidchart">
-                                        <HumidChart />
-                                    </div>
-                                    <div className="Soilchart">
-                                        <SoilChart />
-                                    </div>
-                                </div>
-                                <div className="strl-history">
-                                    <div className="histop"></div>
-                                    <table className='his-table'>
-                                        {/* Add table */}
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-4 str-right">
-                            <RaChart />
-                            <PChart />
+                        <div className={cx('time-opt-3Months')}>
+                            3-Months
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className='stl-opt'>
-                <i className="uil uil-draggabledots slt-opt-btn"></i>
-                <ul className='dropdown-opt d-none'>
-                    <li className='short-temp'>Temperature</li>
-                    <li className='short-light'>Light</li>
-                    <li className='short-humid'>Humidity</li>
-                    <li className='short-soil'>Soil Moisture</li>
-                </ul>
-                <div className='dropdown-arrow d-none'>
-                    <i className="uis uis-triangle"></i>
+                <div className={cx('statis-histogram')}>
+                    <TempChart />
+                    <LightChart />
+                    <HumidChart />
+                    <SoilChart />
                 </div>
             </div>
+
+            <div className={cx('statis-more')}>
+                <div className={cx('statis-more__histogram')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-sun"></i>
+                        <div>
+                            <p>
+                                Temperature
+                            </p>
+                            <p className={cx('temp-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubTempChart />
+                    </div>
+                </div>
+                <div className={cx('statis-more__histogram')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-brightness-half"></i>
+                        <div>
+                            <p>
+                                Light
+                            </p>
+                            <p className={cx('light-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubLightChart />
+                    </div>
+                </div>
+                <div className={cx('statis-more__histogram')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-tear"></i>
+                        <div>
+                            <p>
+                                Humidity
+                            </p>
+                            <p className={cx('humid-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubHumidChart />
+                    </div>
+                </div>
+                <div className={cx('statis-more__histogram')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-mountains-sun"></i>
+                        <div>
+                            <p>
+                                Soil Moisture
+                            </p>
+                            <p className={cx('soil-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubSoilChart />
+                    </div>
+                </div>
+            </div>
+
+            <div className={cx('statis-history')}>
+                <div className={cx('statis-notification')}>
+                    <div>
+                        <p>
+                            Notification
+                        </p>
+                    </div>
+                    <div className={cx('notification-wrap')}>
+                    </div>
+                </div>
+                <div className={cx('statis-report')}>
+                    <div>
+                        <p>
+                            Report
+                        </p>
+                    </div>
+                    <div className={cx('report-wrap')}>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }

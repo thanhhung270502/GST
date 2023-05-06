@@ -56,6 +56,10 @@ a {
     text-decoration: none;
 }
 
+p {
+    margin: 0;
+}
+
 .sticky {
     // background-color: var(--green-dark) !important;
     background-image: linear-gradient(
@@ -84,4 +88,25 @@ a {
     .header__menu .header__item .header__link {
         color: #0b850b !important;
     }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #7e7e7e;
+    border-radius: 15px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #aaaaaa;
 }
