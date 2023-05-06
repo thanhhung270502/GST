@@ -1,20 +1,17 @@
 .temp-setting {
-    background-color: var(--white);
-    // height: 100vh;
-    padding-top: 50px;
+    // background-color: var(--white);
 
     .sidebar {
-        font-family: 'Play', sans-serif;
-        background-color: var(--black-green);
-        color: var(--white);
+        border-right: 2px solid #ccc;
+        // background-color: var(--black-green);
         padding: 0.5rem;
 
-        height: 100vh;
+        height: calc(100vh - 56px - 58px);
 
         .title {
             font-weight: bold;
             font-size: 1.25rem;
-            padding: 0.25rem 0.5rem 0.5rem;
+            padding: 0.25rem 0.5rem 0.75rem;
         }
 
         .sidebar-item {
@@ -23,42 +20,64 @@
             cursor: pointer;
 
             &:hover {
-                background-color: rgba($color: #fff, $alpha: 0.3);
+                background-color: var(--blue-db);
+                color: var(--white);
+            }
+        }
+
+        .sidebar-link {
+            // color: var(--black);
+            font-weight: bold;
+
+            span {
+                padding: 0 0.2rem;
             }
         }
 
         .item-active {
-            background-color: rgba($color: #fff, $alpha: 0.3);
-        }
-
-        .sidebar-link {
+            background-color: var(--blue-db);
             color: var(--white);
         }
-    }
-
-    .main {
-        height: 100vh;
     }
 
     .inner-main {
         margin: 0 auto;
         padding: 1.25rem 0;
 
+        height: calc(100vh - 56px - 58px);
+
         .title {
             font-weight: bold;
-            font-family: 'Play', sans-serif;
             font-size: 1.25rem;
-            // padding-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
             // border-bottom: 1px solid rgba($color: #000, $alpha: 0.75);
         }
 
         .content {
-            padding: 0.5rem 0;
+            padding: 0.5rem 0 1.5rem;
+            border-bottom: 4px solid #aaa;
         }
 
         .main-item {
             padding-bottom: 1.25rem;
-            border-bottom: 1px solid #ddd;
+        }
+
+        .sub-items {
+            padding-top: 1rem;
+        }
+
+        .mode-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .mode-btn {
+            padding: 6px 20px;
+            background-color: var(--blue-db);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
         }
     }
 }

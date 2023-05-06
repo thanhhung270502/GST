@@ -16,10 +16,6 @@ export const signup = async (info) => {
         });
 };
 
-// const setCookie = (name, value, options = {}) => {
-//     document.cookie = cookie.serialize(name, value, options);
-// };
-
 const removeCookie = (name, options = {}) => {
     document.cookie = cookie.serialize(name, '', {
         ...options,
@@ -31,14 +27,14 @@ export const login = async (info) => {
     const res = await axios
         .post(`${URL}/auth/signin`, info)
         .then(function (response) {
-            console.log("Ok...")
+            console.log('Ok...');
             const dt = response.data;
             console.log(dt);
             setCookie('user_id', dt.id, 30);
             return dt;
         })
         .catch(function (error) {
-            console.log("Error...")
+            console.log('Error...');
             console.log(error);
             return error.response;
         });
@@ -46,5 +42,25 @@ export const login = async (info) => {
 };
 
 export const logout = () => {
-    setCookie("user_id", '', 0);
+    setCookie('user_id', '', 0);
+};
+
+export const getLastClimateByType = (type) => {
+    return axios.get(`${URL}/climates/last/${type}`).then((res) => res.data);
+};
+
+export const getUserByID = (user_id) => {
+    return axios.get(`${URL}/auth/${user_id}`).then((response) => response.data);
+};
+
+export const createSchedule = async (info) => {
+    const res = await axios
+        .post(`${URL}/schedule`, info)
+        .then(function (response) {
+            return response;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error.response;
+        });
 };

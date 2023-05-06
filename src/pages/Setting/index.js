@@ -1,42 +1,53 @@
 import { useEffect, useRef, useState } from 'react';
 import './setting.scss';
 import data from './setting.json';
-import $ from 'jquery';
+import { $, $$ } from 'jquery';
+import Mode from './mode';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDropletSlash, faLightbulb, faSeedling, faTemperature3 } from '@fortawesome/free-solid-svg-icons';
 
 function Setting() {
-    // const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-    var firstRender = false;
-
-    const conditions = ['Temperator', 'Lighting', 'Irrigation'];
-
     const [temp, setTemp] = useState(true);
     const [light, setLight] = useState(false);
-    const [irri, setIrri] = useState(false);
+    const [humi, setHumi] = useState(false);
+    const [soil, setSoil] = useState(false);
+
+    const [type, setType] = useState('temp');
 
     const handleTemp = () => {
         setTemp(true);
         setLight(false);
-        setIrri(false);
+        setHumi(false);
+        setSoil(false);
+        setType('temp');
     };
     const handleLight = () => {
         setTemp(false);
         setLight(true);
-        setIrri(false);
+        setHumi(false);
+        setSoil(false);
+        setType('light');
     };
-    const handleIrri = () => {
+    const handleHumi = () => {
         setTemp(false);
         setLight(false);
-        setIrri(true);
+        setHumi(true);
+        setSoil(false);
+        setType('humi');
+    };
+    const handleSoil = () => {
+        setTemp(false);
+        setLight(false);
+        setHumi(false);
+        setSoil(true);
+        setType('soil');
     };
 
-    useEffect(() => {
-        if (firstRender === false) {
-            $('.inner__header').attr('style', 'background-color: var(--green-dark) !important');
-            $('.header__logo, .header__link').attr('style', 'color: var(--white) !important');
-            firstRender = true;
-        }
-    })
+    const [mode, setMode] = useState('auto');
+
+    const handleChangeMode = (event) => {
+        setMode(event.target.value);
+    };
 
     return (
         <div className="temp-setting">
@@ -45,97 +56,112 @@ function Setting() {
                     <div className="title">Setting</div>
                     <div className="menu">
                         {temp && (
-                            <li onClick={handleTemp} className="sidebar-item item-active">
+                            <li onClick={handleTemp} value="temp" className="sidebar-item item-active">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-sun"></i> Temperator
+                                    <span>
+                                        <FontAwesomeIcon icon={faTemperature3} />
+                                    </span>{' '}
+                                    Temperature
                                 </div>
                             </li>
                         )}
                         {!temp && (
                             <li onClick={handleTemp} className="sidebar-item">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-sun"></i> Temperator
+                                    <span>
+                                        <FontAwesomeIcon icon={faTemperature3} />
+                                    </span>{' '}
+                                    Temperature
                                 </div>
                             </li>
                         )}
                         {light && (
                             <li onClick={handleLight} className="sidebar-item item-active">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-brightness-half"></i> Lighting
+                                    <span>
+                                        <FontAwesomeIcon icon={faLightbulb} />
+                                    </span>{' '}
+                                    Lighting
                                 </div>
                             </li>
                         )}
                         {!light && (
                             <li onClick={handleLight} className="sidebar-item">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-brightness-half"></i> Lighting
+                                    <span>
+                                        <FontAwesomeIcon icon={faLightbulb} />
+                                    </span>{' '}
+                                    Lighting
                                 </div>
                             </li>
                         )}
-                        {irri && (
-                            <li onClick={handleIrri} className="sidebar-item item-active">
+                        {humi && (
+                            <li onClick={handleHumi} className="sidebar-item item-active">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-tear"></i> Irrigation
+                                    <span>
+                                        <FontAwesomeIcon icon={faDropletSlash} />
+                                    </span>{' '}
+                                    Humidity
                                 </div>
                             </li>
                         )}
-                        {!irri && (
-                            <li onClick={handleIrri} className="sidebar-item">
+                        {!humi && (
+                            <li onClick={handleHumi} className="sidebar-item">
                                 <div href="#" className="sidebar-link">
-                                    <i class="uil uil-tear"></i> Irrigation
+                                    <span>
+                                        <FontAwesomeIcon icon={faDropletSlash} />
+                                    </span>{' '}
+                                    Humidity
+                                </div>
+                            </li>
+                        )}
+                        {soil && (
+                            <li onClick={handleSoil} className="sidebar-item item-active">
+                                <div href="#" className="sidebar-link">
+                                    <span>
+                                        <FontAwesomeIcon icon={faSeedling} />
+                                    </span>{' '}
+                                    Soil Moisture
+                                </div>
+                            </li>
+                        )}
+                        {!soil && (
+                            <li onClick={handleSoil} className="sidebar-item">
+                                <div href="#" className="sidebar-link">
+                                    <span>
+                                        <FontAwesomeIcon icon={faSeedling} />
+                                    </span>{' '}
+                                    Soil Moisture
                                 </div>
                             </li>
                         )}
                     </div>
                 </div>
                 <div className="col-9 d-flex main">
-                    {temp && (
-                        <div className="col-8 inner-main">
-                            <div className="main-item">
-                                <div className="title">Sunscreen adjustment mode</div>
-                                <div className="content">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">Automatic</option>
-                                        <option value="2">Schedule</option>
-                                        <option value="3">Manual</option>
-                                    </select>
-                                </div>
-                                <div className="sub-items">
-                                    <div className="sub-item">
-
-                                    </div>
+                    <div className="col-8 inner-main">
+                        <div className="main-item">
+                            {temp && <div className="title">Mode: Temperature</div>}
+                            {light && <div className="title">Mode: Lighting</div>}
+                            {humi && <div className="title">Mode: Humidity</div>}
+                            {soil && <div className="title">Mode: Soil Moisture</div>}
+                            <div className="content">
+                                <select
+                                    class="form-select"
+                                    aria-label="Default select example"
+                                    onChange={handleChangeMode}
+                                >
+                                    <option value="auto">Automatic</option>
+                                    <option value="schedule">Schedule</option>
+                                    <option value="manual">Manual</option>
+                                </select>
+                            </div>
+                            <div className="sub-items">
+                                <div className="sub-item">
+                                    <Mode type={type} mode={mode} />
                                 </div>
                             </div>
                         </div>
-                    )}
-                    {light && (
-                        <div className="col-8 inner-main">
-                            <div className="main-item">
-                                <div className="title">Mode: Light</div>
-                                <div className="content">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">Automatic</option>
-                                        <option value="2">Schedule</option>
-                                        <option value="3">Manual</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    {irri && (
-                        <div className="col-8 inner-main">
-                            <div className="main-item">
-                                <div className="title">Mode: Irrigation</div>
-                                <div className="content">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">Automatic</option>
-                                        <option value="2">Schedule</option>
-                                        <option value="3">Manual</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@ import {
     faTriangleExclamation,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { logout } from '~/api/api';
+import { getUserByID, logout } from '~/api/api';
 import cookie from 'cookie';
 import { getCookie } from '~/api/cookie';
 
@@ -27,7 +27,11 @@ function Header() {
     };
 
     useEffect(() => {
-        setCurrentUser(getCookie('user_id'));
+        (async () => {
+            await getUserByID(getCookie('user_id')).then((data) => {
+                setCurrentUser(data);
+            });
+        })();
     }, []);
 
     return (
@@ -115,9 +119,9 @@ function Header() {
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                         >
-                                            <div className="top-header__username">Thanh Hung</div>
+                                            <div className="top-header__username">{currentUser.name}</div>
                                             <div className="top-header__avatar">
-                                                <img src="http://html.phoenixcoded.net/empire/bootstrap/default/assets/img/avatars/1.png"></img>
+                                                <img src={currentUser.avatar}></img>
                                             </div>
                                         </div>
 
@@ -195,11 +199,11 @@ function Header() {
                             </div>
                             <div className="bottom-header__link">Statistical</div>
                         </a>
-                        <a href="#" className="d-flex bottom-header__item">
+                        <a href="setting" className="d-flex bottom-header__item">
                             <div className="bottom-header__icon">
                                 <FontAwesomeIcon icon={faGear} />
                             </div>
-                            <a href="#" className="bottom-header__link">
+                            <a href="/setting" className="bottom-header__link">
                                 Settings
                             </a>
                         </a>
