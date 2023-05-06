@@ -10,33 +10,55 @@ import Button from 'react-bootstrap/Button';
 import hot from '../../assets/images/hot.png';
 import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
+import soilpng from '../../assets/images/soil.png'
 import $ from 'jquery';
-import { toggleDevice } from '~/api/toggle';
+import { sendData } from '~/api/api';
+import { getTheLastData } from '~/api/api';
+function toggleFan(valueFan) {
+    const username = 'vienminhphuc';
+    const feedKey = 'gst-fan';
+    const aioKey = '';
+    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
 
-
-
+    //Create a GET request with value 1 and send it to AdafruitIO
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-AIO-Key': aioKey,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            value: 0, //Turn on the fan
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+}
 
 function Climate() {
     const staticAt = ['High', 'Normal', 'Low'];
     const [fan, setFan] = useState(0);
-    const [led, setLed] = useState(0);
-    const [pump, setPump] = useState(0);
-    const [roof, setRoof] = useState(0);
 
     const [temp, setTemp] = useState(22);
     const [tempTimePrev, setTempTimePrev] = useState(22);
+    // const [modeTemp, setModeTemp] = useState('Automatic');
+    // const [staticTemp, setStaticTemp] = useState('Normal');
 
     const [light, setLight] = useState(1200);
     const [lightTimePrev, setLightTimePrev] = useState(1200);
+    // const [modeLight, setModeLight] = useState('Automatic');
+    // const [staticLight, setStaticLight] = useState('Normal');
 
     const [humi, setHumi] = useState(56);
     const [humiTimePrev, setHumiTimePrev] = useState(56);
+    // const [modeHumi, setModeHumi] = useState('Automatic');
+    // const [staticHumi, setStaticHumi] = useState('Normal');
 
     const [soil, setSoil] = useState(56);
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_vzdq51hH08Y7zHyKkTTXSx8ubgIp';
+    const AIO_KEY = '';
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -45,82 +67,38 @@ function Climate() {
     const url_light = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[1] + '/data';
     const url_soil = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[2] + '/data';
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
-
-    // --------------------------------- Start --------------------------------- //
-
-    useEffect(() => {
-        fetch(url_temp, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setTemp(data[0].value);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
-    useEffect(() => {
-        fetch(url_light, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setLight(data[0].value);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
-    useEffect(() => {
-        fetch(url_humi, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setHumi(data[0].value);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
-    useEffect(() => {
-        fetch(url_soil, {
-            headers: {
-                'X-AIO-Key': AIO_KEY,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setSoil(data[0].value);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
     // --------------------------------- Real-time --------------------------------- //
-    useEffect(() => {
-        setInterval(() => {
-            fetch(url_temp, {
+    const send = async (data) => {
+        await sendData({type: data.feed_key.slice(4),value: data.value, time: data.created_at});
+   };        
+   const check = async(data) => {
+    const res = await getTheLastData(data.feed_key.slice(4))
+    if(res === '') {send(data); throw "Succesfully add to database";}
+    res.time = res.time.replace('.000', '')
+    if(res.time === data.created_at)
+    {
+        throw Error("Database already had this row!")
+    }
+    else send(data);
+   };
+
+     useEffect(() => {
+        setInterval(async () => {
+             fetch(url_temp, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
                     'Content-Type': 'application/json',
                 },
+
             })
                 .then((response) => response.json())
-                .then((data) => {
-                    setTemp(data[0].value);
-                    console.log(data[0]);
+                .then((data) => {   
+                    check(data[0]);
+                    setTemp(data[0].value);            
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
-        setInterval(() => {
+        setInterval(async() => {
             fetch(url_light, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -129,11 +107,13 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    check(data[0]);
                     setLight(data[0].value);
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
-        setInterval(() => {
+
+        setInterval(async() => {
             fetch(url_humi, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -142,11 +122,12 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    check(data[0]);
                     setHumi(data[0].value);
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
-        setInterval(() => {
+        setInterval(async() => {
             fetch(url_soil, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -155,6 +136,7 @@ function Climate() {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    check(data[0]);
                     setSoil(data[0].value);
                 })
                 .catch((error) => console.log(error));
@@ -164,45 +146,29 @@ function Climate() {
     const handleFan = () => {
         if (fan === 0) {
             setFan(1);
-            toggleDevice("fan", 1);
+            toggleFan(fan);
         } else {
             setFan(0);
-            toggleDevice("fan", 0);
+            toggleFan(fan);
         }
     };
-
-    const handleLed = () => {
-        if (led === 0) {
-            setLed(1);
-            toggleDevice("led", 1);
-        } else {
-            setLed(0);
-            toggleDevice("led", 0);
-        }
-    };
-
-    const handlePump = () => {
-        if (led === 0) {
-            setPump(1);
-            toggleDevice("pump", 1);
-        } else {
-            setPump(0);
-            toggleDevice("pump", 0);
-        }
-    };
-
-    const handleRoof = () => {
-        if (led === 0) {
-            setRoof(1);
-            toggleDevice("roof", 1);
-        } else {
-            setRoof(0);
-            toggleDevice("roof", 0);
-        }
-    };
-
     return (
         <Container fluid className="custom-container">
+            {/* <Navbar bg="none" variant="light">
+                <Container>
+                    <Navbar.Brand className="logo" href="#home">
+                        GSTomato
+                    </Navbar.Brand>
+                    <Nav className="justify-content-center">
+                        <Nav.Link href="#home">Home</Nav.Link>
+                        <Nav.Link href="#features">Features</Nav.Link>
+                        <Nav.Link href="#about">About us</Nav.Link>
+                        <Nav.Link href="#services">Services</Nav.Link>
+                        <Nav.Link href="#contact">Contact</Nav.Link>
+                        <Nav.Link href="#connect">Connect</Nav.Link>
+                    </Nav>
+                </Container>
+            </Navbar> */}
             <Container>
                 <Row className="frame5">
                     <Col lg="12" className="text-center">
@@ -257,16 +223,9 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                {led === 0 && (
-                                    <div className="btn btn-warning btn-md" onClick={handleLed}>
-                                        Turn on the light
-                                    </div>
-                                )}
-                                {led === 1 && (
-                                    <div className="btn btn-warning btn-md" onClick={handleLed}>
-                                        Turn off the light
-                                    </div>
-                                )}
+                                <Button size="md" variant="warning">
+                                    Turn on the light
+                                </Button>{' '}
                             </div>
                         </div>
                     </Col>
@@ -285,23 +244,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                {pump === 0 && (
-                                    <div className="btn btn-success btn-md" onClick={handlePump}>
-                                        Turn on the pump
-                                    </div>
-                                )}
-                                {pump === 1 && (
-                                    <div className="btn btn-success btn-md" onClick={handlePump}>
-                                        Turn off the pump
-                                    </div>
-                                )}
+                                <Button size="md" variant="success">
+                                    Water the tree
+                                </Button>{' '}
                             </div>
                         </div>
                     </Col>
                     <Col md={12} lg={3} xs={12} className="text-center">
                         <div className="customCard">
-                            <div className="irri">
-                                <img src={irri} alt="irri" />
+                            <div className="soilpng">
+                                <img src={soilpng} alt="soil" />
                             </div>
                             <div className="card-content">
                                 <h2>Soil Moisture</h2>
@@ -313,16 +265,9 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                {roof === 0 && (
-                                    <div className="btn btn-success btn-md" onClick={handleRoof}>
-                                        Turn on the roof
-                                    </div>
-                                )}
-                                {roof === 1 && (
-                                    <div className="btn btn-success btn-md" onClick={handleRoof}>
-                                        Turn off the roof
-                                    </div>
-                                )}
+                                <Button size="md" variant="success">
+                                    Water the tree
+                                </Button>{' '}
                             </div>
                         </div>
                     </Col>
