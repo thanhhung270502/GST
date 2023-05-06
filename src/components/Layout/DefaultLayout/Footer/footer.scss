@@ -1,86 +1,15 @@
-.top__footer {
-    background-image: linear-gradient(to top, #a8edea 0%, #fff 100%);
-    padding: 3rem 0;
+.nav-item
+{
+    font-weight: 500;
 }
-
-.footer__brand {
-    font-size: 1.75rem;
-    font-weight: bold;
-    background: -webkit-linear-gradient(to right, #0f9b0f, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #0f9b0f, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: var(--black);
-    padding-bottom: 1.75rem;
+.logo h1
+{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: var(--green-dark) !important;
+    font-weight: 300;
+    font-size: larger;
 }
-
-.footer__text {
-    font-size: 0.9rem;
-    color: var(--black);
-    padding-bottom: 1rem;
-}
-
-.footer__icon {
-    padding: 5px 10px;
-    margin-right: 15px;
-    background: var(--primary-dark);
-    color: var(--white);
-    border-radius: 5px;
-
-    &:hover {
-        color: var(--white);
-        opacity: 0.8;
-    }
-}
-
-.footer__title  {
-    font-weight: bold;
-    background: -webkit-linear-gradient(to right, #0f9b0f, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #0f9b0f, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.footer__items  {
-
-}
-
-.footer__item  {
-    font-size: 0.9rem;
-    color: var(--black);
-    padding-bottom: 0.25rem;
-}
-
-.bottom__footer {
-    background-image: linear-gradient(to top, #a8edea 0%, #fff 100%);
-    padding: 40px 0;
-    color: var(--black);
-    // text-align: center;
-}
-
-.bf__item {
-    padding: 0 1rem;
-    font-size: 0.9rem;
-}
-
-.bf__title_icon {
-    font-size: 2rem;
-    color: var(--primary-dark);
-    padding: 1rem 0 0.5rem;
-}
-.bf__title {
-    padding-bottom: 0.75rem;
-}
-
-// Responsive
-@media (max-width: 1023px) {
-    .footer__brand {
-        padding-bottom: 0.75rem;
-    }
-
-    .footer__text {
-        padding-bottom: 0.5rem;
-    }
-
-
+.nav
+{
+    padding-top:15px;
 }
