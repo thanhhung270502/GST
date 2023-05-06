@@ -16,24 +16,29 @@
 
     --red: #df2020;
     --orange: #ff8d5c;
+    --orange-dark: #ff5e19;
     --yellow: #ffc174;
+    --yellow-dark: #fa9d2c;
     --yellow-light: #fdf7ea;
 
     --blue: #0c97ff;
     --blue-light: #dfebf1;
     --blue-dark: #0d5cb6;
     --blue-black: #1f232e;
-    --blue-dark: #313743;
+    // --blue-dark: #313743;
     --blue-db: #2d5d80;
 
     --green: #2df3aa;
     --green-dark: #25b580;
+    --green-black: #00a84a;
     --green-light: #dff1ea;
 
     --purple: #e574ff;
     --pink: #fa7daf;
     --beige: #c9ba9b;
     --brown: #433625;
+
+    --light: #aaa;
 }
 
 * {
@@ -46,6 +51,7 @@ html {
 }
 
 body {
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
 }
 
 li {
@@ -90,6 +96,9 @@ p {
     }
 }
 
+.content {
+    
+}
 /* width */
 ::-webkit-scrollbar {
     width: 10px;

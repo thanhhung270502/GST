@@ -1,31 +1,12 @@
 .home-body {
     // background-color: var(--green-light);
-    background-color: #fcfffe;
-    background-image: linear-gradient(315deg, #fcfffe 0%, #d5feee 74%);
+    // background-color: #fcfffe;
+    // background-image: linear-gradient(315deg, #fcfffe 0%, #d5feee 74%);
 }
 
 #homepic {
     width: 100%;
     height: 15%;
-}
-
-.inner__header {
-    background-color: transparent;
-
-    .header__logo {
-        color: var(--black);
-    }
-
-    .header__menu {
-        .header__link {
-            color: var(--black);
-            font-weight: normal !important;
-
-            &:hover {
-                font-weight: bold !important;
-            }
-        }
-    }
 }
 
 .home-content {

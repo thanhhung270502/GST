@@ -7,17 +7,7 @@ function Home() {
         $('html, body').animate({ scrollTop: 0 }, 'fast');
 
         var show = document.getElementsByClassName('header-section')[0];
-        var navbar = $('.navbar');
-        navbar.removeClass('fixed');
-        $(window).on('scroll', function () {
-            var scroll = $(window).scrollTop();
-
-            if (scroll < 50) {
-                navbar.removeClass('sticky');
-            } else if (scroll >= 50) {
-                navbar.addClass('sticky');
-            }
-        });
+        $('.inner__header').attr('style', 'background-color: var(--white) !important');
     });
 
     return (

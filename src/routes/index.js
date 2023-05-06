@@ -11,6 +11,8 @@ import Statis from '~/pages/Statistical';
 import Test from '~/pages/Test';
 import Upload from '~/pages/Upload';
 import Climate from '../pages/View Current Climate';
+import Login from '~/pages/Login';
+import SignUp from '~/pages/SignUp';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -50,6 +52,16 @@ const publicRoutes = [
     {
         path: '/climate',
         component: Climate,
+    },
+    // http://localhost:3000/login
+    {
+        path: '/login',
+        component: Login,
+    },
+    // http://localhost:3000/signup
+    {
+        path: '/signup',
+        component: SignUp,
     },
 ];
 
