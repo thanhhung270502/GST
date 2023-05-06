@@ -4,18 +4,19 @@ export var subdataSoil = [];
 
 export var meanSoil = 0;
 
-const url = 'http://localhost:4000/climates/soil';
+const url = 'http://localhost:3000/climates/soil';
 
 const getSubSoil = async () => {
-    axios.get(`${url}`)
+    axios
+        .get(`${url}`)
         .then(function (res) {
             for (var i = 0; i < res.data.length; i++) {
                 if (i === 10) {
                     break;
-                };
+                }
                 subdataSoil[i] = res.data[i];
                 meanSoil += Number(res.data[i].value);
-            };
+            }
             meanSoil = res.data.length < 10 ? meanSoil / res.data.length : meanSoil / 10;
         })
         .catch(function (err) {

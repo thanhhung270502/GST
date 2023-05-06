@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { getFreqData } from './Data/freqdata.js';
 
-const url = 'http://localhost:4000/climates/temp';
+const url = 'http://localhost:3000/climates/temp';
 
 var freqdata = getFreqData();
 

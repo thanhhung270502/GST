@@ -20,13 +20,11 @@ function LightChart() {
     const [data, setData] = useState(pdata);
     // console.log(data);
 
-    useEffect(() => {
-
-    })
+    useEffect(() => {});
 
     return (
-        <div className='LightChart'>
-            <div className='legend__light'>
+        <div className="LightChart">
+            <div className="legend__light">
                 <div>
                     <div></div>
                     <p>Light</p>
@@ -44,7 +42,6 @@ function LightChart() {
                         bottom: 30,
                     }}
                 >
-
                     <defs>
                         <linearGradient id="colorUvHC" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="10%" stopColor="#0092e4" stopOpacity={0.8} />
@@ -57,16 +54,13 @@ function LightChart() {
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" />
-                    <YAxis
-                        ticks={[800, 1600, 2400, 3200, 4000]}
-                        domain={[0, 4096]}
-                    />
-                    <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none", fontWeight: "bold" }} />
+                    <YAxis ticks={[800, 1600, 2400, 3200, 3000]} domain={[0, 4096]} />
+                    <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: 'none', fontWeight: 'bold' }} />
                     <Area type="monotone" dataKey="value" stroke="#D9D9D9" fill="url(#colorUvHC)" fillOpacity={1} />
                 </AreaChart>
             </ResponsiveContainer>
         </div>
-    )
+    );
 }
 
 export default LightChart;
