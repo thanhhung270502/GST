@@ -62,18 +62,74 @@ function setdataDay() {
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = 23;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            var count = 0;
+            var mean = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
-                if (res.data[i].time.split('T')[0] !== notiDate) {
+                if (idx === 23) {
                     break;
                 };
-                pdata[idx] = res.data[i];
-                pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
-            }
+                if (i === 0 && res.data[i].time.split('T')[0] === notiDate) {
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        idx++;
+                    };
+                    break;
+                } else if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                    break;
+                };
+                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                    idx++;
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    i++;
+                }
+            };
+            notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                    if (i === 0) {
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx].time = notiHours + ":00:00";
+                            pdata[idx - 1] = {};
+                            pdata[idx - 1].value = Number(res.data[i].value);
+                            pdata[idx - 1].time = res.data[i].time.split('T')[1].split(':')[0] + ":00:00";
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx].time = notiHours;
+                        };
+                        break;
+                    };
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / count;
+                    pdata[idx--].time = notiHours + ":00:00";
+                    break;
+                };
+                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / count;
+                    pdata[idx--].time = notiHours + ":00:00";
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    mean = Number(res.data[i].value);
+                    count = 1;
+                } else {
+                    mean += Number(res.data[i].value);
+                    count++;
+                }
+            };
+
+            console.log(url);
+            console.log(pdata);
+            console.log(res.data.length);
         })
         .catch(function (err) {
             console.log(err);
         });
+
 
     refreshHistogram();
 }
@@ -86,24 +142,64 @@ function setdataWeek() {
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = (res.data.length / 24) >= 7 ? 6 : res.data.length - 1;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === 6) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0]) {
+                    idx++;
+                    notiDate = res.data[i].time.split('T')[0];
+                }
+            }
+            notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var mean = 0;
+            var meanHour = 0;
+            var count = 0;
+            var countHour = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
 
                 if (idx === -1) {
                     break;
                 };
-                if (notiDate !== res.data[i].time.split('T')[0]) {
+                if (notiDate !== res.data[i].time.split('T')[0] || i === 0) {
+                    if (i === 0) {
+                        if (notiHours === res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
+                    };
+                    mean += meanHour / countHour;
+                    count++;
                     pdata[idx] = {};
-                    pdata[idx].value = mean / 24;
+                    pdata[idx].value = mean / count;
                     pdata[idx].time = notiDate;
                     notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
                     mean = 0;
-                    i++;
+                    if (i !== 0) {
+                        i++;
+                    }
                     idx--;
+                    count = 0;
+                    meanHour = 0;
+                    countHour = 0;
                 } else {
-                    mean += Number(res.data[i].value);
-                }
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        mean += meanHour / countHour;
+                        count++;
+                        countHour = 1;
+                        meanHour = Number(res.data[i].value);
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    } else {
+                        meanHour += Number(res.data[i].value);
+                        countHour++;
+                    };
+                };
 
             }
         })
@@ -122,22 +218,62 @@ function setdataMonth() {
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = (res.data.length / 24) >= 30 ? 29 : res.data.length / 24 - 1;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === 29) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0]) {
+                    idx++;
+                    notiDate = res.data[i].time.split('T')[0];
+                }
+            };
+            notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var mean = 0;
+            var meanHour = 0;
+            var count = 0;
+            var countHour = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
                 if (idx === -1) {
                     break;
                 };
                 if (notiDate !== res.data[i].time.split('T')[0] || i === 0) {
+                    if (i === 0) {
+                        if (notiHours === res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
+                    };
+                    mean += meanHour / countHour;
+                    count++;
                     pdata[idx] = {};
-                    pdata[idx].value = mean / 24;
+                    pdata[idx].value = mean / count;
                     pdata[idx].time = notiDate;
                     notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
                     mean = 0;
-                    i++;
+                    if (i !== 0) {
+                        i++;
+                    }
                     idx--;
+                    count = 0;
+                    meanHour = 0;
+                    countHour = 0;
                 } else {
-                    mean += Number(res.data[i].value);
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        mean += meanHour / countHour;
+                        count++;
+                        countHour = 1;
+                        meanHour = Number(res.data[i].value);
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    } else {
+                        meanHour += Number(res.data[i].value);
+                        countHour++;
+                    }
                 }
             }
         })
@@ -157,60 +293,80 @@ function setdata3Months() {
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var notiMonth = res.data[res.data.length - 1].time.split('-')[1];
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
             var idx = Number(res.data[res.data.length - 1].time.split('-')[1] - res.data[0].time.split('-')[1]);
             if (idx > 2) {
                 idx = 2;
             };
-            var mean = 0;
-            var sum = 0;
-            var count = 1;
-            var counthours = 0;
+            var meanHour = 0;
+            var meanDate = 0;
+            var meanMonth = 0;
+            var countHour = 0;
+            var countDate = 0;
+            var countMonth = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
                 if (idx === -1) {
                     break;
                 };
-                if (notiMonth !== res.data[i].time.split('-')[1] && i === 0) {
-                    sum += mean / counthours;
-                    pdata[idx] = {
-                        value: sum / count,
-                        time: 'Tháng ' + notiMonth
-                    };
-                    if (idx === 1) {
-                        pdata[--idx] = {
-                            value: Number(res.data[i].value),
-                            time: 'Tháng' + res.data[i].time.split('-')[1]
-                        }
-                    }
-                } else if (notiMonth !== res.data[i].time.split('-')[1] || i === 0) {
+                if (notiMonth !== res.data[i].time.split('-')[1] || i === 0) {
                     if (i === 0) {
-                        mean += Number(res.data[i].value);
-                        counthours++;
-                        sum += mean / counthours;
+                        if (notiDate !== res.data[i].time.split('T')[0]) {
+                            meanMonth += Number(res.data[i].value);
+                        } else {
+                            if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                meanDate += Number(res.data[i].value);
+                                countDate++;
+                            } else {
+                                meanHour += Number(res.data[i].value);
+                                countHour++;
+                            };
+                            meanDate += meanHour / countHour;
+                            countDate++;
+                        };
                     };
+
+                    meanMonth += meanDate / countDate;
+                    countMonth++;
                     pdata[idx] = {};
-                    pdata[idx].value = sum / count;
-                    pdata[idx].time = 'Tháng ' + notiMonth;
-                    if (i > 0) {
-                        notiMonth = res.data[i].time.split('-')[1];
-                        notiDate = res.data[i].time.split('T')[0];
-                        i++;
-                    };
-                    sum = 0;
-                    mean = 0;
-                    count = 1;
-                    counthours = 0;
+                    pdata[idx].value = meanMonth / countMonth;
+                    pdata[idx].time = "Tháng " + notiMonth;
+                    notiMonth = res.data[i].time.split('-')[1];
+                    notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    countDate = 0;
+                    countHour = 0;
+                    meanDate = 0;
+                    meanHour = 0;
                     idx--;
+                    if (i !== 0) {
+                        i++;
+                    }
+
                 } else {
                     if (notiDate !== res.data[i].time.split('T')[0]) {
-                        count++;
+                        meanDate += meanHour / countHour;
+                        countDate++;
+                        meanMonth += meanDate / countDate;
+                        countMonth++;
                         notiDate = res.data[i].time.split('T')[0];
-                        sum += mean / counthours;
-                        mean = 0;
-                        counthours = 0;
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                        countDate = 0;
+                        meanDate = 0;
+                        meanHour = Number(res.data[i].value);
+                        countHour = 1;
+                    } else {
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanDate += meanHour / countHour;
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            meanHour = Number(res.data[i].value);
+                            countHour = 1;
+                            countDate++;
+                        } else {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        }
                     }
-                    mean += Number(res.data[i].value);
-                    counthours++;
-                }
+                };
             }
         })
         .catch(function (err) {
@@ -454,14 +610,68 @@ function Statistical() {
             // Get data from Database and First render
             axios.get(`${url}`)
                 .then(function (res) {
+                    refreshData();
+
                     var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-                    var idx = 23;
+                    var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+                    var idx = 0;
+                    var count = 0;
+                    var mean = 0;
                     for (var i = res.data.length - 1; i >= 0; i--) {
-                        if (res.data[i].time.split('T')[0] !== notiDate) {
+                        if (idx === 23) {
                             break;
                         };
-                        pdata[idx] = res.data[i];
-                        pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
+                        if (i === 0 && res.data[i].time.split('T')[0] === notiDate) {
+                            if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                idx++;
+                            };
+                            break;
+                        } else if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                            break;
+                        };
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            idx++;
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            i++;
+                        }
+                    };
+                    notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+                    for (var i = res.data.length - 1; i >= 0; i--) {
+                        if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                            if (i === 0) {
+                                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                    pdata[idx] = {};
+                                    pdata[idx].value = mean / count;
+                                    pdata[idx].time = notiHours + ":00:00";
+                                    pdata[idx - 1] = {};
+                                    pdata[idx - 1].value = Number(res.data[i].value);
+                                    pdata[idx - 1].time = res.data[i].time.split('T')[1].split(':')[0] + ":00:00";
+                                } else {
+                                    mean += Number(res.data[i].value);
+                                    count++;
+                                    pdata[idx] = {};
+                                    pdata[idx].value = mean / count;
+                                    pdata[idx].time = notiHours;
+                                };
+                                break;
+                            };
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx--].time = notiHours + ":00:00";
+                            break;
+                        };
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx--].time = notiHours + ":00:00";
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            i++;
+                            mean = 0;
+                            count = 0;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
                     };
 
                     window.setTimeout(function () {
@@ -529,6 +739,7 @@ function Statistical() {
             } else if ($('.climate-opt option:selected').text() === 'Light') {
                 $('.LightChart').css('display', 'flex');
                 url = 'http://localhost:3000/climates/light';
+                console.log(url);
             } else if ($('.climate-opt option:selected').text() === 'Humidity') {
                 $('.HumidChart').css('display', 'flex');
                 url = 'http://localhost:3000/climates/humi';
