@@ -477,6 +477,9 @@ const setInitialReport = async () => {
 const setInitialNoti = async () => {
     await axios.get(`${notiurl}`)
         .then(function (res) {
+            if (res.data.length === 0) {
+                $('.statis-subnoti i').css('color', '#b3b3b3');
+            }
             for (var i = res.data.length - 1; i >= 0; i--) {
                 // Set initial variables
                 var srcImg = '~/assets/images/Becareful.png';
@@ -567,6 +570,9 @@ const setInitialNoti = async () => {
                 }
 
                 $('#noti-activity-' + i).on('click', function (e) {
+                    if (res.data.length === 1) {
+                        $('.statis-subnoti i').css('color', '#b3b3b3');
+                    }
                     $('.notification-wrap').find('#notification-wrap__' + e.target.id.split('-')[2]).remove();
                     axios.delete(`http://localhost:3000/notification/${garden_id}/delete/${res.data[e.target.id.split('-')[2]].id}`);
                     var notiId = res.data[e.target.id.split('-')[2]].id;
@@ -753,6 +759,11 @@ function Statistical() {
             setdataClimate();
             refreshHistogram();
         })
+
+        // Sub Notification
+        $('.statis-subnoti').on('click', function (e) {
+
+        });
     });
 
     if (isLoading) {
@@ -769,7 +780,7 @@ function Statistical() {
                 <div className={cx('statis-main')}>
                     <div className={cx('statis-main__top')}>
                         <p className={cx('statis-main__title')}>
-                            Statistics
+                            Main Statistics
                         </p>
                         <i className="uil uil-ellipsis-h"></i>
                     </div>
@@ -838,7 +849,7 @@ function Statistical() {
                     </div>
                 </div>
 
-                <div className={cx('statis-frequency')}>
+                <div className={cx('statis-frequency')} id='statis-frequency1'>
                     <div className={cx('statis-frequency__top')}>
                         <p className={cx('statis-frequency__title')}>
                             Frequency
@@ -887,6 +898,54 @@ function Statistical() {
                 </div>
             </div>
 
+            <div className={cx('statis-frequency')} id='statis-frequency2'>
+                <div className={cx('statis-frequency__top')}>
+                    <p className={cx('statis-frequency__title')}>
+                        Frequency
+                    </p>
+                    <i className="uil uil-ellipsis-h"></i>
+                </div>
+                <div className={cx('statis-frequency__content')}>
+                    <div className={cx('statis-frequency__histogram')}>
+                        <FreqChart />
+                    </div>
+                    <div className={cx('histogram-legend')}>
+                        <div className='legend__temp'>
+                            <p>Temperature</p>
+                            <div>
+                                <div className={('freq-temp')} >
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__light'>
+                            <p>Light</p>
+                            <div>
+                                <div className={('freq-light')}>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__humid'>
+                            <p>Humidity</p>
+                            <div>
+                                <div className={('freq-humid')}>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__soil'>
+                            <p>Soil Moisture</p>
+                            <div>
+                                <div className={('freq-soil')}>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className={cx('statis-particular')}>
                 <div className={cx('statis-content')}>
                     <p className={cx('statis-content__title')}>
@@ -921,8 +980,8 @@ function Statistical() {
                 </div>
             </div>
 
-            <div className={cx('statis-more')}>
-                <div className={cx('statis-more__histogram')}>
+            <div className={cx('statis-more')} id={cx('statis-more1')}>
+                <div className={cx('statis-more__histogram histogram-subTemp')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-sun"></i>
                         <div>
@@ -937,7 +996,7 @@ function Statistical() {
                         <SubTempChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subLight')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-brightness-half"></i>
                         <div>
@@ -952,7 +1011,7 @@ function Statistical() {
                         <SubLightChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subHumid')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-tear"></i>
                         <div>
@@ -967,7 +1026,40 @@ function Statistical() {
                         <SubHumidChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subSoil')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-mountains-sun"></i>
+                        <div>
+                            <p>
+                                Soil Moisture
+                            </p>
+                            <p className={cx('soil-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubSoilChart />
+                    </div>
+                </div>
+            </div>
+
+            <div className={cx('statis-more')} id={cx('statis-more2')}>
+                <div className={cx('statis-more__histogram histogram-subHumid')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-tear"></i>
+                        <div>
+                            <p>
+                                Humidity
+                            </p>
+                            <p className={cx('humid-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubHumidChart />
+                    </div>
+                </div>
+                <div className={cx('statis-more__histogram histogram-subSoil')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-mountains-sun"></i>
                         <div>
@@ -999,9 +1091,11 @@ function Statistical() {
                         <p>
                             Report
                         </p>
+                        <div className={cx('statis-subnoti')}>
+                            <i class="uil uil-bell"></i>
+                        </div>
                     </div>
                     <div className={cx('report-wrap')}>
-
                     </div>
                 </div>
             </div>

@@ -12,12 +12,15 @@ const getSubHumid = async () => {
     await axios
         .get(`${url}`)
         .then(function (res) {
+            var count = 0;
+            var idx = res.data.length < 10 ? res.data.length - 1 : 9;
             for (var i = 0; i < res.data.length; i++) {
                 if (i === 10) {
                     break;
                 }
-                subdataHumid[i] = res.data[i];
-                meanHumid += Number(res.data[i].value);
+                subdataHumid[idx--] = res.data[res.data.length - 1 - count];
+                meanHumid += Number(res.data[res.data.length - 1 - count].value);
+                count++;
             }
             meanHumid = res.data.length < 10 ? meanHumid / res.data.length : meanHumid / 10;
         })

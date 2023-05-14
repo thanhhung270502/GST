@@ -12,14 +12,18 @@ const getSubTemp = async () => {
     axios
         .get(`${url}`)
         .then(function (res) {
+            var count = 0;
+            var idx = res.data.length < 10 ? res.data.length - 1 : 9;
             for (var i = 0; i < res.data.length; i++) {
                 if (i === 10) {
                     break;
                 }
-                subdataTemp[i] = res.data[i];
-                meanTemp += Number(res.data[i].value);
+                subdataTemp[idx--] = res.data[res.data.length - 1 - count];
+                meanTemp += Number(res.data[res.data.length - 1 - count].value);
+                count++;
             }
             meanTemp = res.data.length < 10 ? meanTemp / res.data.length : meanTemp / 10;
+            console.log(meanTemp);
         })
         .catch(function (err) {
             console.log(err);
