@@ -29,9 +29,11 @@ import SubSoilChart from './Histogram/SubChart/SubSoilChart';
 
 const cx = classNames.bind(stylesCss);
 
-var url = 'http://localhost:3000/climates/temp';
-var notiurl = 'http://localhost:3000/notification';
-var hisurl = 'http://localhost:3000/history';
+const garden_id = 'gar00000-0000-0000-0000-000000000001';
+
+var url = `http://localhost:3000/climates/${garden_id}/temp`;
+var notiurl = `http://localhost:3000/notification/${garden_id}`;
+var hisurl = `http://localhost:3000/history/${garden_id}`;
 
 var pdata = dataJson();
 
@@ -566,7 +568,7 @@ const setInitialNoti = async () => {
 
                 $('#noti-activity-' + i).on('click', function (e) {
                     $('.notification-wrap').find('#notification-wrap__' + e.target.id.split('-')[2]).remove();
-                    axios.delete(`http://localhost:3000/notification/delete/${res.data[e.target.id.split('-')[2]].id}`);
+                    axios.delete(`http://localhost:3000/notification/${garden_id}/delete/${res.data[e.target.id.split('-')[2]].id}`);
                     var notiId = res.data[e.target.id.split('-')[2]].id;
                     var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
                     notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4];
@@ -577,7 +579,7 @@ const setInitialNoti = async () => {
                     var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
                         + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
                         + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
-                    axios.post(`http://localhost:3000/history/add/${notiId}k/${'Huynh Tuan Kiet'}/${notiActivity}/${date} ${time}`)
+                    axios.post(`http://localhost:3000/history/${garden_id}/add/${notiId}k/${'Huynh Tuan Kiet'}/${notiActivity}/${date} ${time}`)
                         .then(function (res) {
                             setInitialReport();
                         })
@@ -735,17 +737,17 @@ function Statistical() {
             $('.SoilChart').css('display', 'none');
             if ($('.climate-opt option:selected').text() === 'Temperature') {
                 $('.TempChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/temp';
+                url = `http://localhost:3000/climates/${garden_id}/temp`;
             } else if ($('.climate-opt option:selected').text() === 'Light') {
                 $('.LightChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/light';
+                url = `http://localhost:3000/climates/${garden_id}/light`;
                 console.log(url);
             } else if ($('.climate-opt option:selected').text() === 'Humidity') {
                 $('.HumidChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/humi';
+                url = `http://localhost:3000/climates/${garden_id}/humi`;
             } else if ($('.climate-opt option:selected').text() === 'Soil Moisture') {
                 $('.SoilChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/soil';
+                url = `http://localhost:3000/climates/${garden_id}/soil`;
             };
 
             setdataClimate();

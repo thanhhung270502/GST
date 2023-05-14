@@ -4,7 +4,9 @@ export var subdataLight = [];
 
 export var meanLight = 0;
 
-const url = 'http://localhost:3000/climates/light';
+const garden_id = 'gar00000-0000-0000-0000-000000000001';
+
+const url = `http://localhost:3000/climates/${garden_id}/light`;
 
 const getSubLight = async () => {
     await axios
