@@ -29,6 +29,7 @@ export const login = async (info) => {
             const dt = response.data;
             console.log(dt);
             setCookie('user_id', dt.id, 30);
+            setCookie('garden_id', dt.garden_id, 30);
             return dt;
         })
         .catch(function (error) {
@@ -62,13 +63,13 @@ export const createSchedule = async (info) => {
         });
 };
 
-export const sendData = async(data) => {
+export const sendData = async (data) => {
     await axios.post(`${URL}/climates`, data)
-   .then(res => console.log('Data send'))
-   .catch(err => console.log(err.data))
+        .then(res => console.log('Data send'))
+        .catch(err => console.log(err.data))
 };
 
-export const getTheLastData = async(type) => {
+export const getTheLastData = async (type) => {
     return (await axios.get(`${URL}/climates/last/${type}`)).data
 
 };

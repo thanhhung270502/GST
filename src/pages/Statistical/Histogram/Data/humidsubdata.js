@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { getCookie } from '~/api/cookie';
 
 export var subdataHumid = [];
 
 export var meanHumid = 0;
 
-const garden_id = 'gar00000-0000-0000-0000-000000000001';
+const garden_id = getCookie('garden_id');
+// const garden_id = 'gar00000-0000-0000-0000-000000000001';
 
 const url = `http://localhost:3000/climates/${garden_id}/humi`;
 

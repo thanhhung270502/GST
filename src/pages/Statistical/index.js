@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import stylesCss from './statistical.scss';
+import { getCookie } from '~/api/cookie';
 // import Data
 import { dataJson } from './Histogram/Data/data';
 import { meanTemp } from './Histogram/Data/tempsubdata';
@@ -29,7 +30,8 @@ import SubSoilChart from './Histogram/SubChart/SubSoilChart';
 
 const cx = classNames.bind(stylesCss);
 
-const garden_id = 'gar00000-0000-0000-0000-000000000001';
+const garden_id = getCookie('garden_id');
+// const garden_id = 'gar00000-0000-0000-0000-000000000001';
 
 var url = `http://localhost:3000/climates/${garden_id}/temp`;
 var notiurl = `http://localhost:3000/notification/${garden_id}`;
@@ -40,6 +42,7 @@ var pdata = dataJson();
 var maindata = getMainData();
 
 var freqdata = getFreqData();
+
 
 // Function
 
@@ -55,6 +58,15 @@ function refreshHistogram() {
         $('.statis-histogram').show();
     }, 50)
 }
+
+const getName = async () => {
+    return await axios.get(`http://localhost:3000/auth/${getCookie('user_id')}`).then(function (res) {
+        return res.data.name;
+    }).catch(function (err) {
+        return 'Failed'
+        console.log(err);
+    });
+};
 
 function setdataDay() {
     // Remove data 30 days
@@ -123,10 +135,6 @@ function setdataDay() {
                     count++;
                 }
             };
-
-            console.log(url);
-            console.log(pdata);
-            console.log(res.data.length);
         })
         .catch(function (err) {
             console.log(err);
@@ -215,6 +223,7 @@ function setdataWeek() {
 function setdataMonth() {
     // Remove data 30 days
     refreshData();
+    console.log(getCookie('Huỳnh Tuấn Kiệt'));
 
     // Set data 30 days
     axios.get(`${url}`)
@@ -424,22 +433,22 @@ const setInitialReport = async () => {
                 table += `
                 <tr id='report-activity-${i}'>
                     <td>
-                        <input type="text" value="${i}" disabled>
+                        <input type="text" value="${i}" disabled class='report__id'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].editor}" disabled>
+                        <input type="text" value="${res.data[i].user_name}" disabled class='report__editor'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].activity}" disabled>
+                        <input type="text" value="${res.data[i].activity}" disabled class='report__activity'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].time.split('T')[0]} ${res.data[i].time.split('T')[1].split('.')[0]}" disabled>
+                        <input type="text" value="${res.data[i].time.split('T')[0]} ${res.data[i].time.split('T')[1].split('.')[0]}" disabled class='report__time'>
                             
                         </input>
                     </td>
@@ -459,13 +468,32 @@ const setInitialReport = async () => {
                     $(this).css('display', 'none');
                     $(`#report-activity-check-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
                     $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', false);
-                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', '1px solid #7d7d7d')
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', '1px solid #7d7d7d');
+                    $(`#report-activity-${e.target.id.split('-')[3]} .report__id`).prop('disabled', true);
+                    $(`#report-activity-${e.target.id.split('-')[3]} .report__id`).css('border', 'none');
                 })
                 $(`#report-activity-check-${i}`).on('click', function (e) {
                     $(this).css('display', 'none');
                     $(`#report-activity-fix-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
                     $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', true);
-                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', 'none')
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', 'none');
+                    const id = res.data[e.target.id.split('-')[3]].id;
+                    const user_name = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__editor').val();
+                    const activity = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__activity').val();
+                    const time = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__time').val();
+                    const hisData = {
+                        user_name: user_name,
+                        garden_id: garden_id,
+                        activity: activity,
+                        time: time
+                    };
+                    axios.patch(`http://localhost:3000/history/${id}`, hisData).
+                        then(function (res) {
+                            // console.log(hisData);
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
                 })
             }
         })
@@ -574,24 +602,35 @@ const setInitialNoti = async () => {
                         $('.statis-subnoti i').css('color', '#b3b3b3');
                     }
                     $('.notification-wrap').find('#notification-wrap__' + e.target.id.split('-')[2]).remove();
-                    axios.delete(`http://localhost:3000/notification/${garden_id}/delete/${res.data[e.target.id.split('-')[2]].id}`);
+                    axios.delete(`http://localhost:3000/notification/delete/${res.data[e.target.id.split('-')[2]].id}`);
                     var notiId = res.data[e.target.id.split('-')[2]].id;
-                    var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
-                    notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4];
-                    var today = new Date();
-                    var date = today.getFullYear()
-                        + '-' + (Number(today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1))
-                        + '-' + (Number(today.getDate()) >= 10 ? today.getDate() : '0' + today.getDate());
-                    var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
-                        + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
-                        + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
-                    axios.post(`http://localhost:3000/history/${garden_id}/add/${notiId}k/${'Huynh Tuan Kiet'}/${notiActivity}/${date} ${time}`)
-                        .then(function (res) {
-                            setInitialReport();
-                        })
-                        .catch(function (err) {
-                            console.log(err);
-                        });
+                    async function run() {
+                        const user_name = await getName();
+                        var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
+                        notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4].split('.')[0];
+                        var today = new Date();
+                        var date = today.getFullYear()
+                            + '-' + (Number(today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1))
+                            + '-' + (Number(today.getDate()) >= 10 ? today.getDate() : '0' + today.getDate());
+                        var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
+                            + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
+                            + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
+                        const hisData = {
+                            user_name: user_name,
+                            garden_id: garden_id,
+                            activity: notiActivity,
+                            time: Date(date + time)
+                        };
+                        axios.post(`http://localhost:3000/history`, hisData)
+                            .then(function (res) {
+                                setInitialReport();
+                            })
+                            .catch(function (err) {
+                                console.log(err);
+                            });
+                    }
+
+                    run();
                 })
             };
 
@@ -702,7 +741,7 @@ function Statistical() {
         if (subdataTemp !== [] && subdataLight !== [] && subdataSoil !== [] && subdataHumid !== [] && pdata !== [] && maindata !== []) {
             setTimeout(function () {
                 setLoading(false);
-            }, 50)
+            }, 200)
         };
         // Scrool default
         $("html, body").animate({ scrollTop: 0 }, "fast");
@@ -747,7 +786,6 @@ function Statistical() {
             } else if ($('.climate-opt option:selected').text() === 'Light') {
                 $('.LightChart').css('display', 'flex');
                 url = `http://localhost:3000/climates/${garden_id}/light`;
-                console.log(url);
             } else if ($('.climate-opt option:selected').text() === 'Humidity') {
                 $('.HumidChart').css('display', 'flex');
                 url = `http://localhost:3000/climates/${garden_id}/humi`;
