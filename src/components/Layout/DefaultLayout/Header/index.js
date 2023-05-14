@@ -109,8 +109,9 @@ function Header() {
             }).catch(function (err) {
                 console.log(err);
             })
+
+            window.location.reload();
         });
-        window.location.reload();
     }
 
     const changeKey = () => {
@@ -137,10 +138,9 @@ function Header() {
                 // console.log(getCookie('garden_id'));
             }).catch(function (err) {
                 console.log(err);
-            })
+            });
+            window.location.reload();
         });
-
-        window.location.reload();
     }
 
     useEffect(() => {

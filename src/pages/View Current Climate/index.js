@@ -69,22 +69,21 @@ function Climate() {
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
     // --------------------------------- Real-time --------------------------------- //
     const send = async (data) => {
-        await sendData({type: data.feed_key.slice(4),value: data.value, time: data.created_at});
-   };        
-   const check = async(data) => {
-    const res = await getTheLastData(data.feed_key.slice(4))
-    if(res === '') {send(data); throw "Succesfully add to database";}
-    res.time = res.time.replace('.000', '')
-    if(res.time === data.created_at)
-    {
-        throw Error("Database already had this row!")
-    }
-    else send(data);
-   };
+        await sendData({ type: data.feed_key.slice(4), value: data.value, time: data.created_at });
+    };
+    const check = async (data) => {
+        const res = await getTheLastData(data.feed_key.slice(4))
+        if (res === '') { send(data); throw "Succesfully add to database"; }
+        res.time = res.time.replace('.000', '')
+        if (res.time === data.created_at) {
+            throw Error("Database already had this row!")
+        }
+        else send(data);
+    };
 
-     useEffect(() => {
+    useEffect(() => {
         setInterval(async () => {
-             fetch(url_temp, {
+            fetch(url_temp, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
                     'Content-Type': 'application/json',
@@ -92,13 +91,13 @@ function Climate() {
 
             })
                 .then((response) => response.json())
-                .then((data) => {   
+                .then((data) => {
                     check(data[0]);
-                    setTemp(data[0].value);            
+                    setTemp(data[0].value);
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
-        setInterval(async() => {
+        setInterval(async () => {
             fetch(url_light, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -113,7 +112,7 @@ function Climate() {
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
 
-        setInterval(async() => {
+        setInterval(async () => {
             fetch(url_humi, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -127,7 +126,7 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
-        setInterval(async() => {
+        setInterval(async () => {
             fetch(url_soil, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
