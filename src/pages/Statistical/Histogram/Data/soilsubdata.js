@@ -10,12 +10,15 @@ const getSubSoil = async () => {
     axios
         .get(`${url}`)
         .then(function (res) {
+            var count = 0;
+            var idx = res.data.length < 10 ? res.data.length - 1 : 9;
             for (var i = 0; i < res.data.length; i++) {
                 if (i === 10) {
                     break;
                 }
-                subdataSoil[i] = res.data[i];
-                meanSoil += Number(res.data[i].value);
+                subdataSoil[idx--] = res.data[res.data.length - 1 - count];
+                meanSoil += Number(res.data[res.data.length - 1 - count].value);
+                count++;
             }
             meanSoil = res.data.length < 10 ? meanSoil / res.data.length : meanSoil / 10;
         })
