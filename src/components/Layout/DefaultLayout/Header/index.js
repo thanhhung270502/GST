@@ -14,9 +14,14 @@ import {
     faRightFromBracket,
     faTriangleExclamation,
     faUser,
+    faHouseChimneyMedical,
+    faHouseCircleCheck,
+    faArrowRightArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
 import { getUserByID, logout } from '~/api/api';
-import { getCookie } from '~/api/cookie';
+import cookie from 'cookie';
+import { getCookie, setCookie } from '~/api/cookie';
+import axios from 'axios';
 
 function Header() {
     const [currentUser, setCurrentUser] = useState();
@@ -25,12 +30,127 @@ function Header() {
         window.location.href = './';
     };
 
+    const checkGarden = () => {
+        if (getCookie('garden_id') === '') {
+            return true;
+        };
+        return false;
+    }
+
+    // const checkUrlGarden = async () => {
+    //     await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
+    //         if (res.data.url === 'EMPTY DATA') return 0;
+    //         return 1;
+    //     }).catch(function (err) {
+    //         console.log(err);
+    //     })
+    // }
+
+    const createGarden = async () => {
+        const gardenData = {
+            url: 'EMPTY DATA',
+            gKey: 'EMPTY DATA'
+        };
+        await axios.post('http://localhost:3000/garden', gardenData).then(function (res) {
+            setCookie('garden_id', res.data.id, 30);
+            // console.log(getCookie('garden_id'));
+        }).catch(function (err) {
+            console.log(err);
+        });
+
+        await axios.post(`http://localhost:3000/auth/${getCookie('user_id')}/${getCookie('garden_id')}`).then(function (res) {
+            // console.log(res);
+        }).catch(function (err) {
+            console.log(err);
+        })
+
+        window.location.reload();
+    }
+
+    const existGarden = () => {
+        $('body').css('overflow', 'hidden');
+        $('body .type-table').css('display', 'block');
+        $('body .type-wrapper__title').html('Nhập mã định danh của Garden');
+
+        $('body .type-wrapper button').on('click', async (e) => {
+            setCookie('garden_id', $('body .type-wrapper input').val(), 30);
+            await axios.post(`http://localhost:3000/auth/${getCookie('user_id')}/${getCookie('garden_id')}`).then(function (res) {
+                // console.log(res);
+            }).catch(function (err) {
+                console.log(err);
+            })
+
+            window.location.reload();
+        })
+    }
+
+    const changeUrl = () => {
+        $('body').css('overflow', 'hidden');
+        $('body .type-table').css('display', 'block');
+        $('body .type-wrapper__title').html('Nhập giá trị URL của Dashboard');
+
+        $('body .type-wrapper button').on('click', async (e) => {
+            const gKey = await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
+                return res.data.gKey;
+                // console.log(res.data.gKey);
+            }).catch(function (err) {
+                console.log(err);
+            });
+
+            const gardenData = {
+                url: $('body .type-wrapper input').val(),
+                gKey: gKey
+            }
+
+            await axios.patch(`http://localhost:3000/garden/${getCookie('garden_id')}`, gardenData).then(function (res) {
+                // console.log(res);
+                // console.log($('body .type-wrapper input').val());
+                // console.log(getCookie('garden_id'));
+            }).catch(function (err) {
+                console.log(err);
+            })
+
+            window.location.reload();
+        });
+    }
+
+    const changeKey = () => {
+        $('body').css('overflow', 'hidden');
+        $('body .type-table').css('display', 'block');
+        $('body .type-wrapper__title').html('Nhập giá trị KEY của Dashboard');
+
+        $('body .type-wrapper button').on('click', async (e) => {
+            const url = await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
+                return res.data.url;
+                // console.log(res.data.gKey);
+            }).catch(function (err) {
+                console.log(err);
+            });
+
+            const gardenData = {
+                url: url,
+                gKey: $('body .type-wrapper input').val()
+            }
+
+            await axios.patch(`http://localhost:3000/garden/${getCookie('garden_id')}`, gardenData).then(function (res) {
+                // console.log(res);
+                // console.log($('body .type-wrapper input').val());
+                // console.log(getCookie('garden_id'));
+            }).catch(function (err) {
+                console.log(err);
+            });
+            window.location.reload();
+        });
+    }
+
     useEffect(() => {
         (async () => {
             await getUserByID(getCookie('user_id')).then((data) => {
                 setCurrentUser(data);
             });
         })();
+
+
     }, []);
 
     return (
@@ -133,14 +253,50 @@ function Header() {
                                                     <div className="col-10">My Profile</div>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a class="d-flex align-items-center dropdown-item" href="#">
+                                            {
+                                                checkGarden() && (
+                                                    <li className='create-garden' onClick={createGarden}>
+                                                        <div class="d-flex align-items-center dropdown-item">
+                                                            <div className="top-header__icon col-2">
+                                                                <FontAwesomeIcon icon={faHouseChimneyMedical} />
+                                                            </div>
+                                                            <div className="col-10">Create new garden</div>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            }
+                                            <li className='exist-garden' onClick={existGarden}>
+                                                <div class="d-flex align-items-center dropdown-item">
                                                     <div className="top-header__icon col-2">
-                                                        <FontAwesomeIcon icon={faGear} />
+                                                        <FontAwesomeIcon icon={faHouseCircleCheck} />
                                                     </div>
-                                                    <div className="col-10">Account settings</div>
-                                                </a>
+                                                    <div className="col-10">Select garden</div>
+                                                </div>
                                             </li>
+                                            {
+                                                !checkGarden() && (
+                                                    <li className='change-garden' onClick={changeUrl}>
+                                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                                            <div className="top-header__icon col-2">
+                                                                <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                                                            </div>
+                                                            <div className="col-10">Change URL</div>
+                                                        </a>
+                                                    </li>
+                                                )
+                                            }
+                                            {
+                                                !checkGarden() && (
+                                                    <li className='change-key' onClick={changeKey}>
+                                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                                            <div className="top-header__icon col-2">
+                                                                <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                                                            </div>
+                                                            <div className="col-10">Change KEY</div>
+                                                        </a>
+                                                    </li>
+                                                )
+                                            }
                                             <li>
                                                 <hr class="dropdown-divider" />
                                             </li>

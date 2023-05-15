@@ -2,8 +2,12 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { getFreqData } from './Data/freqdata.js';
+import { getCookie } from '~/api/cookie.js';
 
-const url = 'http://localhost:3000/climates/temp';
+const garden_id = getCookie('garden_id');
+// const garden_id = 'gar00000-0000-0000-0000-000000000001';
+
+const url = `http://localhost:3000/history/${garden_id}`;
 
 var freqdata = getFreqData();
 
@@ -39,18 +43,16 @@ function FreqChart() {
                 var countSoil = 0;
 
                 var idx = res.data.length > 10 ? 9 : res.data.length - 1;
-                for (var i = 0; i <= idx; i++) {
-                    switch (res.data[i].type) {
-                        case 'temp':
+                for (var i = res.data.length - 1; i >= res.data.length - 1 - idx; i--) {
+                    switch (res.data[i].activity.split(' ')[3]) {
+                        case 'fan':
                             countTemp++;
                             break;
-                        case 'light':
+                        case 'led':
                             countLight++;
                             break;
-                        case 'humid':
+                        case 'pump':
                             countHumid++;
-                            break;
-                        case 'soil':
                             countSoil++;
                             break;
                         default:
@@ -59,19 +61,19 @@ function FreqChart() {
                 };
                 freqdata[0] = {
                     name: 'Temperature',
-                    value: countTemp * 10 - 10
+                    value: countTemp / (idx + 1) * 100
                 };
                 freqdata[1] = {
                     name: 'Light',
-                    value: countLight * 10 + 10
+                    value: countLight / (idx + 1) * 100
                 };
                 freqdata[2] = {
                     name: 'Humid',
-                    value: countHumid * 10
+                    value: countHumid / (idx + 1) * 100
                 };
                 freqdata[3] = {
                     name: 'Soil Moisture',
-                    value: countSoil * 10
+                    value: countSoil / (idx + 1) * 100
                 }
                 setLoading(false);
             })

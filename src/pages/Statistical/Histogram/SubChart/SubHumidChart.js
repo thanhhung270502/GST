@@ -1,6 +1,6 @@
 import { subdataHumid } from '../Data/humidsubdata';
 import { useState, useEffect } from 'react';
-import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, Tooltip, ResponsiveContainer, YAxis } from 'recharts';
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -21,7 +21,7 @@ function SubHumidChart() {
     })
 
     return (
-        <div >
+        <div style={{ width: '100%', height: '100%' }}>
             <ResponsiveContainer width='100%'>
                 <LineChart
                     width={300}
@@ -34,6 +34,7 @@ function SubHumidChart() {
                         bottom: 25,
                     }}
                 >
+                    <YAxis domain={[0, 100]} axisLine={false} hide />
                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none", paddingTop: "20px", fontWeight: "bold", fontSize: "0.8em" }} />
                     <Line type="monotone" dataKey="value" stroke="#25b580" dot={false} strokeWidth={4} style={{
                         filter: `drop-shadow(0 15px 20px #25b580)`,
