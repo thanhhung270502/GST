@@ -115,19 +115,19 @@ export const updateModeGarden = async (info) => {
         });
 };
 
-// export const updateStatusSchedule = async (info) => {
-//     console.log(info.garden_id, info.type, info.status);
-//     const res = await axios
-//         .patch(`${URL}/schedule/${info.garden_id}/${info.type}`, {
-//             status: info.status
-//         })
-//         .then(function (response) {
-//             console.log("Heree");
-//             return response;
-//         })
-//         .catch(function (error) {
-//             console.log(error);
-//             return error.response;
-//         });
-//     return res;
-// };
+export const updateStatusSchedule = async (info) => {
+    console.log(info.garden_id, info.type, info.status);
+    const res = await axios
+        .patch(`${URL}/schedule/${info.garden_id}/${info.type}`, {
+            status: info.status
+        })
+        .then(function (response) {
+            console.log("Heree");
+            return response;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error.response;
+        });
+    return res;
+};
