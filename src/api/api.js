@@ -87,7 +87,6 @@ export const toggleDeviceDB = async (name, status) => {
 };
 
 export const getModeGarden = async (garden_id, type) => {
-    console.log(garden_id, type);
     return (await axios.get(`${URL}/mode_garden/${garden_id}/${type}`)).data;
 };
 
@@ -130,4 +129,11 @@ export const updateStatusSchedule = async (info) => {
             return error.response;
         });
     return res;
+};
+
+export const sendNoti = async (data) => {
+    await axios
+        .post(`${URL}/notification`, data)
+        .then((res) => console.log('Successful push noti to database'))
+        .catch((err) => console.log(err.data));
 };
