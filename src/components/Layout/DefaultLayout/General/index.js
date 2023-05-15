@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { sendData } from '~/api/api';
 import { getLastClimateByType } from '~/api/api';
 import { getTheLastData } from '~/api/api';
+import { sendNoti } from '~/api/api';
 const LOW_TEMP = 20; 
 // NHỎ HƠN LOW TEMP: TAT QUAT & BAT LED
 const HIGH_TEMP = 30;
@@ -20,69 +21,102 @@ const HIGH_HUMI = 95; //LON HON: TAT PUMP & BAT QUAT
 
 const LOW_SOIL = 70; //NHO HON LƠW: BAT PUMP
 const HIGH_SOIL = 85; // LON HON : TAT PUMP
+const garden_id = getCookie('garden_id');
+
 const checkTemp = async(data) =>
 {
-    if( data < LOW_TEMP)
+    const problem = ['The temperature is too high', 'The temperature is normal', 'The temperature is too low'];
+
+    if( data.value < LOW_TEMP)
     {
+
+        await sendNoti({status: 'warn',problem: problem[2], sub_problem: "Turn off fan & Turn on the light", time: data.time, garden_id: garden_id}); 
         await toggleDeviceDB('fan', 0);
         await getFan();
         await toggleDeviceDB('led', 1);
     }
-    else if(data > HIGH_TEMP)
+    else if(data.value > HIGH_TEMP)
     {
+        await sendNoti({status: 'danger',problem: problem[2], sub_problem: "Turn on fan and turn off the light",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('fan', 1);
         await toggleDeviceDB('led', 0);
     }
     else 
     {
+        await sendNoti({status: 'info',problem: problem[1], sub_problem: "Do nothing", time: data.time, garden_id: garden_id}); 
         return;
     }
+
 }
 const checkLight = async(data) =>
 {
-    if( data < LOW_LIGHT)
+    const problem = ['The lighting strength is too high', 'The lighting strength is normal', 'The lighting strength is too low'];
+
+    if( data.value < LOW_LIGHT)
     {
+        await sendNoti({status: 'warning',problem: problem[2], sub_problem: "Turn on the light",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('led', 1);
     }
-    else if(data > HIGH_LIGHT)
+    else if(data.value > HIGH_LIGHT)
     {
+        await sendNoti({status: 'danger',problem: problem[0], sub_problem: "Turn off the light and close the roof",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('roof', 0);
         await toggleDeviceDB('led', 0);
     }
     else 
     {
+        await sendNoti({status: 'info',problem: problem[1], sub_problem: "Do nothing",time: data.time, garden_id: garden_id}); 
         return;
     }
 }
 const checkHumi = async(data) =>
 {
-    if( data < LOW_HUMI)
+    const problem = ['The humid value is too high', 'The humid value is normal', 'The humid value is too low'];
+
+    if( data.value < LOW_HUMI)
     {
+        await sendNoti({status: 'warning',problem: problem[2], sub_problem: "Turn on the pump",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('pump', 1);
     }
-    else if(data > HIGH_HUMI)
+    else if(data.value > HIGH_HUMI)
     {
+        await sendNoti({status: 'danger',problem: problem[0], sub_problem: "Turn on the fan & turn off the pump",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('pump', 0);
         await toggleDeviceDB('fan', 1);
 
     }
     else 
     {
+        await sendNoti({status: 'info',problem: problem[1], sub_problem: "Do nothing",time: data.time, garden_id: garden_id}); 
+
         return;
     }
 }
 const checkSoil = async(data) =>
 {
-    if( data < LOW_SOIL)
+    const problem = ['The soil value is too high', 'The soil value is normal', 'The soil value is too low'];
+
+    if( data.value < LOW_SOIL)
     {
+        await sendNoti({status: 'warning',problem: problem[2], sub_problem: "Turn on the pump",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('pump', 1);
     }
-    else if(data > HIGH_SOIL)
+    else if(data.value > HIGH_SOIL)
     {
+        await sendNoti({status: 'danger',problem: problem[0], sub_problem: "Turn off the pump",time: data.time, garden_id: garden_id}); 
+
         await toggleDeviceDB('pump', 0);
     }
     else 
     {
+        await sendNoti({status: 'info',problem: problem[1], sub_problem: "Do nothing",time: data.time, garden_id: garden_id}); 
+
         return;
     }
 }
@@ -152,10 +186,6 @@ function General() {
                 .then((response) => response.json())
                 .then((data) => {   
                     check(data[0]);
-                    if(data[0].value > 10)
-                    {
-    
-                    }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
@@ -169,9 +199,6 @@ function General() {
                 .then((response) => response.json())
                 .then((data) => {
                     check(data[0]);
-                    if(data[0].value)
-                    {}
-    
                     
                 })
                 .catch((error) => console.log(error));
@@ -252,7 +279,7 @@ function General() {
                     const getTemp = async() => {
                         const res = await getLastClimateByType("temp");
                         console.log(res)
-                        checkTemp(res.value)
+                        checkTemp(res);
                     }
                     getTemp();
                 }
@@ -287,8 +314,7 @@ function General() {
                     const getLight = async() => {
                         const res = await getLastClimateByType("light");
                         console.log(res);
-                        checkLight(res.value)
-
+                        checkLight(res);
                     }
                     getLight();
                 }
@@ -323,7 +349,7 @@ function General() {
                     const getHumi = async() => {
                         const res = await getLastClimateByType("light");
                         console.log(res)
-                        checkHumi(res.value);
+                        checkHumi(res);
                     }
                     getHumi();
 
@@ -359,7 +385,7 @@ function General() {
                     const getSoil = async() => {
                         const res = await getLastClimateByType("soi");
                         console.log(res);
-                        checkSoil(res.value);
+                        checkSoil(res);
                     }
                     getSoil();
 

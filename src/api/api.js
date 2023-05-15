@@ -67,6 +67,14 @@ export const sendData = async (data) => {
         .catch((err) => console.log(err.data));
 };
 
+export const sendNoti = async (data) => {
+    await axios
+        .post(`${URL}/notification`, data)
+        .then((res) => console.log('Successful push noti to database'))
+        .catch((err) => console.log(err.data));
+};
+
+
 export const getTheLastData = async (type) => {
     return (await axios.get(`${URL}/climates/last/${type}`)).data;
 };
