@@ -16,7 +16,6 @@ import {
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { getUserByID, logout } from '~/api/api';
-import cookie from 'cookie';
 import { getCookie } from '~/api/cookie';
 
 function Header() {

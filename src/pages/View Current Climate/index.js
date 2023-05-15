@@ -14,6 +14,7 @@ import soilpng from '../../assets/images/soil.png'
 import $ from 'jquery';
 import { sendData } from '~/api/api';
 import { getTheLastData } from '~/api/api';
+
 function toggleFan(valueFan) {
     const username = 'vienminhphuc';
     const feedKey = 'gst-fan';
@@ -70,19 +71,20 @@ function Climate() {
     // --------------------------------- Real-time --------------------------------- //
     const send = async (data) => {
         await sendData({type: data.feed_key.slice(4),value: data.value, time: data.created_at});
-   };        
-   const check = async(data) => {
-    const res = await getTheLastData(data.feed_key.slice(4))
-    if(res === '') {send(data); throw "Succesfully add to database";}
-    res.time = res.time.replace('.000', '')
-    if(res.time === data.created_at)
-    {
-        throw Error("Database already had this row!")
-    }
-    else send(data);
-   };
+    };        
+    const check = async(data) => {
+        const res = await getTheLastData(data.feed_key.slice(4))
+        
+        if(res === '') {send(data); throw "Succesfully add to database";}
+            res.time = res.time.replace('.000', '')
+        
+        if(res.time === data.created_at) {
+            throw Error("Database already had this row!")
+        }
+        else send(data);
+    };
 
-     useEffect(() => {
+    useEffect(() => {
         setInterval(async () => {
              fetch(url_temp, {
                 headers: {

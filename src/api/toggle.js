@@ -1,7 +1,7 @@
-const AIO_KEY = 'aio_vzdq51hH08Y7zHyKkTTXSx8ubgIp';
+const AIO_KEY = 'aio_hPUq79wWYm0zHs4dJIKf8N2smjVv';
 
 export function toggleDevice(device, valueDevice) {
-    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-`+ device + `/data`;
+    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-` + device + `/data`;
 
     //Create a GET request with value 1 and send it to AdafruitIO
     fetch(url, {
@@ -19,7 +19,7 @@ export function toggleDevice(device, valueDevice) {
 }
 
 export const fetchItem = async (climate) => {
-    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-`+ climate +`/data`;
+    const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-` + climate + `/data`;
 
     await fetch(url, {
         headers: {
@@ -32,4 +32,23 @@ export const fetchItem = async (climate) => {
             return data;
         })
         .catch((error) => console.log(error));
-}
+};
+
+export const getDeviceValue = (device) => {
+    const apiKey = '';
+
+    return fetch(`https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-` + device + `/data`, {
+        headers: {
+            'X-AIO-Key': apiKey,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            return data[0];
+        })
+        .catch((error) => {
+            console.error('Error while getting fan:', error);
+            return null;
+        });
+};
