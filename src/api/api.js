@@ -61,73 +61,27 @@ export const createSchedule = async (info) => {
 };
 
 export const sendData = async (data) => {
-    await axios
-        .post(`${URL}/climates`, data)
-        .then((res) => console.log('Data send'))
-        .catch((err) => console.log(err.data));
+    await axios.post(`${URL}/climates`, data)
+        .then(res => console.log('Data send'))
+        .catch(err => console.log(err.data))
 };
 
 export const getTheLastData = async (type) => {
-    return (await axios.get(`${URL}/climates/last/${type}`)).data;
-};
+    return (await axios.get(`${URL}/climates/last/${type}`)).data
 
-export const getLastScheduleByType = async (garden_id, type) => {
-    return (await axios.get(`${URL}/schedule/${garden_id}/${type}`)).data;
-};
-
-export const getStatusByName = async (name) => {
-    return (await axios.get(`${URL}/device/${name}`)).data;
-};
-
-export const toggleDeviceDB = async (name, status) => {
-    await axios
-        .patch(`${URL}/device/${name}`, { name, status })
-        .then((res) => console.log('Data send'))
-        .catch((err) => console.log(err.data));
-};
-
-export const getModeGarden = async (garden_id, type) => {
-    console.log(garden_id, type);
-    return (await axios.get(`${URL}/mode_garden/${garden_id}/${type}`)).data;
-};
-
-export const createModeGarden = async (info) => {
-    const res = await axios
-        .post(`${URL}/mode_garden`, info)
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            console.log(error);
-            return error.response;
-        });
-};
-
-export const updateModeGarden = async (info) => {
-    const res = await axios
-        .patch(`${URL}/mode_garden`, info)
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            console.log(error);
-            return error.response;
-        });
-};
-
-export const updateStatusSchedule = async (info) => {
-    console.log(info.garden_id, info.type, info.status);
-    const res = await axios
-        .patch(`${URL}/schedule/${info.garden_id}/${info.type}`, {
-            status: info.status
-        })
-        .then(function (response) {
-            console.log("Heree");
-            return response;
-        })
-        .catch(function (error) {
-            console.log(error);
-            return error.response;
-        });
-    return res;
-};
+    export const updateStatusSchedule = async (info) => {
+        console.log(info.garden_id, info.type, info.status);
+        const res = await axios
+            .patch(`${URL}/schedule/${info.garden_id}/${info.type}`, {
+                status: info.status
+            })
+            .then(function (response) {
+                console.log("Heree");
+                return response;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return error.response;
+            });
+        return res;
+    };

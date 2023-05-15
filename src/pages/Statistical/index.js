@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import stylesCss from './statistical.scss';
+import { getCookie } from '~/api/cookie';
 // import Data
 import { dataJson } from './Histogram/Data/data';
 import { meanTemp } from './Histogram/Data/tempsubdata';
@@ -29,15 +30,19 @@ import SubSoilChart from './Histogram/SubChart/SubSoilChart';
 
 const cx = classNames.bind(stylesCss);
 
-var url = 'http://localhost:3000/climates/temp';
-var notiurl = 'http://localhost:3000/notification';
-var hisurl = 'http://localhost:3000/history';
+const garden_id = getCookie('garden_id');
+// const garden_id = 'gar00000-0000-0000-0000-000000000001';
+
+var url = `http://localhost:3000/climates/${garden_id}/temp`;
+var notiurl = `http://localhost:3000/notification/${garden_id}`;
+var hisurl = `http://localhost:3000/history/${garden_id}`;
 
 var pdata = dataJson();
 
 var maindata = getMainData();
 
 var freqdata = getFreqData();
+
 
 // Function
 
@@ -54,6 +59,15 @@ function refreshHistogram() {
     }, 50)
 }
 
+const getName = async () => {
+    return await axios.get(`http://localhost:3000/auth/${getCookie('user_id')}`).then(function (res) {
+        return res.data.name;
+    }).catch(function (err) {
+        return 'Failed'
+        console.log(err);
+    });
+};
+
 function setdataDay() {
     // Remove data 30 days
     refreshData();
@@ -62,18 +76,70 @@ function setdataDay() {
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = 23;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            var count = 0;
+            var mean = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
-                if (res.data[i].time.split('T')[0] !== notiDate) {
+                if (idx === 23) {
                     break;
                 };
-                pdata[idx] = res.data[i];
-                pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
-            }
+                if (i === 0 && res.data[i].time.split('T')[0] === notiDate) {
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        idx++;
+                    };
+                    break;
+                } else if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                    break;
+                };
+                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                    idx++;
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    i++;
+                }
+            };
+            notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                    if (i === 0) {
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx].time = notiHours + ":00:00";
+                            pdata[idx - 1] = {};
+                            pdata[idx - 1].value = Number(res.data[i].value);
+                            pdata[idx - 1].time = res.data[i].time.split('T')[1].split(':')[0] + ":00:00";
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx].time = notiHours;
+                        };
+                        break;
+                    };
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / count;
+                    pdata[idx--].time = notiHours + ":00:00";
+                    break;
+                };
+                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                    pdata[idx] = {};
+                    pdata[idx].value = mean / count;
+                    pdata[idx--].time = notiHours + ":00:00";
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    mean = Number(res.data[i].value);
+                    count = 1;
+                } else {
+                    mean += Number(res.data[i].value);
+                    count++;
+                }
+            };
         })
         .catch(function (err) {
             console.log(err);
         });
+
 
     refreshHistogram();
 }
@@ -86,24 +152,64 @@ function setdataWeek() {
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = (res.data.length / 24) >= 7 ? 6 : res.data.length - 1;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === 6) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0]) {
+                    idx++;
+                    notiDate = res.data[i].time.split('T')[0];
+                }
+            }
+            notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var mean = 0;
+            var meanHour = 0;
+            var count = 0;
+            var countHour = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
 
                 if (idx === -1) {
                     break;
                 };
-                if (notiDate !== res.data[i].time.split('T')[0]) {
+                if (notiDate !== res.data[i].time.split('T')[0] || i === 0) {
+                    if (i === 0) {
+                        if (notiHours === res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
+                    };
+                    mean += meanHour / countHour;
+                    count++;
                     pdata[idx] = {};
-                    pdata[idx].value = mean / 24;
+                    pdata[idx].value = mean / count;
                     pdata[idx].time = notiDate;
                     notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
                     mean = 0;
-                    i++;
+                    if (i !== 0) {
+                        i++;
+                    }
                     idx--;
+                    count = 0;
+                    meanHour = 0;
+                    countHour = 0;
                 } else {
-                    mean += Number(res.data[i].value);
-                }
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        mean += meanHour / countHour;
+                        count++;
+                        countHour = 1;
+                        meanHour = Number(res.data[i].value);
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    } else {
+                        meanHour += Number(res.data[i].value);
+                        countHour++;
+                    };
+                };
 
             }
         })
@@ -117,27 +223,68 @@ function setdataWeek() {
 function setdataMonth() {
     // Remove data 30 days
     refreshData();
+    console.log(getCookie('Huỳnh Tuấn Kiệt'));
 
     // Set data 30 days
     axios.get(`${url}`)
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-            var idx = (res.data.length / 24) >= 30 ? 29 : res.data.length / 24 - 1;
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+            var idx = 0;
+            for (var i = res.data.length - 1; i >= 0; i--) {
+                if (idx === 29) {
+                    break;
+                };
+                if (notiDate !== res.data[i].time.split('T')[0]) {
+                    idx++;
+                    notiDate = res.data[i].time.split('T')[0];
+                }
+            };
+            notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var mean = 0;
+            var meanHour = 0;
+            var count = 0;
+            var countHour = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
                 if (idx === -1) {
                     break;
                 };
                 if (notiDate !== res.data[i].time.split('T')[0] || i === 0) {
+                    if (i === 0) {
+                        if (notiHours === res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
+                    };
+                    mean += meanHour / countHour;
+                    count++;
                     pdata[idx] = {};
-                    pdata[idx].value = mean / 24;
+                    pdata[idx].value = mean / count;
                     pdata[idx].time = notiDate;
                     notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
                     mean = 0;
-                    i++;
+                    if (i !== 0) {
+                        i++;
+                    }
                     idx--;
+                    count = 0;
+                    meanHour = 0;
+                    countHour = 0;
                 } else {
-                    mean += Number(res.data[i].value);
+                    if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                        mean += meanHour / countHour;
+                        count++;
+                        countHour = 1;
+                        meanHour = Number(res.data[i].value);
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    } else {
+                        meanHour += Number(res.data[i].value);
+                        countHour++;
+                    }
                 }
             }
         })
@@ -157,60 +304,80 @@ function setdata3Months() {
         .then(function (res) {
             var notiDate = res.data[res.data.length - 1].time.split('T')[0];
             var notiMonth = res.data[res.data.length - 1].time.split('-')[1];
+            var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
             var idx = Number(res.data[res.data.length - 1].time.split('-')[1] - res.data[0].time.split('-')[1]);
             if (idx > 2) {
                 idx = 2;
             };
-            var mean = 0;
-            var sum = 0;
-            var count = 1;
-            var counthours = 0;
+            var meanHour = 0;
+            var meanDate = 0;
+            var meanMonth = 0;
+            var countHour = 0;
+            var countDate = 0;
+            var countMonth = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
                 if (idx === -1) {
                     break;
                 };
-                if (notiMonth !== res.data[i].time.split('-')[1] && i === 0) {
-                    sum += mean / counthours;
-                    pdata[idx] = {
-                        value: sum / count,
-                        time: 'Tháng ' + notiMonth
-                    };
-                    if (idx === 1) {
-                        pdata[--idx] = {
-                            value: Number(res.data[i].value),
-                            time: 'Tháng' + res.data[i].time.split('-')[1]
-                        }
-                    }
-                } else if (notiMonth !== res.data[i].time.split('-')[1] || i === 0) {
+                if (notiMonth !== res.data[i].time.split('-')[1] || i === 0) {
                     if (i === 0) {
-                        mean += Number(res.data[i].value);
-                        counthours++;
-                        sum += mean / counthours;
+                        if (notiDate !== res.data[i].time.split('T')[0]) {
+                            meanMonth += Number(res.data[i].value);
+                        } else {
+                            if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                meanDate += Number(res.data[i].value);
+                                countDate++;
+                            } else {
+                                meanHour += Number(res.data[i].value);
+                                countHour++;
+                            };
+                            meanDate += meanHour / countHour;
+                            countDate++;
+                        };
                     };
+
+                    meanMonth += meanDate / countDate;
+                    countMonth++;
                     pdata[idx] = {};
-                    pdata[idx].value = sum / count;
-                    pdata[idx].time = 'Tháng ' + notiMonth;
-                    if (i > 0) {
-                        notiMonth = res.data[i].time.split('-')[1];
-                        notiDate = res.data[i].time.split('T')[0];
-                        i++;
-                    };
-                    sum = 0;
-                    mean = 0;
-                    count = 1;
-                    counthours = 0;
+                    pdata[idx].value = meanMonth / countMonth;
+                    pdata[idx].time = "Tháng " + notiMonth;
+                    notiMonth = res.data[i].time.split('-')[1];
+                    notiDate = res.data[i].time.split('T')[0];
+                    notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                    countDate = 0;
+                    countHour = 0;
+                    meanDate = 0;
+                    meanHour = 0;
                     idx--;
+                    if (i !== 0) {
+                        i++;
+                    }
+
                 } else {
                     if (notiDate !== res.data[i].time.split('T')[0]) {
-                        count++;
+                        meanDate += meanHour / countHour;
+                        countDate++;
+                        meanMonth += meanDate / countDate;
+                        countMonth++;
                         notiDate = res.data[i].time.split('T')[0];
-                        sum += mean / counthours;
-                        mean = 0;
-                        counthours = 0;
+                        notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                        countDate = 0;
+                        meanDate = 0;
+                        meanHour = Number(res.data[i].value);
+                        countHour = 1;
+                    } else {
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            meanDate += meanHour / countHour;
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            meanHour = Number(res.data[i].value);
+                            countHour = 1;
+                            countDate++;
+                        } else {
+                            meanHour += Number(res.data[i].value);
+                            countHour++;
+                        }
                     }
-                    mean += Number(res.data[i].value);
-                    counthours++;
-                }
+                };
             }
         })
         .catch(function (err) {
@@ -261,27 +428,30 @@ const setInitialReport = async () => {
                 Action
             </th>
         </tr>`;
-
+            var count = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
+                if (count === 10) {
+                    break;
+                };
                 table += `
                 <tr id='report-activity-${i}'>
                     <td>
-                        <input type="text" value="${i}" disabled>
+                        <input type="text" value="${i}" disabled class='report__id'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].editor}" disabled>
+                        <input type="text" value="${res.data[i].user_name}" disabled class='report__editor'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].activity}" disabled>
+                        <input type="text" value="${res.data[i].activity}" disabled class='report__activity'>
                             
                         </input>
                     </td>
                     <td>
-                        <input type="text" value="${res.data[i].time.split('T')[0]} ${res.data[i].time.split('T')[1].split('.')[0]}" disabled>
+                        <input type="text" value="${res.data[i].time.split('T')[0]} ${res.data[i].time.split('T')[1].split('.')[0]}" disabled class='report__time'>
                             
                         </input>
                     </td>
@@ -291,6 +461,7 @@ const setInitialReport = async () => {
                     </td>
                 </tr>
             `;
+                count++;
             };
 
             table += `</table>`;
@@ -301,13 +472,32 @@ const setInitialReport = async () => {
                     $(this).css('display', 'none');
                     $(`#report-activity-check-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
                     $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', false);
-                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', '1px solid #7d7d7d')
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', '1px solid #7d7d7d');
+                    $(`#report-activity-${e.target.id.split('-')[3]} .report__id`).prop('disabled', true);
+                    $(`#report-activity-${e.target.id.split('-')[3]} .report__id`).css('border', 'none');
                 })
                 $(`#report-activity-check-${i}`).on('click', function (e) {
                     $(this).css('display', 'none');
                     $(`#report-activity-fix-${e.target.id.split('-')[3]}`).css({ 'display': 'inline-block' });
                     $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').prop('disabled', true);
-                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', 'none')
+                    $(`#report-activity-${e.target.id.split('-')[3]}`).find('input').css('border', 'none');
+                    const id = res.data[e.target.id.split('-')[3]].id;
+                    const user_name = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__editor').val();
+                    const activity = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__activity').val();
+                    const time = $(`#report-activity-${e.target.id.split('-')[3]}`).find('.report__time').val();
+                    const hisData = {
+                        user_name: user_name,
+                        garden_id: garden_id,
+                        activity: activity,
+                        time: time
+                    };
+                    axios.patch(`http://localhost:3000/history/${id}`, hisData).
+                        then(function (res) {
+                            // console.log(hisData);
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
                 })
             }
         })
@@ -319,6 +509,9 @@ const setInitialReport = async () => {
 const setInitialNoti = async () => {
     await axios.get(`${notiurl}`)
         .then(function (res) {
+            if (res.data.length === 0) {
+                $('.statis-subnoti i').css('color', '#b3b3b3');
+            }
             for (var i = res.data.length - 1; i >= 0; i--) {
                 // Set initial variables
                 var srcImg = '~/assets/images/Becareful.png';
@@ -409,25 +602,39 @@ const setInitialNoti = async () => {
                 }
 
                 $('#noti-activity-' + i).on('click', function (e) {
+                    if (res.data.length === 1) {
+                        $('.statis-subnoti i').css('color', '#b3b3b3');
+                    }
                     $('.notification-wrap').find('#notification-wrap__' + e.target.id.split('-')[2]).remove();
                     axios.delete(`http://localhost:3000/notification/delete/${res.data[e.target.id.split('-')[2]].id}`);
                     var notiId = res.data[e.target.id.split('-')[2]].id;
-                    var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
-                    notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4];
-                    var today = new Date();
-                    var date = today.getFullYear()
-                        + '-' + (Number(today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1))
-                        + '-' + (Number(today.getDate()) >= 10 ? today.getDate() : '0' + today.getDate());
-                    var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
-                        + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
-                        + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
-                    axios.post(`http://localhost:3000/history/add/${notiId}k/${'Huynh Tuan Kiet'}/${notiActivity}/${date} ${time}`)
-                        .then(function (res) {
-                            setInitialReport();
-                        })
-                        .catch(function (err) {
-                            console.log(err);
-                        });
+                    async function run() {
+                        const user_name = await getName();
+                        var notiActivity = res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[2] === 'on' ? 'Turn on the ' : 'Turn off the ';
+                        notiActivity += res.data[e.target.id.split('-')[2]].sub_problem.split(' ')[4].split('.')[0];
+                        var today = new Date();
+                        var date = today.getFullYear()
+                            + '-' + (Number(today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1))
+                            + '-' + (Number(today.getDate()) >= 10 ? today.getDate() : '0' + today.getDate());
+                        var time = (Number(today.getHours()) >= 10 ? today.getHours() : '0' + today.getHours())
+                            + ":" + (Number(today.getMinutes()) >= 10 ? today.getMinutes() : '0' + today.getMinutes())
+                            + ":" + (Number(today.getSeconds()) >= 10 ? today.getSeconds() : '0' + today.getSeconds());
+                        const hisData = {
+                            user_name: user_name,
+                            garden_id: garden_id,
+                            activity: notiActivity,
+                            time: Date(date + time)
+                        };
+                        axios.post(`http://localhost:3000/history`, hisData)
+                            .then(function (res) {
+                                setInitialReport();
+                            })
+                            .catch(function (err) {
+                                console.log(err);
+                            });
+                    }
+
+                    run();
                 })
             };
 
@@ -454,14 +661,68 @@ function Statistical() {
             // Get data from Database and First render
             axios.get(`${url}`)
                 .then(function (res) {
+                    refreshData();
+
                     var notiDate = res.data[res.data.length - 1].time.split('T')[0];
-                    var idx = 23;
+                    var notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+                    var idx = 0;
+                    var count = 0;
+                    var mean = 0;
                     for (var i = res.data.length - 1; i >= 0; i--) {
-                        if (res.data[i].time.split('T')[0] !== notiDate) {
+                        if (idx === 23) {
                             break;
                         };
-                        pdata[idx] = res.data[i];
-                        pdata[idx--].time = res.data[i].time.split('T')[1].split('.')[0];
+                        if (i === 0 && res.data[i].time.split('T')[0] === notiDate) {
+                            if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                idx++;
+                            };
+                            break;
+                        } else if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                            break;
+                        };
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            idx++;
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            i++;
+                        }
+                    };
+                    notiHours = res.data[res.data.length - 1].time.split('T')[1].split(':')[0];
+                    for (var i = res.data.length - 1; i >= 0; i--) {
+                        if (res.data[i].time.split('T')[0] !== notiDate || i === 0) {
+                            if (i === 0) {
+                                if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                                    pdata[idx] = {};
+                                    pdata[idx].value = mean / count;
+                                    pdata[idx].time = notiHours + ":00:00";
+                                    pdata[idx - 1] = {};
+                                    pdata[idx - 1].value = Number(res.data[i].value);
+                                    pdata[idx - 1].time = res.data[i].time.split('T')[1].split(':')[0] + ":00:00";
+                                } else {
+                                    mean += Number(res.data[i].value);
+                                    count++;
+                                    pdata[idx] = {};
+                                    pdata[idx].value = mean / count;
+                                    pdata[idx].time = notiHours;
+                                };
+                                break;
+                            };
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx--].time = notiHours + ":00:00";
+                            break;
+                        };
+                        if (notiHours !== res.data[i].time.split('T')[1].split(':')[0]) {
+                            pdata[idx] = {};
+                            pdata[idx].value = mean / count;
+                            pdata[idx--].time = notiHours + ":00:00";
+                            notiHours = res.data[i].time.split('T')[1].split(':')[0];
+                            i++;
+                            mean = 0;
+                            count = 0;
+                        } else {
+                            mean += Number(res.data[i].value);
+                            count++;
+                        }
                     };
 
                     window.setTimeout(function () {
@@ -484,7 +745,7 @@ function Statistical() {
         if (subdataTemp !== [] && subdataLight !== [] && subdataSoil !== [] && subdataHumid !== [] && pdata !== [] && maindata !== []) {
             setTimeout(function () {
                 setLoading(false);
-            }, 50)
+            }, 200)
         };
         // Scrool default
         $("html, body").animate({ scrollTop: 0 }, "fast");
@@ -525,21 +786,26 @@ function Statistical() {
             $('.SoilChart').css('display', 'none');
             if ($('.climate-opt option:selected').text() === 'Temperature') {
                 $('.TempChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/temp';
+                url = `http://localhost:3000/climates/${garden_id}/temp`;
             } else if ($('.climate-opt option:selected').text() === 'Light') {
                 $('.LightChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/light';
+                url = `http://localhost:3000/climates/${garden_id}/light`;
             } else if ($('.climate-opt option:selected').text() === 'Humidity') {
                 $('.HumidChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/humi';
+                url = `http://localhost:3000/climates/${garden_id}/humi`;
             } else if ($('.climate-opt option:selected').text() === 'Soil Moisture') {
                 $('.SoilChart').css('display', 'flex');
-                url = 'http://localhost:3000/climates/soil';
+                url = `http://localhost:3000/climates/${garden_id}/soil`;
             };
 
             setdataClimate();
             refreshHistogram();
         })
+
+        // Sub Notification
+        $('.statis-subnoti').on('click', function (e) {
+
+        });
     });
 
     if (isLoading) {
@@ -556,7 +822,7 @@ function Statistical() {
                 <div className={cx('statis-main')}>
                     <div className={cx('statis-main__top')}>
                         <p className={cx('statis-main__title')}>
-                            Statistics
+                            Main Statistics
                         </p>
                         <i className="uil uil-ellipsis-h"></i>
                     </div>
@@ -625,7 +891,7 @@ function Statistical() {
                     </div>
                 </div>
 
-                <div className={cx('statis-frequency')}>
+                <div className={cx('statis-frequency')} id='statis-frequency1'>
                     <div className={cx('statis-frequency__top')}>
                         <p className={cx('statis-frequency__title')}>
                             Frequency
@@ -674,6 +940,54 @@ function Statistical() {
                 </div>
             </div>
 
+            <div className={cx('statis-frequency')} id='statis-frequency2'>
+                <div className={cx('statis-frequency__top')}>
+                    <p className={cx('statis-frequency__title')}>
+                        Frequency
+                    </p>
+                    <i className="uil uil-ellipsis-h"></i>
+                </div>
+                <div className={cx('statis-frequency__content')}>
+                    <div className={cx('statis-frequency__histogram')}>
+                        <FreqChart />
+                    </div>
+                    <div className={cx('histogram-legend')}>
+                        <div className='legend__temp'>
+                            <p>Temperature</p>
+                            <div>
+                                <div className={('freq-temp')} >
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__light'>
+                            <p>Light</p>
+                            <div>
+                                <div className={('freq-light')}>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__humid'>
+                            <p>Humidity</p>
+                            <div>
+                                <div className={('freq-humid')}>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className='legend__soil'>
+                            <p>Soil Moisture</p>
+                            <div>
+                                <div className={('freq-soil')}>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className={cx('statis-particular')}>
                 <div className={cx('statis-content')}>
                     <p className={cx('statis-content__title')}>
@@ -708,8 +1022,8 @@ function Statistical() {
                 </div>
             </div>
 
-            <div className={cx('statis-more')}>
-                <div className={cx('statis-more__histogram')}>
+            <div className={cx('statis-more')} id={cx('statis-more1')}>
+                <div className={cx('statis-more__histogram histogram-subTemp')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-sun"></i>
                         <div>
@@ -724,7 +1038,7 @@ function Statistical() {
                         <SubTempChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subLight')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-brightness-half"></i>
                         <div>
@@ -739,7 +1053,7 @@ function Statistical() {
                         <SubLightChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subHumid')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-tear"></i>
                         <div>
@@ -754,7 +1068,40 @@ function Statistical() {
                         <SubHumidChart />
                     </div>
                 </div>
-                <div className={cx('statis-more__histogram')}>
+                <div className={cx('statis-more__histogram histogram-subSoil')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-mountains-sun"></i>
+                        <div>
+                            <p>
+                                Soil Moisture
+                            </p>
+                            <p className={cx('soil-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubSoilChart />
+                    </div>
+                </div>
+            </div>
+
+            <div className={cx('statis-more')} id={cx('statis-more2')}>
+                <div className={cx('statis-more__histogram histogram-subHumid')}>
+                    <div className={cx('statis-more-top')}>
+                        <i className="uil uil-tear"></i>
+                        <div>
+                            <p>
+                                Humidity
+                            </p>
+                            <p className={cx('humid-mean')}>
+                            </p>
+                        </div>
+                    </div>
+                    <div className={cx('statis-more-bottom')}>
+                        <SubHumidChart />
+                    </div>
+                </div>
+                <div className={cx('statis-more__histogram histogram-subSoil')}>
                     <div className={cx('statis-more-top')}>
                         <i className="uil uil-mountains-sun"></i>
                         <div>
@@ -786,9 +1133,11 @@ function Statistical() {
                         <p>
                             Report
                         </p>
+                        <div className={cx('statis-subnoti')}>
+                            <i class="uil uil-bell"></i>
+                        </div>
                     </div>
                     <div className={cx('report-wrap')}>
-
                     </div>
                 </div>
             </div>

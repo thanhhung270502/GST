@@ -60,12 +60,16 @@
         0px 1px 10px 0px rgba(0, 0, 0, 0.03);
     border-top: 5px solid var(--green-dark) !important;
     width: 220px;
-    padding: 0.25rem 0!important;
+    padding: 0.25rem 0 !important;
+
+    li {
+        cursor: pointer;
+    }
 }
 
 .dropdown-item {
     padding: 0.5rem 1rem;
-    
+
     &:hover {
         background-color: #eee;
     }
@@ -131,4 +135,3 @@
         color: var(--light);
     }
 }
-

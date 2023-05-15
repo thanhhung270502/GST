@@ -3,7 +3,7 @@
     flex-direction: column;
     background-color: rgb(240, 244, 245);
     padding: 0 5%;
-    padding-top: 100px;
+    padding-top: 50px;
     font-size: 1.2rem;
 
     // Variables
@@ -65,7 +65,7 @@
 
                     div {
                         .recharts-wrapper {
-                            width: 600px !important;
+                            width: 95% !important;
                             height: 100% !important;
                             .recharts-surface {
                                 width: 100%;
@@ -158,131 +158,157 @@
             }
         }
 
-        .statis-frequency {
-            width: 48%;
-            min-width: 500px;
-            height: 100%;
-            background-color: #ffffff;
-            border-radius: 5px;
-
+        #statis-frequency1 {
             .statis-frequency__top {
-                position: relative;
+                font-size: 0.7em;
+            }
+        }
+    }
+
+    .statis-frequency {
+        width: 48%;
+        min-width: 500px;
+        height: 100%;
+        background-color: #ffffff;
+        border-radius: 5px;
+        display: block;
+
+        .statis-frequency__top {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 15%;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-bottom: 1px solid #d9d9d9;
+
+            .statis-frequency__title {
+                padding-left: 20px;
+            }
+
+            i {
+                position: absolute;
+                right: 20px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .statis-frequency__content {
+            display: flex;
+            height: 85%;
+
+            .statis-frequency__histogram {
                 display: flex;
                 align-items: center;
-                height: 15%;
-                font-size: 0.7em;
-                font-weight: bold;
-                border-bottom: 1px solid #d9d9d9;
+                justify-content: center;
+                width: 60%;
+                height: 100%;
+                border-right: 1px solid #d9d9d9;
 
-                .statis-frequency__title {
-                    padding-left: 20px;
-                }
-
-                i {
-                    position: absolute;
-                    right: 20px;
-
-                    &:hover {
-                        cursor: pointer;
+                div {
+                    .recharts-wrapper {
+                        width: 300px !important;
+                        height: 250px !important;
+                        .recharts-surface {
+                            width: 100%;
+                            height: 100%;
+                        }
                     }
                 }
             }
 
-            .statis-frequency__content {
+            .histogram-legend {
                 display: flex;
-                height: 85%;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 40%;
+                height: 100%;
+                font-size: 0.8em;
 
-                .statis-frequency__histogram {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 60%;
-                    height: 100%;
-                    border-right: 1px solid #d9d9d9;
-
-                    div {
-                        .recharts-wrapper {
-                            width: 300px !important;
-                            height: 250px !important;
-                            .recharts-surface {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-                    }
-                }
-
-                .histogram-legend {
+                .legend__temp,
+                .legend__light,
+                .legend__humid,
+                .legend__soil {
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40%;
-                    height: 100%;
-                    font-size: 0.8em;
+                    width: 80%;
+                    height: 50px;
+                    margin: 5px;
 
-                    .legend__temp,
-                    .legend__light,
-                    .legend__humid,
-                    .legend__soil {
-                        display: flex;
-                        flex-direction: column;
-                        width: 80%;
-                        height: 50px;
-                        margin: 5px;
-
-                        p {
-                            margin-bottom: 5px;
-                        }
-
-                        div {
-                            width: 100%;
-                            height: 7px;
-                            background-color: #d9d9d9;
-                            border-radius: 5px;
-                        }
+                    p {
+                        margin-bottom: 5px;
                     }
 
-                    .legend__temp {
-                        div {
-                            .freq-temp {
-                                width: 0%;
-                                height: 100%;
-                                background-color: var(--color-temp);
-                            }
-                        }
+                    div {
+                        width: 100%;
+                        height: 7px;
+                        background-color: #d9d9d9;
+                        border-radius: 5px;
                     }
+                }
 
-                    .legend__light {
-                        div {
-                            .freq-light {
-                                width: 0%;
-                                height: 100%;
-                                background-color: var(--color-light);
-                            }
-                        }
-                    }
-
-                    .legend__humid {
-                        div {
-                            .freq-humid {
-                                width: 0%;
-                                height: 100%;
-                                background-color: var(--color-humid);
-                            }
-                        }
-                    }
-
-                    .legend__soil {
-                        div {
-                            .freq-soil {
-                                width: 0%;
-                                height: 100%;
-                                background-color: var(--color-soil);
-                            }
+                .legend__temp {
+                    div {
+                        .freq-temp {
+                            width: 0%;
+                            height: 100%;
+                            background-color: var(--color-temp);
                         }
                     }
                 }
+
+                .legend__light {
+                    div {
+                        .freq-light {
+                            width: 0%;
+                            height: 100%;
+                            background-color: var(--color-light);
+                        }
+                    }
+                }
+
+                .legend__humid {
+                    div {
+                        .freq-humid {
+                            width: 0%;
+                            height: 100%;
+                            background-color: var(--color-humid);
+                        }
+                    }
+                }
+
+                .legend__soil {
+                    div {
+                        .freq-soil {
+                            width: 0%;
+                            height: 100%;
+                            background-color: var(--color-soil);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #statis-frequency2 {
+        margin-top: 50px;
+        width: 100%;
+        height: 30vw;
+        min-height: 450px;
+        display: none;
+
+        .statis-frequency__top {
+            height: 12%;
+            font-size: 0.8em;
+
+            .statis-frequency__title {
+                padding: 0 30px;
+                font-weight: bold;
+                opacity: 0.8;
             }
         }
     }
@@ -498,7 +524,7 @@
                 display: flex;
                 align-items: center;
                 padding-left: 15px;
-                height: 30%;
+                height: 40%;
                 border-bottom: 1px solid #d9d9d9;
 
                 i {
@@ -576,6 +602,15 @@
         }
     }
 
+    #statis-more2 {
+        height: 25vw;
+        display: none;
+
+        .statis-more__histogram {
+            width: 45%;
+        }
+    }
+
     .statis-history {
         display: flex;
         justify-content: space-between;
@@ -583,7 +618,7 @@
         margin-bottom: 100px;
 
         .statis-notification {
-            width: 30%;
+            width: 420px;
             background-color: #ffffff;
             border-radius: 5px;
 
@@ -664,11 +699,12 @@
         }
 
         .statis-report {
-            width: 65%;
+            width: calc(95% - 420px);
             background-color: #ffffff;
             border-radius: 5px;
 
             & > div:first-child {
+                position: relative;
                 display: flex;
                 align-items: center;
                 height: 15%;
@@ -676,6 +712,25 @@
                 font-size: 1rem;
                 font-weight: bold;
                 border-bottom: 1px solid #d9d9d9;
+
+                .statis-subnoti {
+                    position: absolute;
+                    right: 10px;
+                    width: 40px;
+                    height: 40px;
+                    display: none;
+
+                    i {
+                        color: red;
+                        font-size: 30px;
+                        text-align: center;
+
+                        &:hover {
+                            cursor: pointer;
+                            opacity: 0.4;
+                        }
+                    }
+                }
             }
 
             .report-wrap {
@@ -792,6 +847,66 @@
         ::-webkit-scrollbar-thumb:hover {
             cursor: pointer;
             background: #8e8e8e;
+        }
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .statis-body {
+        .statis-general {
+            height: 35vw;
+            min-height: 450px;
+            .statis-main {
+                width: 100%;
+
+                .statis-main__top {
+                    font-size: 0.8em;
+
+                    .statis-main__title {
+                        padding: 0 30px;
+                        font-weight: bold;
+                        opacity: 0.8;
+                    }
+                }
+            }
+            #statis-frequency1 {
+                display: none;
+            }
+        }
+
+        #statis-frequency2 {
+            display: block;
+        }
+
+        #statis-more1 {
+            height: 25vw;
+
+            .statis-more__histogram {
+                width: 45%;
+            }
+
+            .histogram-subHumid,
+            .histogram-subSoil {
+                display: none;
+            }
+        }
+
+        #statis-more2 {
+            display: flex;
+        }
+    }
+
+    .statis-notification {
+        display: none;
+    }
+
+    .statis-report {
+        width: 100% !important;
+
+        div:first-child {
+            .statis-subnoti {
+                display: block !important;
+            }
         }
     }
 }
