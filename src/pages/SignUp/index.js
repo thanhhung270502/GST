@@ -7,6 +7,7 @@ function SignUp() {
         username: null,
         password: null,
         name: null,
+        garden_id: null
     });
 
     const handleSubmit = async (e) => {
@@ -72,6 +73,16 @@ function SignUp() {
                             onChange={handleChange}
                         />
                         <label for="floatingInput">Avatar</label>
+                    </div><div class="form-floating mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="floatingInput"
+                            placeholder="username"
+                            name="garden_id"
+                            onChange={handleChange}
+                        />
+                        <label for="floatingInput">Garden_id</label>
                     </div>
                     <div className="d-flex justify-content-center align-items-center">
                         <button type="submit" className="log__btn">Create</button>

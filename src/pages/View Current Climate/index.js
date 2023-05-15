@@ -10,14 +10,14 @@ import Button from 'react-bootstrap/Button';
 import hot from '../../assets/images/hot.png';
 import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
-import soilpng from '../../assets/images/soil.png'
+import soilpng from '../../assets/images/soil.png';
 import $ from 'jquery';
+
 function toggleFan(valueFan) {
     const username = 'vienminhphuc';
     const feedKey = 'gst-fan';
     const aioKey = '';
     const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-fan/data`;
-
     //Create a GET request with value 1 and send it to AdafruitIO
     fetch(url, {
         method: 'POST',
@@ -50,7 +50,7 @@ function Climate() {
     const url_soil = "http://localhost:3000/climates/last/soil" ;
     const url_humi =  "http://localhost:3000/climates/last/humi" ;
 
-     useEffect(() => {
+    useEffect(() => {
         setInterval(async () => {
              fetch(url_temp, {
                 headers: {
