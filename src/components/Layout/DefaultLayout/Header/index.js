@@ -253,14 +253,6 @@ function Header() {
                                                     <div className="col-10">My Profile</div>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a class="d-flex align-items-center dropdown-item" href="#">
-                                                    <div className="top-header__icon col-2">
-                                                        <FontAwesomeIcon icon={faGear} />
-                                                    </div>
-                                                    <div className="col-10">Account settings</div>
-                                                </a>
-                                            </li>
                                             {
                                                 checkGarden() && (
                                                     <li className='create-garden' onClick={createGarden}>
