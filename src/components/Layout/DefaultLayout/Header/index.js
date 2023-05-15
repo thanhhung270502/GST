@@ -49,7 +49,7 @@ function Header() {
     const createGarden = async () => {
         const gardenData = {
             url: 'EMPTY DATA',
-            key: 'EMPTY DATA'
+            gKey: 'EMPTY DATA'
         };
         await axios.post('http://localhost:3000/garden', gardenData).then(function (res) {
             setCookie('garden_id', res.data.id, 30);
@@ -90,16 +90,16 @@ function Header() {
         $('body .type-wrapper__title').html('Nhập giá trị URL của Dashboard');
 
         $('body .type-wrapper button').on('click', async (e) => {
-            const key = await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
-                return res.data.key;
-                // console.log(res.data.key);
+            const gKey = await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
+                return res.data.gKey;
+                // console.log(res.data.gKey);
             }).catch(function (err) {
                 console.log(err);
             });
 
             const gardenData = {
                 url: $('body .type-wrapper input').val(),
-                key: key
+                gKey: gKey
             }
 
             await axios.patch(`http://localhost:3000/garden/${getCookie('garden_id')}`, gardenData).then(function (res) {
@@ -122,14 +122,14 @@ function Header() {
         $('body .type-wrapper button').on('click', async (e) => {
             const url = await axios.get(`http://localhost:3000/garden/${getCookie('garden_id')}`).then(function (res) {
                 return res.data.url;
-                // console.log(res.data.key);
+                // console.log(res.data.gKey);
             }).catch(function (err) {
                 console.log(err);
             });
 
             const gardenData = {
                 url: url,
-                key: $('body .type-wrapper input').val()
+                gKey: $('body .type-wrapper input').val()
             }
 
             await axios.patch(`http://localhost:3000/garden/${getCookie('garden_id')}`, gardenData).then(function (res) {
