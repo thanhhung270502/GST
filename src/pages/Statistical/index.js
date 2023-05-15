@@ -428,8 +428,11 @@ const setInitialReport = async () => {
                 Action
             </th>
         </tr>`;
-
+            var count = 0;
             for (var i = res.data.length - 1; i >= 0; i--) {
+                if (count === 10) {
+                    break;
+                };
                 table += `
                 <tr id='report-activity-${i}'>
                     <td>
@@ -458,6 +461,7 @@ const setInitialReport = async () => {
                     </td>
                 </tr>
             `;
+                count++;
             };
 
             table += `</table>`;
