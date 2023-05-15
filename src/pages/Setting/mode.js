@@ -12,6 +12,7 @@ import {
 } from '~/api/api';
 import TimeOut from './timeout';
 import { getCookie } from '~/api/cookie';
+import { getDeviceValue, toggleDevice } from '~/api/toggle';
 
 function Mode(props) {
     const [timeLeft, setTimeLeft] = useState(0);
@@ -99,19 +100,15 @@ function Mode(props) {
             }
             const getDeviceStatus = await getStatusByName(getDevice());
 
-            if (getDeviceStatus && getDeviceStatus.name == "fan" && getDeviceStatus.status != fan) {
+            if (getDeviceStatus && getDeviceStatus.name == 'fan' && getDeviceStatus.status != fan) {
                 setFan(getDeviceStatus.status);
-            }
-            else if (getDeviceStatus && getDeviceStatus.name == "led" && getDeviceStatus.status != led) {
+            } else if (getDeviceStatus && getDeviceStatus.name == 'led' && getDeviceStatus.status != led) {
                 setLed(getDeviceStatus.status);
-            }
-            else if (getDeviceStatus && getDeviceStatus.name == "pump" && getDeviceStatus.status != pump) {
+            } else if (getDeviceStatus && getDeviceStatus.name == 'pump' && getDeviceStatus.status != pump) {
                 setPump(getDeviceStatus.status);
-            }
-            else if (getDeviceStatus && getDeviceStatus.name == "roof" && getDeviceStatus.status != roof) {
+            } else if (getDeviceStatus && getDeviceStatus.name == 'roof' && getDeviceStatus.status != roof) {
                 setRoof(getDeviceStatus.status);
             }
-
         }, 10000);
         return () => clearInterval(timer);
     }, [props.type, fan, led, roof, pump]);
@@ -172,23 +169,49 @@ function Mode(props) {
         }
     };
 
+    const handleAutoSubmit = async (e) => {
+        e.preventDefault();
+        const mode = 'auto';
+        const garden_id = getCookie('garden_id');
+        const checkModeGarden = await getModeGarden(garden_id, props.type);
+        if (!checkModeGarden) {
+            console.log('Here1');
+            const create_mode_garden = await createModeGarden({
+                garden_id,
+                type: props.type,
+                mode,
+            });
+        } else {
+            console.log('Here2');
+            const res2 = await updateModeGarden({
+                garden_id: getCookie('garden_id'),
+                type: props.type,
+                mode,
+            });
+        }
+    };
+
     const handleToggleDevice = async (e) => {
         e.preventDefault();
         if (props.type == 'temp') {
             let value = fan === 1 ? 0 : 1;
             const res = await toggleDeviceDB('fan', value);
+            toggleDevice('fan', value);
             setFan(value);
         } else if (props.type == 'light') {
             let value = led === 1 ? 0 : 1;
             const res = await toggleDeviceDB('led', value);
+            toggleDevice('led', value);
             setLed(value);
         } else if (props.type == 'humi') {
             let value = pump === 1 ? 0 : 1;
             const res = await toggleDeviceDB('pump', value);
+            toggleDevice('pump', value);
             setPump(value);
         } else if (props.type == 'soil') {
             let value = roof === 1 ? 0 : 1;
             const res = await toggleDeviceDB('roof', value);
+            toggleDevice('roof', value);
             setRoof(value);
         }
     };
@@ -272,6 +295,37 @@ function Mode(props) {
             );
         }
     };
+
+    const handleGetData = async (device) => {
+        if (props.type == "temp") {
+            const response = await getDeviceValue("fan");
+            console.log("abc: ", response);
+            if (response.value != fan) {
+                setFan(response.value);
+            }
+        } 
+        else if (props.type == "light") {
+            const response = await getDeviceValue("led");
+            console.log("abc: ", response);
+            if (response.value != led) {
+                setLed(response.value);
+            }
+        }
+        else if (props.type == "humi") {
+            const response = await getDeviceValue("pump");
+            console.log("abc: ", response);
+            if (response.value != pump) {
+                setPump(response.value);
+            }
+        }
+        else if (props.type == "soil") {
+            const response = await getDeviceValue("roof");
+            console.log("abc: ", response);
+            if (response.value != roof) {
+                setRoof(response.value);
+            }
+        }
+    };  
 
     useEffect(() => {
         (async () => {
@@ -359,14 +413,24 @@ function Mode(props) {
             )}
             {props.mode == 'auto' && (
                 <div className="mode-auto-section">
-                    <form>
+                    <form onSubmit={handleAutoSubmit}>
                         <button type="submit" className="mode-btn">
                             Start
                         </button>
                     </form>
                 </div>
             )}
-            {props.mode == 'manual' && buttonDevice(props.type)}
+            {props.mode == 'manual' && (
+                <div>
+                    <div className='mode-btn mb-3' onClick={handleGetData}>Get data {getDevice(props.type)}</div>
+                    {buttonDevice(props.type)}
+                    {/* <form onSubmit={    (getDevice(props.type))}>
+                        <button className="mode-btn" type="submit">
+                            Get data {getDevice(props.type)}
+                        </button>
+                    </form> */}
+                </div>
+            )}
         </div>
     );
 }
