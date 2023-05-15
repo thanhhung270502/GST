@@ -44,6 +44,10 @@ function DefaultLayout({ children }) {
             .then((response) => response.json())
             .then((data) => {   
                 check(data[0]);
+                if(data[0].value > 10)
+                {
+
+                }
             })
             .catch((error) => console.log(error));
     }, TIMEOUT_MS);
@@ -57,6 +61,10 @@ function DefaultLayout({ children }) {
             .then((response) => response.json())
             .then((data) => {
                 check(data[0]);
+                if(data[0].value)
+                {}
+
+                
             })
             .catch((error) => console.log(error));
     }, TIMEOUT_MS + 1000);

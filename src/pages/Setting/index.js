@@ -44,6 +44,7 @@ function Setting() {
     };
 
     const [mode, setMode] = useState('auto');
+    
 
     const handleChangeMode = (event) => {
         setMode(event.target.value);
