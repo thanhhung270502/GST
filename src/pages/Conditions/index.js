@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './static_page.scss';
+import { getCookie } from '~/api/cookie';
 
 function StaticPage() {
     const modeAt = ['Automatic', 'Schedule', 'Manual'];
@@ -22,7 +23,7 @@ function StaticPage() {
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = 'aio_frSn91BqMRRjfVRKqU3ql28RIq7c';
+    const AIO_KEY = getCookie("garden_key");
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms

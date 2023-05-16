@@ -8,10 +8,10 @@ import { getLastClimateByType } from '~/api/api';
 
 function General() {
     const LOW_TEMP = 20; // NHỎ HƠN LOW TEMP: TAT QUAT & BAT LED
-    const HIGH_TEMP = 30; //LỚN HƠN HIGH: BAT QUAT & TAT LED
+    const HIGH_TEMP = 22; //LỚN HƠN HIGH: BAT QUAT & TAT LED
 
-    const LOW_LIGHT = 1000; // NHO HON LOW: BAT LED
-    const HIGH_LIGHT = 3000; //LON HON HIGH: TAT LED & DONG MAI
+    const LOW_LIGHT = 100; // NHO HON LOW: BAT LED
+    const HIGH_LIGHT = 200; //LON HON HIGH: TAT LED & DONG MAI
 
     const LOW_HUMI = 80; // NHO HON LOW: BAT PUMP
     const HIGH_HUMI = 95; //LON HON: TAT PUMP & BAT QUAT
@@ -114,7 +114,7 @@ function General() {
     //begin fetch data
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = '';
+    const AIO_KEY = getCookie("garden_key");
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -127,17 +127,17 @@ function General() {
     // --------------------------------- Real-time --------------------------------- //
 
     const send = async (data) => {
-        await sendData({
-            type: data.feed_key.slice(4),
-            value: data[0].value,
-            time: data.created_at,
-            garden_id: getCookie('garden_id'),
-        });
+        if (data[0]) {
+            await sendData({
+                type: data.feed_key.slice(4),
+                value: data[0].value,
+                time: data.created_at,
+                garden_id: getCookie('garden_id'),
+            });
+        }
     };
     const check = async (data) => {
-        console.log(data);
         const res = await getTheLastData(data.feed_key.slice(4));
-        console.log("Here: ", res);
         if (res === '') {
             send(data);
             throw 'Succesfully add to database';
@@ -160,24 +160,24 @@ function General() {
                 .then((response) => response.json())
                 .then(async (data) => {
                     check(data[0]);
-                    // console.log(data[0])
-                    // if (data[0].value < LOW_TEMP) {
-                    //     await sendNoti({
-                    //         status: 'warn',
-                    //         problem: problem[2],
-                    //         sub_problem: 'Turn off fan & Turn on the light',
-                    //         time: data[0].time,
-                    //         garden_id: garden_id,
-                    //     });
-                    // } else if (data[0].value > HIGH_TEMP) {
-                    //     await sendNoti({
-                    //         status: 'danger',
-                    //         problem: problem[2],
-                    //         sub_problem: 'Turn on fan and turn off the light',
-                    //         time: data[0].time,
-                    //         garden_id: garden_id,
-                    //     });
-                    // }
+                    console.log(data[0])
+                    if (data[0].value < LOW_TEMP) {
+                        await sendNoti({
+                            status: 'warn',
+                            problem: problem[2],
+                            sub_problem: 'Turn off fan & Turn on the light',
+                            time: data[0].created_at,
+                            garden_id: garden_id,
+                        });
+                    } else if (data[0].value > HIGH_TEMP) {
+                        await sendNoti({
+                            status: 'danger',
+                            problem: problem[0],
+                            sub_problem: 'Turn on fan and turn off the light',
+                            time: data[0].created_at,
+                            garden_id: garden_id,
+                        });
+                    }
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
@@ -202,7 +202,7 @@ function General() {
                     //         status: 'warning',
                     //         problem: problem[2],
                     //         sub_problem: 'Turn on the light',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // } else if (data[0].value > HIGH_LIGHT) {
@@ -210,7 +210,7 @@ function General() {
                     //         status: 'danger',
                     //         problem: problem[0],
                     //         sub_problem: 'Turn off the light and close the roof',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // }
@@ -234,7 +234,7 @@ function General() {
                     //         status: 'warning',
                     //         problem: problem[2],
                     //         sub_problem: 'Turn on the pump',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // } else if (data[0].value > HIGH_HUMI) {
@@ -242,7 +242,7 @@ function General() {
                     //         status: 'danger',
                     //         problem: problem[0],
                     //         sub_problem: 'Turn on the fan & turn off the pump',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // }
@@ -266,7 +266,7 @@ function General() {
                     //         status: 'warning',
                     //         problem: problem[2],
                     //         sub_problem: 'Turn on the pump',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // } else if (data[0].value > HIGH_SOIL) {
@@ -274,7 +274,7 @@ function General() {
                     //         status: 'danger',
                     //         problem: problem[0],
                     //         sub_problem: 'Turn off the pump',
-                    //         time: data[0].time,
+                    //         time: data[0].created_at,
                     //         garden_id: garden_id,
                     //     });
                     // }
@@ -318,8 +318,6 @@ function General() {
                                 type: 'temp',
                                 status: 'now',
                             });
-                            console.log(res2);
-                            console.log('OK!');
                         } else if (checkTimeSchedule == 'end' && getTempSchedule.status == 'now') {
                             const res = await toggleDeviceDB('fan', 0);
                             toggleDevice('fan', 0);
@@ -328,8 +326,6 @@ function General() {
                                 type: 'temp',
                                 status: 'end',
                             });
-                            console.log(res2);
-                            console.log('OK!');
                         }
                     }
                 } else if (getTempMode && getTempMode.mode == 'auto') {
@@ -363,8 +359,6 @@ function General() {
                                 type: 'light',
                                 status: 'end',
                             });
-                            console.log(res2);
-                            console.log('OK!');
                         }
                     }
                 } else if (getLightMode && getLightMode.mode == 'auto') {
@@ -398,8 +392,6 @@ function General() {
                                 type: 'humi',
                                 status: 'end',
                             });
-                            console.log(res2);
-                            console.log('OK!');
                         }
                     }
                 } else if (getHumiMode && getHumiMode.mode == 'auto') {
@@ -433,8 +425,6 @@ function General() {
                                 type: 'soil',
                                 status: 'end',
                             });
-                            console.log(res2);
-                            console.log('OK!');
                         }
                     }
                 } else if (getSoilMode && getSoilMode.mode == 'auto') {

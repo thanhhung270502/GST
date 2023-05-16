@@ -96,6 +96,8 @@ function Header() {
             }).catch(function (err) {
                 console.log(err);
             });
+            
+            setCookie('garden_url', $('body .type-wrapper input').val(), 30);
 
             const gardenData = {
                 url: $('body .type-wrapper input').val(),
@@ -126,6 +128,8 @@ function Header() {
             }).catch(function (err) {
                 console.log(err);
             });
+
+            setCookie('garden_key', $('body .type-wrapper input').val(), 30);
 
             const gardenData = {
                 url: url,

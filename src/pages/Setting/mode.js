@@ -10,7 +10,6 @@ import {
     toggleDeviceDB,
     updateModeGarden,
 } from '~/api/api';
-import TimeOut from './timeout';
 import { getCookie } from '~/api/cookie';
 import { getDeviceValue, toggleDevice } from '~/api/toggle';
 
@@ -19,6 +18,7 @@ function Mode(props) {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [scheduleMode, setScheduleMode] = useState('');
+    const [autoMode, setAutoMode] = useState(0);
 
     const [fan, setFan] = useState(0);
     const [led, setLed] = useState(0);
@@ -74,17 +74,26 @@ function Mode(props) {
             await getLastScheduleByType(getCookie('garden_id'), props.type).then((data) => {
                 convertTime(data);
                 checkTime(data.start_time, data.end_time);
-                console.log(data);
             });
         })();
     }, [props.type]);
+
+    // useEffect(() => {
+    //     async () => {
+    //         const res = await getModeGarden(getCookie('garden_id'), props.type);
+    //         if (res.mode === 'auto') {
+    //             setAutoMode(1);
+    //         } else {
+    //             setAutoMode(0);
+    //         }
+    //     };
+    // }, [props.type]);
 
     useEffect(() => {
         (async () => {
             await getLastScheduleByType(getCookie('garden_id'), props.type).then((data) => {
                 convertTime(data);
                 checkTime(data.start_time, data.end_time);
-                console.log(data);
             });
         })();
     }, [scheduleMode]);
@@ -96,7 +105,6 @@ function Mode(props) {
 
             if (getSchedule && getSchedule.status != scheduleMode) {
                 setScheduleMode(getSchedule.status);
-                console.log('yess');
             }
             const getDeviceStatus = await getStatusByName(getDevice());
 
@@ -131,7 +139,6 @@ function Mode(props) {
     };
 
     const handleUpdateModeGarden = async (mode) => {
-        console.log(mode);
         const user_id = getCookie('user_id');
         const res = await updateModeGarden({ user_id, mode });
     };
@@ -145,7 +152,6 @@ function Mode(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(data);
         const res = await createSchedule(data);
         checkTime(data.start_time, data.end_time);
 
@@ -153,14 +159,12 @@ function Mode(props) {
         const garden_id = getCookie('garden_id');
         const checkModeGarden = await getModeGarden(garden_id, props.type);
         if (!checkModeGarden) {
-            console.log('Here1');
             const create_mode_garden = await createModeGarden({
                 garden_id,
                 type: props.type,
                 mode,
             });
         } else {
-            console.log('Here2');
             const res2 = await updateModeGarden({
                 garden_id: getCookie('garden_id'),
                 type: props.type,
@@ -171,23 +175,31 @@ function Mode(props) {
 
     const handleAutoSubmit = async (e) => {
         e.preventDefault();
-        const mode = 'auto';
         const garden_id = getCookie('garden_id');
         const checkModeGarden = await getModeGarden(garden_id, props.type);
         if (!checkModeGarden) {
-            console.log('Here1');
             const create_mode_garden = await createModeGarden({
                 garden_id,
                 type: props.type,
-                mode,
+                mode: 'auto',
             });
+            setAutoMode(1);
         } else {
-            console.log('Here2');
-            const res2 = await updateModeGarden({
-                garden_id: getCookie('garden_id'),
-                type: props.type,
-                mode,
-            });
+            if (checkModeGarden.mode === 'auto') {
+                setAutoMode(0);
+                const res2 = await updateModeGarden({
+                    garden_id: getCookie('garden_id'),
+                    type: props.type,
+                    mode: 'manual',
+                });
+            } else {
+                const res2 = await updateModeGarden({
+                    garden_id: getCookie('garden_id'),
+                    type: props.type,
+                    mode: 'auto',
+                });
+                setAutoMode(1);
+            }
         }
     };
 
@@ -297,35 +309,32 @@ function Mode(props) {
     };
 
     const handleGetData = async (device) => {
-        if (props.type == "temp") {
-            const response = await getDeviceValue("fan");
-            console.log("abc: ", response);
+        if (props.type == 'temp') {
+            const response = await getDeviceValue('fan');
             if (response.value != fan) {
+                const res = await toggleDeviceDB('fan', response.value);
                 setFan(response.value);
             }
-        } 
-        else if (props.type == "light") {
-            const response = await getDeviceValue("led");
-            console.log("abc: ", response);
+        } else if (props.type == 'light') {
+            const response = await getDeviceValue('led');
             if (response.value != led) {
+                const res = await toggleDeviceDB('led', response.value);
                 setLed(response.value);
             }
-        }
-        else if (props.type == "humi") {
-            const response = await getDeviceValue("pump");
-            console.log("abc: ", response);
+        } else if (props.type == 'humi') {
+            const response = await getDeviceValue('pump');
             if (response.value != pump) {
+                const res = await toggleDeviceDB('pump', response.value);
                 setPump(response.value);
             }
-        }
-        else if (props.type == "soil") {
-            const response = await getDeviceValue("roof");
-            console.log("abc: ", response);
+        } else if (props.type == 'soil') {
+            const response = await getDeviceValue('roof');
             if (response.value != roof) {
+                const res = await toggleDeviceDB('roof', response.value);
                 setRoof(response.value);
             }
         }
-    };  
+    };
 
     useEffect(() => {
         (async () => {
@@ -340,8 +349,6 @@ function Mode(props) {
                 currentDevice = 'roof';
             }
 
-            console.log(currentDevice);
-
             await getStatusByName(currentDevice).then((data) => {
                 if (currentDevice == 'fan') {
                     setFan(data.status);
@@ -352,7 +359,6 @@ function Mode(props) {
                 } else if (currentDevice == 'roof') {
                     setRoof(data.status);
                 }
-                console.log(data);
             });
         })();
     }, [fan, led, pump, roof, props.type]);
@@ -413,16 +419,27 @@ function Mode(props) {
             )}
             {props.mode == 'auto' && (
                 <div className="mode-auto-section">
-                    <form onSubmit={handleAutoSubmit}>
-                        <button type="submit" className="mode-btn">
-                            Start
-                        </button>
-                    </form>
+                    {autoMode !== 0 && (
+                        <form onSubmit={handleAutoSubmit}>
+                            <button type="submit" className="mode-btn">
+                                Stop
+                            </button>
+                        </form>
+                    )}
+                    {autoMode === 0 && (
+                        <form onSubmit={handleAutoSubmit}>
+                            <button type="submit" className="mode-btn">
+                                Start
+                            </button>
+                        </form>
+                    )}
                 </div>
             )}
             {props.mode == 'manual' && (
                 <div>
-                    <div className='mode-btn mb-3' onClick={handleGetData}>Get data {getDevice(props.type)}</div>
+                    <div className="mode-btn mb-3" onClick={handleGetData}>
+                        Get data {getDevice(props.type)}
+                    </div>
                     {buttonDevice(props.type)}
                     {/* <form onSubmit={    (getDevice(props.type))}>
                         <button className="mode-btn" type="submit">

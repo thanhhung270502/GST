@@ -12,8 +12,10 @@ import lightpng from '../../assets/images/light.png';
 import irri from '../../assets/images/irrigation.png';
 import soilpng from '../../assets/images/soil.png'
 import $ from 'jquery';
-import { sendData } from '~/api/api';
+import { sendData, toggleDeviceDB } from '~/api/api';
 import { getTheLastData } from '~/api/api';
+import { toggleDevice } from '~/api/toggle';
+import { getCookie } from '~/api/cookie';
 
 function toggleFan(valueFan) {
     const username = 'vienminhphuc';
@@ -38,28 +40,22 @@ function toggleFan(valueFan) {
 
 function Climate() {
     const staticAt = ['High', 'Normal', 'Low'];
+
     const [fan, setFan] = useState(0);
+    const [led, setLed] = useState(0);
+    const [pump, setPump] = useState(0);
+    const [roof, setRoof] = useState(0);
 
     const [temp, setTemp] = useState(22);
-    const [tempTimePrev, setTempTimePrev] = useState(22);
-    // const [modeTemp, setModeTemp] = useState('Automatic');
-    // const [staticTemp, setStaticTemp] = useState('Normal');
-
     const [light, setLight] = useState(1200);
-    const [lightTimePrev, setLightTimePrev] = useState(1200);
-    // const [modeLight, setModeLight] = useState('Automatic');
-    // const [staticLight, setStaticLight] = useState('Normal');
-
     const [humi, setHumi] = useState(56);
-    const [humiTimePrev, setHumiTimePrev] = useState(56);
-    // const [modeHumi, setModeHumi] = useState('Automatic');
-    // const [staticHumi, setStaticHumi] = useState('Normal');
-
     const [soil, setSoil] = useState(56);
+    
+    const [type, setType] = useState();
 
     const AIO_FEED_ID = ['gst-humi', 'gst-light', 'gst-soil', 'gst-temp'];
     const AIO_USERNAME = 'vienminhphuc';
-    const AIO_KEY = '';
+    const AIO_KEY = getCookie("garden_key");
     const AIO_BASE_URL = 'https://io.adafruit.com/api/v2/';
 
     const TIMEOUT_MS = 10000; // Timeout for waiting for new data in ms
@@ -70,7 +66,7 @@ function Climate() {
     const url_humi = AIO_BASE_URL + AIO_USERNAME + '/feeds/' + AIO_FEED_ID[0] + '/data';
     // --------------------------------- Real-time --------------------------------- //
     const send = async (data) => {
-        await sendData({ type: data.feed_key.slice(4), value: data.value, time: data.created_at });
+        await sendData({ type: data.feed_key.slice(4), value: data.value, time: data.created_at, garden_id: getCookie("garden_id") });
     };
     const check = async (data) => {
         const res = await getTheLastData(data.feed_key.slice(4))
@@ -83,7 +79,7 @@ function Climate() {
     };
 
     useEffect(() => {
-        setInterval(async () => {
+        const getA = setInterval(async () => {
             fetch(url_temp, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -98,7 +94,7 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS);
-        setInterval(async () => {
+        const getB = setInterval(async () => {
             fetch(url_light, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -113,7 +109,7 @@ function Climate() {
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 1000);
 
-        setInterval(async () => {
+        const getC = setInterval(async () => {
             fetch(url_humi, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -127,7 +123,8 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 2000);
-        setInterval(async () => {
+        
+        const getD = setInterval(async () => {
             fetch(url_soil, {
                 headers: {
                     'X-AIO-Key': AIO_KEY,
@@ -141,34 +138,66 @@ function Climate() {
                 })
                 .catch((error) => console.log(error));
         }, TIMEOUT_MS + 3000);
+
+        return () => {
+            clearInterval(getA);
+            clearInterval(getB);
+            clearInterval(getC);
+            clearInterval(getD);
+        }
     }, []);
 
     const handleFan = () => {
         if (fan === 0) {
             setFan(1);
-            toggleFan(fan);
+            toggleDevice("fan", 1);
+            toggleDeviceDB("fan", 1);
         } else {
             setFan(0);
-            toggleFan(fan);
+            toggleDevice("fan", 0);
+            toggleDeviceDB("fan", 0);
         }
     };
+
+    const handleLed = () => {
+        if (led === 0) {
+            setLed(1);
+            toggleDevice("led", 1);
+            toggleDeviceDB("led", 1);
+        } else {
+            setLed(0);
+            toggleDevice("led", 0);
+            toggleDeviceDB("led", 0);
+        }
+    };
+
+    const handlePump = () => {
+        if (pump === 0) {
+            setPump(1);
+            toggleDevice("pump", 1);
+            toggleDeviceDB("pump", 1);
+        } else {
+            setPump(0);
+            toggleDevice("pump", 0);
+            toggleDeviceDB("pump", 0);
+        }
+    };
+
+    const handleRoof = () => {
+        if (roof === 0) {
+            setRoof(1);
+            toggleDevice("roof", 1);
+            toggleDeviceDB("roof", 1);
+        } else {
+            setRoof(0);
+            toggleDevice("roof", 0);
+            toggleDeviceDB("roof", 0);
+        }
+    };
+
+
     return (
         <Container fluid className="custom-container">
-            {/* <Navbar bg="none" variant="light">
-                <Container>
-                    <Navbar.Brand className="logo" href="#home">
-                        GSTomato
-                    </Navbar.Brand>
-                    <Nav className="justify-content-center">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#features">Features</Nav.Link>
-                        <Nav.Link href="#about">About us</Nav.Link>
-                        <Nav.Link href="#services">Services</Nav.Link>
-                        <Nav.Link href="#contact">Contact</Nav.Link>
-                        <Nav.Link href="#connect">Connect</Nav.Link>
-                    </Nav>
-                </Container>
-            </Navbar> */}
             <Container>
                 <Row className="frame5">
                     <Col lg="12" className="text-center">
@@ -223,9 +252,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="warning">
-                                    Turn on the light
-                                </Button>{' '}
+                                {led === 0 && (
+                                    <div className="btn btn-danger btn-md" onClick={handleLed}>
+                                        Turn on the led
+                                    </div>
+                                )}
+                                {led === 1 && (
+                                    <div className="btn btn-danger btn-md" onClick={handleLed}>
+                                        Turn off the led
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
@@ -244,9 +280,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="success">
-                                    Water the tree
-                                </Button>{' '}
+                                {pump === 0 && (
+                                    <div className="btn btn-danger btn-md" onClick={handlePump}>
+                                        Turn on the pump
+                                    </div>
+                                )}
+                                {pump === 1 && (
+                                    <div className="btn btn-danger btn-md" onClick={handlePump}>
+                                        Turn off the pump
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
@@ -265,9 +308,16 @@ function Climate() {
                                     Measure Again
                                 </Button>{' '}
                                 <div className="space"></div>
-                                <Button size="md" variant="success">
-                                    Water the tree
-                                </Button>{' '}
+                                {roof === 0 && (
+                                    <div className="btn btn-danger btn-md" onClick={handleRoof}>
+                                        Turn on the roof
+                                    </div>
+                                )}
+                                {roof === 1 && (
+                                    <div className="btn btn-danger btn-md" onClick={handleRoof}>
+                                        Turn off the roof
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>

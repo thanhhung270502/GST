@@ -15,6 +15,22 @@ export const signup = async (info) => {
         });
 };
 
+const getUrl = async (garden_id) => {
+    return await axios.get(`http://localhost:3000/garden/${garden_id}`).then(function (res) {
+        return res.data.url;
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
+
+const getKey = async (garden_id) => {
+    return await axios.get(`http://localhost:3000/garden/${garden_id}`).then(function (res) {
+        return res.data.gKey;
+    }).catch(function (err) {
+        console.log(err);
+    })
+}
+
 export const login = async (info) => {
     const res = await axios
         .post(`${URL}/auth/signin`, info)
@@ -31,6 +47,12 @@ export const login = async (info) => {
             console.log(error);
             return error.response;
         });
+
+    const garden_url = await getUrl(res.garden_id);
+    const garden_key = await getKey(res.garden_id);
+    setCookie('garden_url', garden_url, 30);
+    setCookie('garden_key', garden_key, 30);
+
     return res;
 };
 
@@ -136,4 +158,9 @@ export const sendNoti = async (data) => {
         .post(`${URL}/notification`, data)
         .then((res) => console.log('Successful push noti to database'))
         .catch((err) => console.log(err.data));
+};
+
+
+export const getGardenById = async (garden_id) => {
+    return (await axios.get(`${URL}/garden/${garden_id}`)).data;
 };

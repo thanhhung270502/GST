@@ -1,4 +1,9 @@
-const AIO_KEY = 'aio_hPUq79wWYm0zHs4dJIKf8N2smjVv';
+import { useState } from "react";
+import { useEffect } from "react";
+import { getGardenById } from "./api";
+import { getCookie } from "./cookie";
+
+const AIO_KEY = getCookie("garden_key");
 
 export function toggleDevice(device, valueDevice) {
     const url = `https://io.adafruit.com/api/v2/vienminhphuc/feeds/gst-` + device + `/data`;
